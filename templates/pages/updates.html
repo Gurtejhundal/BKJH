@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "partials/page_header.html" with title="Health Updates" intro="Health camp information, notices, and hospital updates published from admin." eyebrow="Updates" %}
+
+<section class="section section-surface">
+  <div class="wrapper card-grid">
+    {% for update in updates %}
+      <article class="info-card">
+        {% if update.image %}<img class="card-image" src="{{ update.image.url }}" alt="{{ update.title }}" loading="lazy">{% endif %}
+        <h2>{{ update.title }}</h2>
+        <p class="meta">{{ update.date }}</p>
+        <p>{{ update.short_description }}</p>
+        <a class="text-link" href="{{ update.get_absolute_url }}">Read Update</a>
+      </article>
+    {% empty %}
+      {% include "partials/empty_state.html" with title="No updates published" message="Health camp updates and notices can be added from admin when available." %}
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

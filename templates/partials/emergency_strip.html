@@ -1,0 +1,9 @@
+{% load site_extras %}
+<div class="emergency-strip">
+  <div class="wrapper emergency-strip__inner">
+    <span><strong>Emergency</strong>{% if site.emergency_phone %}: <a href="tel:{{ site.emergency_phone|tel }}">{{ site.emergency_phone }}</a>{% else %}: number pending{% endif %}</span>
+    <span><strong>Ambulance</strong>{% if site.ambulance_phone %}: <a href="tel:{{ site.ambulance_phone|tel }}">{{ site.ambulance_phone }}</a>{% else %}: details pending{% endif %}</span>
+    <span><strong>Appointment</strong>: request only, staff confirms</span>
+    <span><strong>Location</strong>{% if site.google_maps_url %}: <a href="{{ site.google_maps_url }}" target="_blank" rel="noopener">open map</a>{% else %}: map pending{% endif %}</span>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "partials/page_header.html" with title="Privacy Policy" intro="Simple privacy information for appointment request and contact data." eyebrow="Privacy" %}
+
+<section class="section">
+  <div class="wrapper content-page">
+    <h2>What information is collected</h2>
+    <p>The appointment form may collect patient name, phone number, preferred department, preferred doctor, preferred date/time, and a short message or reason for visit.</p>
+    <h2>How it is used</h2>
+    <p>Submitted details are used by hospital staff only for hospital communication, appointment follow-up, and patient service coordination.</p>
+    <h2>What not to submit</h2>
+    <p>Do not submit Aadhaar numbers, payment details, prescriptions, lab reports, detailed medical records, or sensitive documents through the public website.</p>
+    <h2>Access control</h2>
+    <p>Appointment requests are not publicly visible. Admin and dashboard access are protected by staff login.</p>
+  </div>
+</section>
+{% endblock %}

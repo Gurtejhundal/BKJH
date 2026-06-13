@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero">
+  <nav class="breadcrumbs wrapper" aria-label="Breadcrumb">
+    <a href="{% url 'core:home' %}">Home</a><span>/</span>
+    <a href="{% url 'hospital:updates' %}">Updates</a><span>/</span>
+    <span aria-current="page">{{ update.title }}</span>
+  </nav>
+  <div class="wrapper">
+    <p class="hero-badge">Hospital update</p>
+    <h1>{{ update.title }}</h1>
+    <p>{{ update.short_description }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <article class="wrapper content-page">
+    <p class="meta">{{ update.date }}</p>
+    {% if update.image %}
+      <img class="content-image" src="{{ update.image.url }}" alt="{{ update.title }}" loading="lazy">
+    {% else %}
+      {% include "partials/image_fallback.html" with label=update.title initials="BK" message="Update image pending" %}
+    {% endif %}
+    <p>{{ update.detailed_description|default:update.short_description }}</p>
+  </article>
+</section>
+
+{% include "partials/cta_band.html" with title="Need more information?" text="Contact the hospital or request an appointment for non-emergency visits." %}
+{% endblock %}

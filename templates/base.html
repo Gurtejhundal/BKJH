@@ -1,0 +1,39 @@
+{% load static site_extras %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% include "partials/seo_meta.html" %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Gurmukhi:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+  {% block extra_css %}{% endblock %}
+  <script src="{% static 'js/site.js' %}" defer></script>
+  {% block extra_js %}{% endblock %}
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  {% include "partials/emergency_strip.html" %}
+  {% include "partials/header.html" %}
+  <main id="main-content">
+    {% if messages %}
+      <section class="messages wrapper" aria-live="polite">
+        {% for message in messages %}
+          <div class="message message-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </section>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+  {% include "partials/contact_strip.html" %}
+  {% include "partials/footer.html" %}
+  {% include "partials/mobile_action_bar.html" %}
+  {% if hospital_schema %}
+    <script type="application/ld+json">{{ hospital_schema|safe }}</script>
+  {% elif site_json_ld %}
+    <script type="application/ld+json">{{ site_json_ld|safe }}</script>
+  {% endif %}
+</body>
+</html>

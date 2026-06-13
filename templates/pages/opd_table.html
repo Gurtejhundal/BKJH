@@ -1,0 +1,21 @@
+{% if timings %}
+<div class="table-card">
+  <table>
+    <thead><tr><th>Department</th><th>Doctor</th><th>Days</th><th>Time</th><th>Room/location</th><th>Notes</th></tr></thead>
+    <tbody>
+      {% for timing in timings %}
+      <tr>
+        <td>{{ timing.department|default:"General OPD" }}</td>
+        <td>{{ timing.doctor|default:"As available" }}</td>
+        <td>{{ timing.days }}</td>
+        <td>{{ timing.time_range }}</td>
+        <td>{{ timing.room_or_location|default:"-" }}</td>
+        <td>{{ timing.notes|default:"-" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+  {% include "partials/empty_state.html" with title="No OPD timings published" message="Verified OPD timings must be added before launch." %}
+{% endif %}

@@ -1,0 +1,10 @@
+{% load site_extras %}
+<article class="contact-card">
+  <h3>{{ title }}</h3>
+  {% if value %}<p>{{ value }}</p>{% else %}<p class="muted">{{ fallback|default:"Pending confirmation" }}</p>{% endif %}
+  {% if phone %}
+    <a class="text-link" href="tel:{{ phone|tel }}">{{ action_label|default:"Call" }}</a>
+  {% elif href %}
+    <a class="text-link" href="{{ href }}"{% if external %} target="_blank" rel="noopener"{% endif %}>{{ action_label|default:"Open" }}</a>
+  {% endif %}
+</article>

@@ -1,0 +1,35 @@
+{% load static site_extras %}
+<footer class="site-footer">
+  <div class="wrapper footer-grid">
+    <section>
+      <div class="footer-brand">
+        {% if site.logo %}
+          <img src="{{ site.logo.url }}" alt="{{ site.hospital_name }} logo">
+        {% else %}
+          <img src="{% static 'images/bkjh-logo.png' %}" alt="{{ site.hospital_name }} logo">
+        {% endif %}
+        <h2>{{ site.hospital_name }}</h2>
+      </div>
+      <p>{{ site.short_tagline }}</p>
+      {% if site.address %}<p>{{ site.address }}</p>{% endif %}
+    </section>
+    <section>
+      <h2>Patient links</h2>
+      <a href="{% url 'hospital:opd_timing' %}">OPD Timing</a>
+      <a href="{% url 'hospital:doctors' %}">Doctors</a>
+      <a href="{% url 'hospital:departments' %}">Departments</a>
+      <a href="{% url 'appointments:appointment' %}">Request Appointment</a>
+    </section>
+    <section>
+      <h2>Contact</h2>
+      {% if site.main_phone %}<a href="tel:{{ site.main_phone|tel }}">Main: {{ site.main_phone }}</a>{% endif %}
+      {% if site.emergency_phone %}<a href="tel:{{ site.emergency_phone|tel }}">Emergency: {{ site.emergency_phone }}</a>{% endif %}
+      {% if site.ambulance_phone %}<a href="tel:{{ site.ambulance_phone|tel }}">Ambulance: {{ site.ambulance_phone }}</a>{% endif %}
+      {% if site.google_maps_url %}<a href="{{ site.google_maps_url }}" rel="noopener" target="_blank">Open Google Maps</a>{% endif %}
+    </section>
+  </div>
+  <div class="wrapper footer-bottom">
+    <span>&copy; {% now "Y" %} {{ site.hospital_name }}.</span>
+    <span><a href="{% url 'core:privacy' %}">Privacy</a> <a href="{% url 'core:terms' %}">Terms</a></span>
+  </div>
+</footer>

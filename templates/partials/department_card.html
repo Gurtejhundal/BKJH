@@ -1,0 +1,6 @@
+<article class="info-card">
+  <div class="card-icon">{{ department.icon|default:"+" }}</div>
+  <h3>{{ department.name }}</h3>
+  <p>{{ department.short_description }}</p>
+  <a class="text-link" href="{{ department.get_absolute_url }}">View Department Details</a>
+</article>

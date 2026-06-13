@@ -1,0 +1,15 @@
+<section class="section cta-band">
+  <div class="wrapper cta-band__inner">
+    <div>
+      <h2>{{ title|default:"Need help before visiting?" }}</h2>
+      <p>{{ text|default:"Request an appointment or call the hospital directly for current information." }}</p>
+    </div>
+    <div class="contact-strip__actions">
+      <a class="btn btn-primary" href="{% url 'appointments:appointment' %}">Request Appointment</a>
+      {% if site.main_phone %}
+        {% load site_extras %}
+        <a class="btn btn-secondary" href="tel:{{ site.main_phone|tel }}">Call Hospital</a>
+      {% endif %}
+    </div>
+  </div>
+</section>

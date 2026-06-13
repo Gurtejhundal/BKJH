@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "partials/page_header.html" with title="Facilities" intro="Hospital infrastructure and support areas, shown only when active in admin." eyebrow="Infrastructure" %}
+
+<section class="section section-surface">
+  <div class="wrapper">
+    <p class="muted">Facilities are physical/support areas of the hospital. They should not duplicate departments or unconfirmed services.</p>
+    <div class="card-grid section-tight">
+      {% for facility in facilities %}
+        <article class="info-card">
+          {% if facility.image %}
+            <img class="card-image" src="{{ facility.image.url }}" alt="{{ facility.title }}" loading="lazy">
+          {% else %}
+            {% include "partials/image_fallback.html" with label=facility.title initials="BK" message="Facility image pending" %}
+          {% endif %}
+          <h2>{{ facility.title }}</h2>
+          <p>{{ facility.short_description }}</p>
+          {% if facility.detailed_description %}<p>{{ facility.detailed_description }}</p>{% endif %}
+        </article>
+      {% empty %}
+        {% include "partials/empty_state.html" with title="No facilities published" message="Only client-confirmed facilities should be published." %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

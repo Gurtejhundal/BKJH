@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "partials/page_header.html" with title="About Bibi Kaulan Ji Hospital" intro=site.short_tagline eyebrow="Hospital overview" %}
+
+<section class="section">
+  <div class="wrapper split">
+    <div>
+      <h2>Local hospital care, clearly explained</h2>
+      <p>{{ site.about_short|default:"Hospital introduction is pending admin entry. Add client-approved history, doctor information, care approach, and facility details before launch." }}</p>
+      <p>We keep this page factual. Awards, years, certifications, patient counts, and facility claims should be added only when the hospital confirms them.</p>
+    </div>
+    <aside class="support-box">
+      <h3>Care values</h3>
+      <ul>
+        <li>Clear communication for patients and families.</li>
+        <li>Simple appointment request process.</li>
+        <li>Direct phone and location access.</li>
+        <li>Published information only after admin approval.</li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<section class="section section-surface">
+  <div class="wrapper">
+    {% include "partials/section_header.html" with title="Services and facilities preview" intro="Shown only when active featured records are added in admin." %}
+    <div class="card-grid">
+      {% for service in services %}
+        <article class="info-card"><h3>{{ service.title }}</h3><p>{{ service.short_description }}</p></article>
+      {% endfor %}
+      {% for facility in facilities %}
+        <article class="info-card"><h3>{{ facility.title }}</h3><p>{{ facility.short_description }}</p></article>
+      {% endfor %}
+      {% if not services and not facilities %}
+        {% include "partials/empty_state.html" with title="About page content pending" message="Add featured services/facilities from admin after client confirmation." %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% include "partials/cta_band.html" with title="Need hospital information?" text="Use the contact page for address, map, and available phone details." %}
+{% endblock %}

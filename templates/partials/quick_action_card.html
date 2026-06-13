@@ -1,0 +1,7 @@
+<a class="quick-action-card" href="{{ href|default:'#' }}">
+  <span class="quick-action-card__icon" aria-hidden="true">{{ icon|default:"+" }}</span>
+  <span>
+    <strong>{{ title }}</strong>
+    {% if text %}<small>{{ text }}</small>{% endif %}
+  </span>
+</a>

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "partials/page_header.html" with title="Terms" intro="Basic website usage terms for hospital information and appointment requests." eyebrow="Website terms" %}
+
+<section class="section">
+  <div class="wrapper content-page">
+    <h2>Website purpose</h2>
+    <p>This website provides hospital information, public contact details, OPD timing information, and appointment request support.</p>
+    <h2>Appointment requests</h2>
+    <p>Submitting an appointment form does not guarantee a confirmed appointment. Hospital staff must contact the patient to confirm timing and availability.</p>
+    <h2>Emergency cases</h2>
+    <p>For urgent medical concerns, call the hospital directly or visit the nearest appropriate emergency facility. Do not wait for online form confirmation.</p>
+    <h2>Information accuracy</h2>
+    <p>Phone numbers, timings, services, and facility details should be confirmed by the hospital before launch and kept updated through the admin panel.</p>
+  </div>
+</section>
+{% endblock %}

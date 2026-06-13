@@ -1,0 +1,28 @@
+<tr id="appointment-{{ appointment.id }}">
+  <td>
+    <strong>{{ appointment.patient_name }}</strong>
+    <span class="meta">{{ appointment.phone }}</span>
+    <span class="meta">Preferred: {{ appointment.preferred_date }}</span>
+    {% if appointment.preferred_time_text %}<span class="meta">{{ appointment.preferred_time_text }}</span>{% endif %}
+  </td>
+  <td>
+    <span>{{ appointment.department|default:"Department not selected" }}</span>
+    <span class="meta">{{ appointment.preferred_doctor|default:"Any available doctor" }}</span>
+    {% if appointment.message %}<p>{{ appointment.message }}</p>{% endif %}
+    <span class="status status-{{ appointment.status }}">{{ appointment.get_status_display }}</span>
+  </td>
+  <td>
+    <form method="post" action="{% url 'dashboard:appointment_update' appointment.id %}" hx-post="{% url 'dashboard:appointment_update' appointment.id %}" hx-target="#appointment-{{ appointment.id }}" hx-swap="outerHTML">
+      {% csrf_token %}
+      <label class="sr-only" for="status-{{ appointment.id }}">Status</label>
+      <select id="status-{{ appointment.id }}" name="status" class="form-control">
+        {% for value,label in appointment.STATUS_CHOICES %}
+          <option value="{{ value }}" {% if appointment.status == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+      <label class="sr-only" for="note-{{ appointment.id }}">Admin note</label>
+      <textarea id="note-{{ appointment.id }}" name="admin_note" class="form-control" rows="2" placeholder="Internal note">{{ appointment.admin_note }}</textarea>
+      <button class="btn btn-secondary btn-small" type="submit">Update</button>
+    </form>
+  </td>
+</tr>

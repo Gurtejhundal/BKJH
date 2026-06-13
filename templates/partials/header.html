@@ -1,0 +1,36 @@
+{% load static site_extras %}
+<header class="site-header">
+  <div class="wrapper header-inner">
+    <a class="brand" href="{% url 'core:home' %}" aria-label="{{ site.hospital_name }} home">
+      {% if site.logo %}
+        <img src="{{ site.logo.url }}" alt="{{ site.hospital_name }} logo">
+      {% else %}
+        <img src="{% static 'images/bkjh-logo.png' %}" alt="{{ site.hospital_name }} logo">
+      {% endif %}
+      <span>
+        <strong>{{ site.hospital_name }}</strong>
+        <small>Hospital care and OPD support</small>
+      </span>
+    </a>
+    <button class="menu-button" type="button" data-menu-toggle aria-expanded="false" aria-controls="main-nav">
+      <span class="menu-button__lines" aria-hidden="true"></span>
+      <span>Menu</span>
+    </button>
+    <nav id="main-nav" class="main-nav" data-main-nav aria-label="Main navigation">
+      <a href="{% url 'core:home' %}">Home</a>
+      <a href="{% url 'core:about' %}">About</a>
+      <a href="{% url 'hospital:departments' %}">Departments</a>
+      <a href="{% url 'hospital:doctors' %}">Doctors</a>
+      <a href="{% url 'hospital:opd_timing' %}">OPD Timing</a>
+      <a href="{% url 'appointments:appointment' %}">Appointment</a>
+      <a href="{% url 'hospital:gallery' %}">Gallery</a>
+      <a href="{% url 'hospital:contact' %}">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn-secondary" href="{% url 'appointments:appointment' %}">Request Appointment</a>
+      {% if site.emergency_phone %}
+        <a class="btn btn-emergency" href="tel:{{ site.emergency_phone|tel }}">Emergency Call</a>
+      {% endif %}
+    </div>
+  </div>
+</header>

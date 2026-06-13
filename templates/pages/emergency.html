@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load site_extras %}
+{% block content %}
+{% include "partials/page_header.html" with title="Emergency Service" intro="Use direct phone contact for urgent hospital guidance." eyebrow="Urgent care" variant="emergency" %}
+
+<section class="section">
+  <div class="wrapper split">
+    <div>
+      <h2>{{ emergency.title|default:"Emergency information pending" }}</h2>
+      <p>{{ emergency.description|default:"Emergency service details are pending client confirmation. The site does not claim 24/7 availability unless admin content confirms it." }}</p>
+      {% if emergency.availability_text %}<p><strong>Availability:</strong> {{ emergency.availability_text }}</p>{% endif %}
+      {% if emergency.instructions %}<p>{{ emergency.instructions }}</p>{% endif %}
+      {% if emergency.emergency_phone or site.emergency_phone %}
+        <a class="btn btn-emergency" href="tel:{{ emergency.emergency_phone|default:site.emergency_phone|tel }}">Call Emergency Number</a>
+      {% endif %}
+    </div>
+    <aside class="support-box">
+      <h3>Related actions</h3>
+      <p>For transport support, check ambulance details. For location, open the map before travelling.</p>
+      <div class="hero-actions">
+        <a class="btn btn-secondary" href="{% url 'hospital:ambulance' %}">Ambulance Details</a>
+        {% if site.google_maps_url %}<a class="btn btn-primary" href="{{ site.google_maps_url }}" target="_blank" rel="noopener">Get Directions</a>{% endif %}
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="section section-surface">
+  <div class="wrapper">
+    {% include "partials/section_header.html" with title="Recent OPD entries" intro="For non-emergency visits, check OPD timing first." %}
+    {% include "pages/opd_table.html" with timings=timings %}
+  </div>
+</section>
+{% endblock %}

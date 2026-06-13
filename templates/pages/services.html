@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "partials/page_header.html" with title="Services" intro="Patient-facing services published from verified admin content." eyebrow="Patient services" %}
+
+<section class="section section-surface">
+  <div class="wrapper">
+    <p class="muted">Services are different from departments. Services describe patient-facing care or support options. Publish only services confirmed by the hospital.</p>
+    <div class="card-grid section-tight">
+      {% for service in services %}
+        <article class="info-card">
+          {% if service.image %}<img class="card-image" src="{{ service.image.url }}" alt="{{ service.title }}" loading="lazy">{% endif %}
+          <div class="card-icon">{{ service.icon|default:"+" }}</div>
+          <h2>{{ service.title }}</h2>
+          <p>{{ service.short_description }}</p>
+          {% if service.detailed_description %}<p>{{ service.detailed_description }}</p>{% endif %}
+          <a class="text-link" href="{% url 'appointments:appointment' %}">Request Appointment</a>
+        </article>
+      {% empty %}
+        {% include "partials/empty_state.html" with title="No services published" message="Only client-confirmed services should be published." %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% include "partials/cta_band.html" with title="Need consultation?" text="Request an appointment and hospital staff will contact you for confirmation." %}
+{% endblock %}

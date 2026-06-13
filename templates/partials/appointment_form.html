@@ -1,0 +1,15 @@
+<form method="post" class="form-panel" novalidate>
+  {% csrf_token %}
+  {{ form.website }}
+  {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+  {% for field in form.visible_fields %}
+    <div class="form-field {% if field.field.widget.input_type == 'checkbox' %}form-field--check{% endif %}">
+      {{ field.label_tag }}
+      {{ field }}
+      {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+      {% for error in field.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+    </div>
+  {% endfor %}
+  <button class="btn btn-primary" type="submit">Submit Appointment Request</button>
+  <p class="form-note">This form does not confirm a booking automatically. Hospital staff will contact you for confirmation.</p>
+</form>

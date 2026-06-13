@@ -1,0 +1,10 @@
+<div class="section-head">
+  <div>
+    {% if eyebrow %}<p class="section-kicker">{{ eyebrow }}</p>{% endif %}
+    <h2>{{ title }}</h2>
+    {% if intro %}<p>{{ intro }}</p>{% endif %}
+  </div>
+  {% if action_href and action_label %}
+    <a class="text-link" href="{{ action_href }}">{{ action_label }}</a>
+  {% endif %}
+</div>

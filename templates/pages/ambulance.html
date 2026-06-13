@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load site_extras %}
+{% block content %}
+{% include "partials/page_header.html" with title="Ambulance Service" intro="Ambulance contact, service area, and availability notes from admin." eyebrow="Transport support" %}
+
+<section class="section">
+  <div class="wrapper split">
+    <div>
+      <h2>{{ ambulance.title|default:"Ambulance information pending" }}</h2>
+      <p>{{ ambulance.description|default:"Ambulance details are pending client confirmation. Availability and service area should be verified before launch." }}</p>
+      {% if ambulance.availability_text %}<p><strong>Availability:</strong> {{ ambulance.availability_text }}</p>{% endif %}
+      {% if ambulance.service_area %}<p><strong>Service area:</strong> {{ ambulance.service_area }}</p>{% endif %}
+      {% if ambulance.ambulance_phone or site.ambulance_phone %}
+        <a class="btn btn-primary" href="tel:{{ ambulance.ambulance_phone|default:site.ambulance_phone|tel }}">Call Ambulance</a>
+      {% endif %}
+    </div>
+    <aside class="support-box">
+      <h3>For urgent care</h3>
+      <p>Call emergency support directly if the patient needs immediate hospital guidance.</p>
+      <a class="btn btn-emergency" href="{% url 'hospital:emergency' %}">Emergency Details</a>
+      {% if site.google_maps_url %}<a class="text-link" href="{{ site.google_maps_url }}" target="_blank" rel="noopener">Open map</a>{% endif %}
+    </aside>
+  </div>
+</section>
+{% endblock %}

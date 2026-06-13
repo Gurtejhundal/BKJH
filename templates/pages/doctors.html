@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "partials/page_header.html" with title="Doctors" intro="Active doctor information, qualifications, departments, and OPD availability." eyebrow="Doctor information" %}
+
+<section class="section section-tight">
+  <div class="wrapper">
+    <form class="filter-bar" method="get">
+      <label for="department">Filter by department</label>
+      <select id="department" name="department" class="form-control">
+        <option value="">All departments</option>
+        {% for department in departments %}
+          <option value="{{ department.id }}" {% if selected_department == department.id|stringformat:"s" %}selected{% endif %}>{{ department.name }}</option>
+        {% endfor %}
+      </select>
+      <button class="btn btn-secondary" type="submit">Apply Filter</button>
+    </form>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrapper doctor-grid">
+    {% for doctor in doctors %}
+      {% include "partials/doctor_card.html" %}
+    {% empty %}
+      {% include "partials/empty_state.html" with title="No doctors published" message="Doctor details should only be added after client approval." %}
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "partials/page_header.html" with title="Gallery" intro="Approved hospital photos organized by category." eyebrow="Hospital photos" %}
+
+<section class="section section-tight">
+  <div class="wrapper filter-links" aria-label="Gallery categories">
+    <a href="{% url 'hospital:gallery' %}" class="{% if not selected_category %}active{% endif %}">All</a>
+    {% for category in categories %}
+      <a href="?category={{ category.slug }}" class="{% if selected_category == category.slug %}active{% endif %}">{{ category.name }}</a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrapper">
+    {% if images %}
+      <div class="gallery-grid">
+        {% for image in images %}
+          <figure>
+            <img src="{{ image.image.url }}" alt="{{ image.alt_text }}" loading="lazy">
+            <figcaption><strong>{{ image.title }}</strong>{% if image.caption %}<span>{{ image.caption }}</span>{% endif %}</figcaption>
+          </figure>
+        {% endfor %}
+      </div>
+    {% else %}
+      {% include "partials/empty_state.html" with title="No gallery images published" message="Upload approved real hospital photos in admin. No fake stock imagery is shown." %}
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

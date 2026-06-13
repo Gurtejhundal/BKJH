@@ -1,0 +1,13 @@
+<section class="page-hero{% if variant %} page-hero--{{ variant }}{% endif %}">
+  {% if breadcrumbs %}{% include "partials/breadcrumbs.html" %}{% endif %}
+  <div class="wrapper">
+    {% if eyebrow %}<p class="hero-badge">{{ eyebrow }}</p>{% endif %}
+    <h1>{{ title }}</h1>
+    {% if intro %}<p>{{ intro }}</p>{% endif %}
+    {% if action_href and action_label %}
+      <div class="page-hero__actions">
+        <a class="btn {{ action_variant|default:'btn-primary' }}" href="{{ action_href }}"{% if action_external %} target="_blank" rel="noopener"{% endif %}>{{ action_label }}</a>
+      </div>
+    {% endif %}
+  </div>
+</section>

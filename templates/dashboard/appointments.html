@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block extra_js %}<script src="https://unpkg.com/htmx.org@1.9.12" defer></script>{% endblock %}
+{% block content %}
+<section class="page-hero"><div class="wrapper"><h1>Appointment Dashboard</h1><p>Review requests, filter by status, and update follow-up notes.</p></div></section>
+<section class="section section-tight">
+  <div class="wrapper dashboard-summary">
+    <div><strong>{{ pending_count }}</strong><span>Pending requests</span></div>
+    <div><strong>{{ today_count }}</strong><span>Preferred today</span></div>
+    <div><strong>{{ appointments.paginator.count }}</strong><span>Matching requests</span></div>
+  </div>
+</section>
+<section class="section">
+  <div class="wrapper">
+    <form class="filter-bar dashboard-filter" method="get">
+      <label for="status">Status</label>
+      <select id="status" name="status" class="form-control">
+        <option value="">All statuses</option>
+        {% for value,label in status_choices %}
+          <option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+      <label for="department">Department</label>
+      <select id="department" name="department" class="form-control">
+        <option value="">All departments</option>
+        {% for department in departments %}
+          <option value="{{ department.id }}" {% if selected_department == department.id|stringformat:"s" %}selected{% endif %}>{{ department.name }}</option>
+        {% endfor %}
+      </select>
+      <label for="date">Preferred date</label>
+      <input id="date" class="form-control" type="date" name="date" value="{{ selected_date }}">
+      <label for="q">Search</label>
+      <input id="q" class="form-control" type="search" name="q" value="{{ query }}" placeholder="Name or phone">
+      <button class="btn btn-secondary" type="submit">Filter</button>
+    </form>
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr><th>Patient</th><th>Request</th><th>Status update</th></tr>
+        </thead>
+        <tbody>
+          {% for appointment in appointments %}
+            {% include "dashboard/partials/appointment_row.html" %}
+          {% empty %}
+            <tr><td colspan="3">No appointment requests match this filter.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if appointments.has_other_pages %}
+      <nav class="pagination" aria-label="Appointment pages">
+        {% if appointments.has_previous %}<a class="text-link" href="?page={{ appointments.previous_page_number }}&status={{ selected_status }}&department={{ selected_department }}&date={{ selected_date }}&q={{ query }}">Previous</a>{% endif %}
+        <span>Page {{ appointments.number }} of {{ appointments.paginator.num_pages }}</span>
+        {% if appointments.has_next %}<a class="text-link" href="?page={{ appointments.next_page_number }}&status={{ selected_status }}&department={{ selected_department }}&date={{ selected_date }}&q={{ query }}">Next</a>{% endif %}
+      </nav>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

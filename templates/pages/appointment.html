@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load site_extras %}
+{% block content %}
+{% include "partials/page_header.html" with title="Request Appointment" intro="Submit a request and hospital staff will contact you for confirmation." eyebrow="Appointment request" %}
+
+<section class="section">
+  <div class="wrapper split">
+    <div>{% include "partials/appointment_form.html" %}</div>
+    <aside class="support-box">
+      <h2>Important</h2>
+      <p>This is not an automatic booking engine. Please keep your phone available after submitting the request.</p>
+      <p>For urgent medical concerns, do not wait for online confirmation. Call the hospital directly.</p>
+      {% if site.emergency_phone %}<a class="btn btn-emergency" href="tel:{{ site.emergency_phone|tel }}">Call Emergency</a>{% endif %}
+    </aside>
+  </div>
+</section>
+{% endblock %}

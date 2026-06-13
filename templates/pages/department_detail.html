@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load site_extras %}
+{% block content %}
+<section class="page-hero">
+  <nav class="breadcrumbs wrapper" aria-label="Breadcrumb">
+    <a href="{% url 'core:home' %}">Home</a><span>/</span>
+    <a href="{% url 'hospital:departments' %}">Departments</a><span>/</span>
+    <span aria-current="page">{{ department.name }}</span>
+  </nav>
+  <div class="wrapper">
+    <p class="hero-badge">Department</p>
+    <h1>{{ department.name }}</h1>
+    <p>{{ department.short_description }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrapper split">
+    <div>
+      <h2>Department overview</h2>
+      <p>{{ department.detailed_description|default:department.short_description }}</p>
+      {% if department.image %}
+        <img class="content-image" src="{{ department.image.url }}" alt="{{ department.name }}" loading="lazy">
+      {% else %}
+        {% include "partials/image_fallback.html" with label=department.name initials="BK" message="Department image pending" %}
+      {% endif %}
+      {% if department.services_list %}
+        <h2>Services and care areas</h2>
+        <ul class="check-list">{% for item in department.services_list|splitlines_clean %}<li>{{ item }}</li>{% endfor %}</ul>
+      {% endif %}
+    </div>
+    <aside class="support-box">
+      <h3>Need this department?</h3>
+      <p>Submit an appointment request. Staff will contact you for confirmation.</p>
+      <a class="btn btn-primary" href="{% url 'appointments:appointment' %}">Request Appointment</a>
+      {% if site.main_phone %}<a class="text-link" href="tel:{{ site.main_phone|tel }}">Call hospital</a>{% endif %}
+    </aside>
+  </div>
+</section>
+
+<section class="section section-surface">
+  <div class="wrapper">
+    {% include "partials/section_header.html" with title="Related doctors" intro="Active doctors linked to this department." %}
+    <div class="doctor-grid">
+      {% for doctor in doctors %}
+        {% include "partials/doctor_card.html" %}
+      {% empty %}
+        {% include "partials/empty_state.html" with title="No related doctors published" message="Doctors can be linked to this department from admin." %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrapper">
+    {% include "partials/section_header.html" with title="OPD timings" intro="Active timings linked to this department." %}
+    {% include "pages/opd_table.html" with timings=timings %}
+  </div>
+</section>
+{% endblock %}

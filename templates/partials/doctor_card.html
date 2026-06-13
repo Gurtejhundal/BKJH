@@ -1,0 +1,19 @@
+<article class="doctor-card">
+  {% if doctor.photo %}
+    <img src="{{ doctor.photo.url }}" alt="Photo of {{ doctor.full_name }}" loading="lazy">
+  {% else %}
+    <div class="avatar" aria-hidden="true">{{ doctor.initials }}</div>
+  {% endif %}
+  <div>
+    <h3>{{ doctor.full_name }}</h3>
+    {% if doctor.qualification %}<p class="muted">{{ doctor.qualification }}</p>{% endif %}
+    {% if doctor.specialization %}<p>{{ doctor.specialization }}</p>{% endif %}
+    {% if doctor.department %}<p class="meta">{{ doctor.department.name }}</p>{% endif %}
+    {% if doctor.opd_days_text or doctor.opd_time_text %}
+      <p class="meta">{{ doctor.opd_days_text }} {% if doctor.opd_time_text %}{{ doctor.opd_time_text }}{% endif %}</p>
+    {% endif %}
+    {% if doctor.appointment_enabled %}
+      <a class="text-link" href="{% url 'appointments:appointment' %}">Request Appointment</a>
+    {% endif %}
+  </div>
+</article>
