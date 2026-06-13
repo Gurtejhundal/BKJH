@@ -2,6 +2,7 @@
   <span class="quick-action-card__icon" aria-hidden="true">{{ icon|default:"+" }}</span>
   <span>
     <strong>{{ title }}</strong>
+    {% if support_text %}<span class="punjabi-support">{{ support_text }}</span>{% endif %}
     {% if text %}<small>{{ text }}</small>{% endif %}
   </span>
 </a>

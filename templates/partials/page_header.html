@@ -3,6 +3,7 @@
   <div class="wrapper">
     {% if eyebrow %}<p class="hero-badge">{{ eyebrow }}</p>{% endif %}
     <h1>{{ title }}</h1>
+    {% if support_text %}<p class="punjabi-support page-punjabi">{{ support_text }}</p>{% endif %}
     {% if intro %}<p>{{ intro }}</p>{% endif %}
     {% if action_href and action_label %}
       <div class="page-hero__actions">

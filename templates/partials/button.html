@@ -1,3 +1,4 @@
-<a class="btn {{ variant|default:'btn-primary' }}" href="{{ href|default:'#' }}"{% if external %} target="_blank" rel="noopener"{% endif %}>
-  {{ label|default:"Learn More" }}
+<a class="btn {{ variant|default:'btn-primary' }}{% if support_text %} btn-stacked{% endif %}" href="{{ href|default:'#' }}"{% if external %} target="_blank" rel="noopener"{% endif %}>
+  <span>{{ label|default:"Learn More" }}</span>
+  {% if support_text %}<small class="punjabi-support">{{ support_text }}</small>{% endif %}
 </a>

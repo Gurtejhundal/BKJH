@@ -135,6 +135,21 @@ p {
   color: var(--color-primary);
 }
 
+.brand-punjabi,
+.punjabi-support {
+  display: block;
+  font-family: "Noto Sans Gurmukhi", Inter, system-ui, sans-serif;
+  letter-spacing: 0;
+  line-height: 1.45;
+}
+
+.punjabi-support {
+  margin-top: 2px;
+  color: var(--color-primary-dark);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
 .muted,
 .meta {
   color: var(--color-muted);
@@ -232,6 +247,14 @@ p {
   font-size: 0.8rem;
 }
 
+.brand-punjabi {
+  margin-top: 1px;
+  color: var(--color-emergency);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
 .menu-button {
   display: inline-flex;
   align-items: center;
@@ -320,6 +343,22 @@ p {
   text-align: center;
   text-decoration: none;
   cursor: pointer;
+}
+
+.btn-stacked {
+  min-height: 56px;
+  flex-direction: column;
+  gap: 1px;
+  padding-block: 8px;
+}
+
+.btn-stacked .punjabi-support {
+  margin: 0;
+  color: currentColor;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.25;
+  opacity: 0.93;
 }
 
 .btn-primary {
@@ -418,6 +457,13 @@ p {
   font-weight: 850;
 }
 
+.hero-punjabi {
+  margin: 4px 0 var(--space-3);
+  color: var(--color-emergency);
+  font-size: clamp(1.2rem, 5vw, 1.8rem);
+  font-weight: 800;
+}
+
 .hero-visual {
   display: grid;
   gap: var(--space-4);
@@ -476,6 +522,12 @@ p {
   box-shadow: inset 0 0 0 5px var(--color-accent-soft);
 }
 
+.trust-item .punjabi-support {
+  color: var(--color-primary);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
 .quick-grid,
 .card-grid,
 .doctor-grid,
@@ -527,6 +579,12 @@ p {
   font-weight: 600;
 }
 
+.quick-action-card .punjabi-support {
+  color: var(--color-emergency);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
 .page-hero {
   padding-block: var(--space-10);
   background: var(--color-surface);
@@ -536,6 +594,13 @@ p {
 .page-hero p {
   max-width: 760px;
   color: var(--color-muted);
+}
+
+.page-hero .page-punjabi {
+  margin: 0 0 var(--space-3);
+  color: var(--color-primary);
+  font-size: clamp(1.05rem, 4vw, 1.35rem);
+  font-weight: 800;
 }
 
 .emergency-hero {
@@ -1052,6 +1117,33 @@ textarea.form-control {
   .doctor-card:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-card);
+  }
+}
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: clamp(1.85rem, 9vw, 2.55rem);
+  }
+
+  .hero {
+    padding-block: var(--space-8);
+  }
+
+  .hero-badge {
+    margin-bottom: var(--space-3);
+    font-size: 0.78rem;
+  }
+
+  .hero-punjabi {
+    font-size: clamp(1.05rem, 5vw, 1.35rem);
+  }
+
+  .hero-actions {
+    margin-top: var(--space-5);
+  }
+
+  .hero-actions .btn {
+    width: 100%;
   }
 }
 

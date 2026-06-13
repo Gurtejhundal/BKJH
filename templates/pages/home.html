@@ -6,27 +6,29 @@
     <div class="hero-copy">
       <p class="hero-badge">Local Healthcare - Fatehgarh Churian - Punjab</p>
       <h1>{{ site.hospital_name }}</h1>
+      <p class="punjabi-support hero-punjabi">ਬੀਬੀ ਕੌਲਾਂ ਜੀ ਹਸਪਤਾਲ</p>
       <p class="hero-local-line">Trusted Healthcare in Fatehgarh Churian</p>
+      <p class="punjabi-support">ਫਤਿਹਗੜ੍ਹ ਚੂੜੀਆਂ ਵਿੱਚ ਭਰੋਸੇਯੋਗ ਸਿਹਤ ਸੇਵਾ</p>
       <p class="lead">{{ site.short_tagline }}</p>
       <p>Request an appointment, check OPD timings, or call the hospital directly for urgent guidance before visiting.</p>
       <div class="hero-actions" aria-label="Primary patient actions">
-        {% include "partials/button.html" with href=appointment_url label="Book Appointment" variant="btn-primary" %}
+        {% include "partials/button.html" with href=appointment_url label="Book Appointment" support_text="ਮੁਲਾਕਾਤ ਲਈ ਬੇਨਤੀ ਕਰੋ" variant="btn-primary" %}
         {% if site.emergency_phone %}
-          {% include "partials/button.html" with href=emergency_tel label="Call Emergency" variant="btn-emergency" %}
+          {% include "partials/button.html" with href=emergency_tel label="Call Emergency" support_text="ਐਮਰਜੈਂਸੀ ਕਾਲ ਕਰੋ" variant="btn-emergency" %}
         {% else %}
-          {% include "partials/button.html" with href=emergency_url label="Emergency Info" variant="btn-emergency" %}
+          {% include "partials/button.html" with href=emergency_url label="Emergency Info" support_text="ਐਮਰਜੈਂਸੀ ਜਾਣਕਾਰੀ" variant="btn-emergency" %}
         {% endif %}
         {% if site.google_maps_url %}
-          {% include "partials/button.html" with href=site.google_maps_url label="Get Directions" variant="btn-secondary" external=True %}
+          {% include "partials/button.html" with href=site.google_maps_url label="Get Directions" support_text="ਰਸਤਾ ਵੇਖੋ" variant="btn-secondary" external=True %}
         {% else %}
-          {% include "partials/button.html" with href=contact_url label="Location" variant="btn-secondary" %}
+          {% include "partials/button.html" with href=contact_url label="Location" support_text="ਸਥਾਨ ਵੇਖੋ" variant="btn-secondary" %}
         {% endif %}
       </div>
       <div class="trust-list" aria-label="Hospital access points">
-        <span class="trust-item">OPD consultation information</span>
-        <span class="trust-item">Emergency contact access</span>
-        <span class="trust-item">Easy access on Ajnala Road</span>
-        <span class="trust-item">Clear appointment request process</span>
+        <span class="trust-item">OPD consultation information <small class="punjabi-support">ਓਪੀਡੀ ਸਲਾਹ ਜਾਣਕਾਰੀ</small></span>
+        <span class="trust-item">Emergency contact access <small class="punjabi-support">ਐਮਰਜੈਂਸੀ ਸੰਪਰਕ</small></span>
+        <span class="trust-item">Easy access on Ajnala Road <small class="punjabi-support">ਅਜਨਾਲਾ ਰੋਡ ਉੱਤੇ ਆਸਾਨ ਪਹੁੰਚ</small></span>
+        <span class="trust-item">Clear appointment request process <small class="punjabi-support">ਸਾਫ਼ ਮੁਲਾਕਾਤ ਬੇਨਤੀ ਪ੍ਰਕਿਰਿਆ</small></span>
       </div>
     </div>
     <div class="hero-visual">
@@ -68,15 +70,15 @@
   <div class="wrapper">
     {% include "partials/section_header.html" with title="Quick patient actions" intro="Fast access for patients on mobile: appointment request, OPD timing, doctors, departments, ambulance, and location." %}
     <div class="quick-grid">
-      {% include "partials/quick_action_card.html" with href=appointment_url icon="+" title="Book Appointment" text="Submit a request. Staff will contact you for confirmation." %}
-      {% include "partials/quick_action_card.html" with href=opd_url icon="+" title="OPD Timing" text="Check active OPD entries before visiting." %}
-      {% include "partials/quick_action_card.html" with href=doctors_url icon="+" title="Doctors" text="View active doctors and OPD details." %}
-      {% include "partials/quick_action_card.html" with href=departments_url icon="+" title="Departments" text="Explore available specialties." %}
-      {% include "partials/quick_action_card.html" with href=ambulance_url icon="+" title="Ambulance" text="See ambulance contact and availability details." %}
+      {% include "partials/quick_action_card.html" with href=appointment_url icon="+" title="Book Appointment" support_text="ਮੁਲਾਕਾਤ ਲਈ ਬੇਨਤੀ" text="Submit a request. Staff will contact you for confirmation." %}
+      {% include "partials/quick_action_card.html" with href=opd_url icon="+" title="OPD Timing" support_text="ਓਪੀਡੀ ਸਮਾਂ" text="Check active OPD entries before visiting." %}
+      {% include "partials/quick_action_card.html" with href=doctors_url icon="+" title="Doctors" support_text="ਡਾਕਟਰ" text="View active doctors and OPD details." %}
+      {% include "partials/quick_action_card.html" with href=departments_url icon="+" title="Departments" support_text="ਵਿਭਾਗ" text="Explore available specialties." %}
+      {% include "partials/quick_action_card.html" with href=ambulance_url icon="+" title="Ambulance" support_text="ਐਂਬੂਲੈਂਸ" text="See ambulance contact and availability details." %}
       {% if site.google_maps_url %}
-        {% include "partials/quick_action_card.html" with href=site.google_maps_url icon="+" title="Location" text="Open directions to Ajnala Road." %}
+        {% include "partials/quick_action_card.html" with href=site.google_maps_url icon="+" title="Location" support_text="ਸਥਾਨ" text="Open directions to Ajnala Road." %}
       {% else %}
-        {% include "partials/quick_action_card.html" with href=contact_url icon="+" title="Location" text="Address and map details pending." %}
+        {% include "partials/quick_action_card.html" with href=contact_url icon="+" title="Location" support_text="ਸਥਾਨ" text="Address and map details pending." %}
       {% endif %}
     </div>
   </div>
