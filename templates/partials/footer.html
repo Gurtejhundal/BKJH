@@ -10,11 +10,13 @@
         {% endif %}
         <h2>{{ site.hospital_name }}</h2>
       </div>
+      <p class="punjabi-support">ਬੀਬੀ ਕੌਲਾਂ ਜੀ ਹਸਪਤਾਲ</p>
       <p>{{ site.short_tagline }}</p>
       {% if site.address %}<p>{{ site.address }}</p>{% endif %}
     </section>
     <section>
       <h2>Patient links</h2>
+      <p class="punjabi-support">ਮਰੀਜ਼ਾਂ ਲਈ ਲਿੰਕ</p>
       <a href="{% url 'hospital:opd_timing' %}">OPD Timing</a>
       <a href="{% url 'hospital:doctors' %}">Doctors</a>
       <a href="{% url 'hospital:departments' %}">Departments</a>
@@ -22,6 +24,7 @@
     </section>
     <section>
       <h2>Contact</h2>
+      <p class="punjabi-support">ਸੰਪਰਕ</p>
       {% if site.main_phone %}<a href="tel:{{ site.main_phone|tel }}">Main: {{ site.main_phone }}</a>{% endif %}
       {% if site.emergency_phone %}<a href="tel:{{ site.emergency_phone|tel }}">Emergency: {{ site.emergency_phone }}</a>{% endif %}
       {% if site.ambulance_phone %}<a href="tel:{{ site.ambulance_phone|tel }}">Ambulance: {{ site.ambulance_phone }}</a>{% endif %}

@@ -2,6 +2,7 @@
   <div>
     {% if eyebrow %}<p class="section-kicker">{{ eyebrow }}</p>{% endif %}
     <h2>{{ title }}</h2>
+    {% if support_text %}<p class="punjabi-support section-punjabi">{{ support_text }}</p>{% endif %}
     {% if intro %}<p>{{ intro }}</p>{% endif %}
   </div>
   {% if action_href and action_label %}

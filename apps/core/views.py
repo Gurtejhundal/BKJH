@@ -54,7 +54,7 @@ def home(request):
     doctors = Doctor.objects.select_related("department").filter(is_active=True).order_by("-is_featured", "display_order", "full_name")[:4]
     timings = OPDTiming.objects.select_related("department", "doctor").filter(is_active=True)[:6]
     gallery = GalleryImage.objects.select_related("category").filter(is_active=True, is_featured=True, category__is_active=True)[:6]
-    services = Service.objects.filter(is_active=True, is_featured=True)[:4]
+    services = Service.objects.filter(is_active=True, is_featured=True)[:8]
     facilities = Facility.objects.filter(is_active=True, is_featured=True)[:4]
     emergency = EmergencyInfo.objects.filter(is_active=True).first()
     ambulance = AmbulanceInfo.objects.filter(is_active=True).first()

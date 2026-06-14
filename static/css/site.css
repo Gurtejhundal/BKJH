@@ -1,15 +1,15 @@
 :root {
-  --color-primary: #00796b;
-  --color-primary-dark: #004d40;
-  --color-accent: #00796b;
-  --color-accent-soft: #eaf7f4;
+  --color-primary: #006b54;
+  --color-primary-dark: #004233;
+  --color-accent: #00866a;
+  --color-accent-soft: #e8f7f2;
   --color-bg: #ffffff;
   --color-surface: #f8faf9;
   --color-border: #e5e7eb;
   --color-text: #374151;
   --color-heading: #1f2933;
   --color-muted: #6b7280;
-  --color-emergency: #d32f2f;
+  --color-emergency: #e11d24;
   --color-warning-soft: #fff7ed;
   --shadow-card: 0 8px 30px rgba(15, 23, 42, 0.06);
   --radius-sm: 6px;
@@ -24,7 +24,7 @@
   --space-8: 32px;
   --space-10: 40px;
   --space-12: 48px;
-  --wrapper: 1160px;
+  --wrapper: 1660px;
   --mobile-action-height: 62px;
 }
 
@@ -172,15 +172,18 @@ p {
 }
 
 .emergency-strip {
-  background: var(--color-primary-dark);
+  background: linear-gradient(90deg, #004233, #00634d);
   color: white;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
 
 .emergency-strip__inner {
-  display: grid;
-  gap: var(--space-1);
-  padding-block: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 9px;
 }
 
 .emergency-strip a {
@@ -188,12 +191,45 @@ p {
   text-decoration: none;
 }
 
+.top-location {
+  position: relative;
+  padding-left: 22px;
+  font-weight: 700;
+}
+
+.top-location::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 10px;
+  height: 10px;
+  border-radius: 50% 50% 50% 0;
+  border: 2px solid currentColor;
+  transform: rotate(-45deg);
+}
+
+.top-motto {
+  display: inline-flex;
+  gap: var(--space-3);
+  align-items: center;
+  font-weight: 800;
+}
+
+.top-motto .punjabi-support {
+  display: inline;
+  margin: 0;
+  color: white;
+  font-size: 0.95rem;
+}
+
 .site-header {
   position: sticky;
   top: 0;
   z-index: 30;
-  background: rgba(255, 255, 255, 0.97);
+  background: rgba(255, 255, 255, 0.985);
   border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 16px 35px rgba(15, 23, 42, 0.05);
   backdrop-filter: blur(14px);
 }
 
@@ -202,8 +238,8 @@ p {
   grid-template-columns: 1fr auto;
   gap: var(--space-3);
   align-items: center;
-  min-height: 78px;
-  padding-block: var(--space-3);
+  min-height: 92px;
+  padding-block: var(--space-4);
 }
 
 .brand {
@@ -216,8 +252,8 @@ p {
 
 .brand img,
 .brand-mark {
-  width: 48px;
-  height: 48px;
+  width: 58px;
+  height: 58px;
   flex: 0 0 auto;
   border-radius: 50%;
   object-fit: cover;
@@ -239,7 +275,9 @@ p {
 
 .brand strong {
   color: var(--color-primary-dark);
-  line-height: 1.2;
+  font-size: clamp(1.05rem, 4vw, 1.72rem);
+  line-height: 1.08;
+  text-transform: uppercase;
 }
 
 .brand small {
@@ -248,9 +286,9 @@ p {
 }
 
 .brand-punjabi {
-  margin-top: 1px;
-  color: var(--color-emergency);
-  font-size: 0.78rem;
+  margin-top: 3px;
+  color: var(--color-primary-dark);
+  font-size: clamp(0.95rem, 3.8vw, 1.2rem);
   font-weight: 800;
   line-height: 1.25;
 }
@@ -326,8 +364,38 @@ p {
   background: var(--color-surface);
 }
 
+.main-nav a.is-active {
+  position: relative;
+  color: var(--color-primary-dark);
+}
+
+.main-nav a.is-active::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 2px;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--color-primary);
+}
+
 .header-actions {
   display: none;
+}
+
+.header-emergency {
+  min-width: 180px;
+  align-items: center;
+  flex-direction: column;
+  gap: 1px;
+  padding-block: 10px;
+  border-radius: 8px;
+}
+
+.header-emergency strong {
+  font-size: 1rem;
+  line-height: 1.2;
 }
 
 .btn {
@@ -395,10 +463,11 @@ p {
 }
 
 .hero {
-  padding-block: var(--space-10) var(--space-8);
+  padding-block: var(--space-10);
   background:
-    linear-gradient(135deg, rgba(234, 247, 244, 0.82), rgba(248, 250, 249, 0.96) 58%),
-    var(--color-surface);
+    linear-gradient(90deg, rgba(232, 247, 242, 0.96) 0%, rgba(255, 255, 255, 0.92) 56%, rgba(248, 250, 249, 1) 100%),
+    white;
+  overflow: hidden;
 }
 
 .hero-grid,
@@ -411,13 +480,13 @@ p {
 }
 
 .hero-copy p {
-  max-width: 680px;
+  max-width: 760px;
 }
 
 .hero-actions {
   display: grid;
   gap: var(--space-3);
-  margin-top: var(--space-6);
+  margin-top: var(--space-5);
 }
 
 .hero-panel,
@@ -458,10 +527,125 @@ p {
 }
 
 .hero-punjabi {
-  margin: 4px 0 var(--space-3);
-  color: var(--color-emergency);
-  font-size: clamp(1.2rem, 5vw, 1.8rem);
+  margin: var(--space-3) 0 var(--space-4);
+  color: var(--color-primary-dark);
+  font-size: clamp(1.45rem, 6vw, 2.65rem);
   font-weight: 800;
+}
+
+.hero-subline {
+  margin-top: -6px;
+  color: var(--color-muted);
+  font-size: clamp(1rem, 4vw, 1.22rem);
+  font-weight: 700;
+}
+
+.hero-society {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  max-width: 680px;
+  margin-top: var(--space-6);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid rgba(0, 107, 84, 0.36);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--color-primary-dark);
+  box-shadow: 0 14px 35px rgba(0, 66, 51, 0.06);
+}
+
+.hero-society strong {
+  display: block;
+  font-size: 0.98rem;
+  line-height: 1.35;
+}
+
+.hero-society .punjabi-support {
+  color: var(--color-primary-dark);
+  font-size: 0.95rem;
+}
+
+.society-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--color-accent-soft);
+  color: var(--color-primary);
+  font-size: 1.45rem;
+  font-weight: 900;
+}
+
+.hero-team {
+  position: relative;
+  display: grid;
+  grid-template-columns: 0.82fr 1.08fr 0.82fr;
+  align-items: end;
+  gap: var(--space-3);
+  min-height: 430px;
+  padding: var(--space-8) var(--space-5) var(--space-5);
+}
+
+.hero-team::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 36px;
+  z-index: 0;
+  border-radius: 34px 0 0 34px;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.86)),
+    url("../images/hospital/consultation-room.png") center / cover;
+  box-shadow: inset 26px 0 40px rgba(255, 255, 255, 0.78);
+}
+
+.team-portrait {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: var(--space-2);
+  text-align: center;
+}
+
+.team-portrait img {
+  width: min(100%, 180px);
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 8px solid white;
+  border-radius: 50%;
+  box-shadow: 0 15px 35px rgba(0, 66, 51, 0.16);
+  outline: 4px solid #12a538;
+}
+
+.team-portrait-main img {
+  width: min(100%, 270px);
+}
+
+.team-portrait strong {
+  display: block;
+  width: 100%;
+  padding: 7px 10px 0;
+  border-radius: 6px 6px 0 0;
+  background: #12a538;
+  color: white;
+  font-size: clamp(0.82rem, 1.8vw, 1.1rem);
+  line-height: 1.2;
+}
+
+.team-portrait span {
+  display: block;
+  width: 100%;
+  margin-top: -8px;
+  padding: 0 10px 8px;
+  border-radius: 0 0 6px 6px;
+  background: #12a538;
+  color: white;
+  font-size: 0.74rem;
+  font-weight: 800;
+  line-height: 1.2;
 }
 
 .hero-visual {
@@ -647,6 +831,79 @@ p {
   font-size: 0.86rem;
   font-weight: 850;
   text-transform: uppercase;
+}
+
+.section-punjabi {
+  margin-top: -6px;
+  margin-bottom: var(--space-3);
+  color: var(--color-primary);
+  font-size: clamp(1.05rem, 3.6vw, 1.38rem);
+  font-weight: 800;
+}
+
+.key-service-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.key-service-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-3);
+  align-items: start;
+  min-height: 120px;
+  padding: var(--space-4);
+  border: 1px solid rgba(0, 107, 84, 0.16);
+  border-radius: var(--radius-md);
+  background: white;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.07);
+}
+
+.key-service-card h3 {
+  margin-bottom: var(--space-1);
+  color: var(--color-primary-dark);
+}
+
+.key-service-card p {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.94rem;
+}
+
+.key-service-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 7px solid white;
+  border-radius: 50%;
+  background: #0b873f;
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 900;
+  box-shadow: 0 0 0 1px rgba(0, 107, 84, 0.16), 0 8px 20px rgba(0, 66, 51, 0.12);
+}
+
+.insurance-band {
+  max-width: 880px;
+  margin: var(--space-6) auto 0;
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-md);
+  background: linear-gradient(90deg, #006b1f, #0ea336);
+  color: white;
+  text-align: center;
+  box-shadow: 0 14px 28px rgba(0, 66, 51, 0.14);
+}
+
+.insurance-band strong,
+.insurance-band span {
+  display: block;
+}
+
+.insurance-band .punjabi-support {
+  margin-top: 3px;
+  color: white;
+  font-size: 1rem;
 }
 
 .info-card,
@@ -1020,6 +1277,11 @@ textarea.form-control {
   color: white;
 }
 
+.contact-strip .punjabi-support,
+.site-footer .punjabi-support {
+  color: rgba(255, 255, 255, 0.88);
+}
+
 .contact-strip__actions {
   display: grid;
   gap: var(--space-3);
@@ -1122,11 +1384,11 @@ textarea.form-control {
 
 @media (max-width: 640px) {
   h1 {
-    font-size: clamp(1.85rem, 9vw, 2.55rem);
+    font-size: clamp(2rem, 10vw, 2.85rem);
   }
 
   .hero {
-    padding-block: var(--space-8);
+    padding-block: var(--space-8) var(--space-4);
   }
 
   .hero-badge {
@@ -1135,7 +1397,7 @@ textarea.form-control {
   }
 
   .hero-punjabi {
-    font-size: clamp(1.05rem, 5vw, 1.35rem);
+    font-size: clamp(1.4rem, 7vw, 1.85rem);
   }
 
   .hero-actions {
@@ -1144,6 +1406,64 @@ textarea.form-control {
 
   .hero-actions .btn {
     width: 100%;
+  }
+
+  .top-motto {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .brand {
+    gap: var(--space-2);
+  }
+
+  .brand img,
+  .brand-mark {
+    width: 50px;
+    height: 50px;
+  }
+
+  .hero-society {
+    align-items: flex-start;
+    padding: var(--space-3);
+  }
+
+  .society-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .hero-team {
+    grid-template-columns: 0.8fr 1fr 0.8fr;
+    gap: 6px;
+    min-height: auto;
+    margin-top: var(--space-4);
+    padding: var(--space-6) 0 var(--space-3);
+  }
+
+  .hero-team::before {
+    inset: 0 0 24px;
+    border-radius: 20px;
+  }
+
+  .team-portrait img {
+    width: 86px;
+    border-width: 5px;
+    outline-width: 2px;
+  }
+
+  .team-portrait-main img {
+    width: 126px;
+  }
+
+  .team-portrait strong {
+    font-size: 0.66rem;
+    padding-inline: 4px;
+  }
+
+  .team-portrait span {
+    font-size: 0.58rem;
+    padding-inline: 4px;
   }
 }
 
@@ -1184,6 +1504,10 @@ textarea.form-control {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .key-service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .trust-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1217,8 +1541,22 @@ textarea.form-control {
 @media (min-width: 900px) {
   .header-inner {
     display: flex;
-    min-height: 82px;
-    gap: var(--space-5);
+    min-height: 118px;
+    gap: var(--space-6);
+  }
+
+  .brand {
+    min-width: 390px;
+  }
+
+  .brand img,
+  .brand-mark {
+    width: 76px;
+    height: 76px;
+  }
+
+  .brand strong {
+    white-space: nowrap;
   }
 
   .menu-button {
@@ -1229,17 +1567,17 @@ textarea.form-control {
     display: flex;
     grid-column: auto;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--space-3);
     margin-left: auto;
     padding-block: 0;
     border-top: 0;
   }
 
   .main-nav a {
-    min-height: 40px;
-    padding-inline: 10px;
+    min-height: 44px;
+    padding-inline: 8px;
     color: var(--color-muted);
-    font-size: 0.94rem;
+    font-size: 0.93rem;
   }
 
   .header-actions {
@@ -1248,14 +1586,31 @@ textarea.form-control {
   }
 
   .hero {
-    padding-block: 76px 52px;
+    padding-block: 44px 0;
   }
 
   .hero-grid,
   .split {
-    grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
+    grid-template-columns: minmax(0, 1.05fr) minmax(460px, 0.95fr);
     align-items: center;
     gap: var(--space-10);
+  }
+
+  .hero-copy {
+    padding-block: var(--space-6);
+  }
+
+  .hero-team {
+    min-height: 560px;
+    padding-inline: var(--space-8);
+  }
+
+  .team-portrait img {
+    width: min(100%, 210px);
+  }
+
+  .team-portrait-main img {
+    width: min(100%, 320px);
   }
 
   .action-pair,
@@ -1295,6 +1650,10 @@ textarea.form-control {
   .card-grid,
   .gallery-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .key-service-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .footer-grid {

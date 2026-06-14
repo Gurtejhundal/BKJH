@@ -10,7 +10,6 @@
       <span>
         <strong>{{ site.hospital_name }}</strong>
         <span class="brand-punjabi">ਬੀਬੀ ਕੌਲਾਂ ਜੀ ਹਸਪਤਾਲ</span>
-        <small>Hospital care and OPD support</small>
       </span>
     </a>
     <button class="menu-button" type="button" data-menu-toggle aria-expanded="false" aria-controls="main-nav">
@@ -18,19 +17,21 @@
       <span>Menu</span>
     </button>
     <nav id="main-nav" class="main-nav" data-main-nav aria-label="Main navigation">
-      <a href="{% url 'core:home' %}">Home</a>
-      <a href="{% url 'core:about' %}">About</a>
-      <a href="{% url 'hospital:departments' %}">Departments</a>
-      <a href="{% url 'hospital:doctors' %}">Doctors</a>
-      <a href="{% url 'hospital:opd_timing' %}">OPD Timing</a>
-      <a href="{% url 'appointments:appointment' %}">Appointment</a>
-      <a href="{% url 'hospital:gallery' %}">Gallery</a>
-      <a href="{% url 'hospital:contact' %}">Contact</a>
+      <a class="{% if request.resolver_match.url_name == 'home' %}is-active{% endif %}" href="{% url 'core:home' %}">Home</a>
+      <a class="{% if request.resolver_match.url_name == 'about' %}is-active{% endif %}" href="{% url 'core:about' %}">About Us</a>
+      <a class="{% if request.resolver_match.url_name == 'services' %}is-active{% endif %}" href="{% url 'hospital:services' %}">Services</a>
+      <a class="{% if request.resolver_match.url_name == 'doctors' %}is-active{% endif %}" href="{% url 'hospital:doctors' %}">Doctors</a>
+      <a class="{% if request.resolver_match.url_name == 'facilities' %}is-active{% endif %}" href="{% url 'hospital:facilities' %}">Facilities</a>
+      <a class="{% if request.resolver_match.url_name == 'opd_timing' %}is-active{% endif %}" href="{% url 'hospital:opd_timing' %}">Patient Info</a>
+      <a class="{% if request.resolver_match.url_name == 'appointment' %}is-active{% endif %}" href="{% url 'appointments:appointment' %}">Appointment</a>
+      <a class="{% if request.resolver_match.url_name == 'gallery' %}is-active{% endif %}" href="{% url 'hospital:gallery' %}">Gallery</a>
+      <a class="{% if request.resolver_match.url_name == 'contact' %}is-active{% endif %}" href="{% url 'hospital:contact' %}">Contact</a>
     </nav>
     <div class="header-actions">
-      <a class="btn btn-secondary" href="{% url 'appointments:appointment' %}">Request Appointment</a>
       {% if site.emergency_phone %}
-        <a class="btn btn-emergency" href="tel:{{ site.emergency_phone|tel }}">Emergency Call</a>
+        <a class="btn btn-emergency header-emergency" href="tel:{{ site.emergency_phone|tel }}"><span>Emergency</span><strong>{{ site.emergency_phone }}</strong></a>
+      {% else %}
+        <a class="btn btn-secondary" href="{% url 'appointments:appointment' %}">Request Appointment</a>
       {% endif %}
     </div>
   </div>

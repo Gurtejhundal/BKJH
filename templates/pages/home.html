@@ -4,13 +4,10 @@
 <section class="hero">
   <div class="wrapper hero-grid">
     <div class="hero-copy">
-      <p class="hero-badge">Local Healthcare - Fatehgarh Churian - Punjab</p>
-      <h1>{{ site.hospital_name }}</h1>
-      <p class="punjabi-support hero-punjabi">ਬੀਬੀ ਕੌਲਾਂ ਜੀ ਹਸਪਤਾਲ</p>
-      <p class="hero-local-line">Trusted Healthcare in Fatehgarh Churian</p>
-      <p class="punjabi-support">ਫਤਿਹਗੜ੍ਹ ਚੂੜੀਆਂ ਵਿੱਚ ਭਰੋਸੇਯੋਗ ਸਿਹਤ ਸੇਵਾ</p>
-      <p class="lead">{{ site.short_tagline }}</p>
-      <p>Request an appointment, check OPD timings, or call the hospital directly for urgent guidance before visiting.</p>
+      <h1>Trusted Healthcare in Fatehgarh Churian</h1>
+      <p class="punjabi-support hero-punjabi">ਫਤਿਹਗੜ੍ਹ ਚੂੜੀਆਂ ਵਿੱਚ ਭਰੋਸੇਯੋਗ ਸਿਹਤ ਸੇਵਾ</p>
+      <p class="lead">Compassionate care. Advanced treatments. Affordable for all.</p>
+      <p class="punjabi-support hero-subline">ਦਇਆਲੂ ਦੇਖਭਾਲ। ਆਧੁਨਿਕ ਇਲਾਜ। ਸਭ ਲਈ ਕਿਫਾਇਤੀ।</p>
       <div class="hero-actions" aria-label="Primary patient actions">
         {% include "partials/button.html" with href=appointment_url label="Book Appointment" support_text="ਮੁਲਾਕਾਤ ਲਈ ਬੇਨਤੀ ਕਰੋ" variant="btn-primary" %}
         {% if site.emergency_phone %}
@@ -24,29 +21,29 @@
           {% include "partials/button.html" with href=contact_url label="Location" support_text="ਸਥਾਨ ਵੇਖੋ" variant="btn-secondary" %}
         {% endif %}
       </div>
-      <div class="trust-list" aria-label="Hospital access points">
-        <span class="trust-item">OPD consultation information <small class="punjabi-support">ਓਪੀਡੀ ਸਲਾਹ ਜਾਣਕਾਰੀ</small></span>
-        <span class="trust-item">Emergency contact access <small class="punjabi-support">ਐਮਰਜੈਂਸੀ ਸੰਪਰਕ</small></span>
-        <span class="trust-item">Easy access on Ajnala Road <small class="punjabi-support">ਅਜਨਾਲਾ ਰੋਡ ਉੱਤੇ ਆਸਾਨ ਪਹੁੰਚ</small></span>
-        <span class="trust-item">Clear appointment request process <small class="punjabi-support">ਸਾਫ਼ ਮੁਲਾਕਾਤ ਬੇਨਤੀ ਪ੍ਰਕਿਰਿਆ</small></span>
+      <div class="hero-society">
+        <span class="society-icon" aria-hidden="true">+</span>
+        <span>
+          <strong>Running under Bibi Kaulan Ji Hospitals Charitable Society</strong>
+          <small class="punjabi-support">ਬੀਬੀ ਕੌਲਾਂ ਜੀ ਹਸਪਤਾਲਸ ਚੈਰੀਟੇਬਲ ਸੋਸਾਇਟੀ ਅਧੀਨ ਚੱਲ ਰਿਹਾ</small>
+        </span>
       </div>
     </div>
-    <div class="hero-visual">
-      <div class="hero-logo-card">
-        {% if site.logo %}
-          <img src="{{ site.logo.url }}" alt="{{ site.hospital_name }} logo">
-        {% else %}
-          <img src="{% static 'images/bkjh-logo.png' %}" alt="{{ site.hospital_name }} logo">
-        {% endif %}
+    <div class="hero-team" aria-label="Hospital doctors">
+      <div class="team-portrait team-portrait-side">
+        <img src="{% static 'images/doctors/dr-kashish-gupta.jpg' %}" alt="Dr. Kashish Gupta">
+        <strong>Dr. Kashish Gupta</strong>
+        <span>Facility Director</span>
       </div>
-      <div class="hero-info-card">
-        <strong>Before visiting</strong>
-        {% if timings %}
-          <span class="meta">Check current OPD timing below or call the hospital.</span>
-        {% else %}
-          <span class="meta">OPD timings are pending admin entry.</span>
-        {% endif %}
-        {% if site.address %}<span>{{ site.address }}</span>{% endif %}
+      <div class="team-portrait team-portrait-main">
+        <img src="{% static 'images/doctors/dr-gagandeep-kaur.jpg' %}" alt="Dr. Gagandeep Kaur">
+        <strong>Dr. Gagandeep Kaur</strong>
+        <span>MBBS, MD, DNB</span>
+      </div>
+      <div class="team-portrait team-portrait-side">
+        <img src="{% static 'images/doctors/dr-manbir-singh.jpg' %}" alt="Dr. Manbir Singh">
+        <strong>Dr. Manbir Singh</strong>
+        <span>MBBS, MD</span>
       </div>
     </div>
   </div>
@@ -68,7 +65,28 @@
 
 <section class="section">
   <div class="wrapper">
-    {% include "partials/section_header.html" with title="Quick patient actions" intro="Fast access for patients on mobile: appointment request, OPD timing, doctors, departments, ambulance, and location." %}
+    {% include "partials/section_header.html" with title="Our Key Services" support_text="ਸਾਡੀਆਂ ਮੁੱਖ ਸੇਵਾਵਾਂ" intro="Hospital highlights from confirmed hospital information and admin-managed content." %}
+    <div class="key-service-grid">
+      {% for service in services %}
+        <article class="key-service-card">
+          <span class="key-service-icon" aria-hidden="true">{{ service.icon|default:"+" }}</span>
+          <h3>{{ service.title }}</h3>
+          <p>{{ service.short_description }}</p>
+        </article>
+      {% empty %}
+        {% include "partials/empty_state.html" with title="Key services pending" message="Add featured services in admin to highlight them here." %}
+      {% endfor %}
+    </div>
+    <div class="insurance-band">
+      <strong>Empanelled with Ayushman Bharat, Private & Govt. Insurance TPA for eligible cashless treatment</strong>
+      <span class="punjabi-support">ਆਯੁਸ਼ਮਾਨ ਭਾਰਤ, ਪ੍ਰਾਈਵੇਟ ਅਤੇ ਸਰਕਾਰੀ ਇੰਸ਼ੋਰੈਂਸ TPA ਨਾਲ ਕੈਸ਼ਲੈਸ ਇਲਾਜ ਲਈ ਐਮਪੈਨਲਡ</span>
+    </div>
+  </div>
+</section>
+
+<section class="section section-tight section-surface">
+  <div class="wrapper">
+    {% include "partials/section_header.html" with title="Quick patient actions" support_text="ਮਰੀਜ਼ਾਂ ਲਈ ਤੇਜ਼ ਕਾਰਵਾਈਆਂ" intro="Fast access for mobile users: appointment request, OPD timing, doctors, departments, ambulance, and location." %}
     <div class="quick-grid">
       {% include "partials/quick_action_card.html" with href=appointment_url icon="+" title="Book Appointment" support_text="ਮੁਲਾਕਾਤ ਲਈ ਬੇਨਤੀ" text="Submit a request. Staff will contact you for confirmation." %}
       {% include "partials/quick_action_card.html" with href=opd_url icon="+" title="OPD Timing" support_text="ਓਪੀਡੀ ਸਮਾਂ" text="Check active OPD entries before visiting." %}
@@ -88,6 +106,7 @@
   <div class="wrapper split">
     <div>
       <h2>About {{ site.hospital_name }}</h2>
+      <p class="punjabi-support section-punjabi">ਬੀਬੀ ਕੌਲਾਂ ਜੀ ਹਸਪਤਾਲ ਬਾਰੇ</p>
       <p>{{ site.about_short|default:"Hospital introduction is pending admin entry. Add client-approved about content before launch." }}</p>
       <a class="text-link" href="{{ about_url }}">Read About Hospital</a>
     </div>
@@ -100,7 +119,7 @@
 
 <section class="section">
   <div class="wrapper">
-    {% include "partials/section_header.html" with title="Departments" intro="Active featured departments from admin." action_href=departments_url action_label="View all departments" %}
+    {% include "partials/section_header.html" with title="Departments" support_text="ਹਸਪਤਾਲ ਦੇ ਵਿਭਾਗ" intro="Active featured departments from admin." action_href=departments_url action_label="View all departments" %}
     <div class="card-grid">
       {% for department in departments %}
         {% include "partials/department_card.html" %}
@@ -113,7 +132,7 @@
 
 <section class="section section-surface">
   <div class="wrapper">
-    {% include "partials/section_header.html" with title="Doctors" intro="Active doctors from admin with OPD information when available." action_href=doctors_url action_label="View doctors" %}
+    {% include "partials/section_header.html" with title="Doctors" support_text="ਸਾਡੀ ਡਾਕਟਰ ਟੀਮ" intro="Active doctors from admin with OPD information when available." action_href=doctors_url action_label="View doctors" %}
     <div class="doctor-grid">
       {% for doctor in doctors %}
         {% include "partials/doctor_card.html" %}
@@ -128,6 +147,7 @@
   <div class="wrapper split">
     <div>
       <h2>OPD Timing</h2>
+      <p class="punjabi-support section-punjabi">ਓਪੀਡੀ ਸਮਾਂ</p>
       <p>Timings below come from active OPD entries in admin. Do not rely on old timings; update admin whenever schedules change.</p>
       <a class="btn btn-secondary" href="{{ opd_url }}">Full OPD Timing</a>
     </div>
@@ -172,16 +192,13 @@
 
 <section class="section">
   <div class="wrapper">
-    {% include "partials/section_header.html" with title="Services and Facilities" intro="Services are patient-facing care options. Facilities are infrastructure and support areas." %}
+    {% include "partials/section_header.html" with title="Facilities and Support" support_text="ਸੁਵਿਧਾਵਾਂ ਅਤੇ ਸਹਾਇਤਾ" intro="Hospital infrastructure and support areas from admin-managed content." %}
     <div class="card-grid">
-      {% for service in services %}
-        <article class="info-card"><div class="card-icon">{{ service.icon|default:"+" }}</div><h3>{{ service.title }}</h3><p>{{ service.short_description }}</p></article>
-      {% endfor %}
       {% for facility in facilities %}
         <article class="info-card"><div class="card-icon">+</div><h3>{{ facility.title }}</h3><p>{{ facility.short_description }}</p></article>
       {% endfor %}
-      {% if not services and not facilities %}
-        {% include "partials/empty_state.html" with title="Services and facilities pending" message="Add featured services and facilities in admin after client confirmation." %}
+      {% if not facilities %}
+        {% include "partials/empty_state.html" with title="Facilities pending" message="Add featured facilities in admin after client confirmation." %}
       {% endif %}
     </div>
   </div>
@@ -189,7 +206,7 @@
 
 <section class="section section-surface">
   <div class="wrapper">
-    {% include "partials/section_header.html" with title="Gallery" intro="Featured active gallery images from admin. Use real hospital photos only." action_href=gallery_url action_label="View gallery" %}
+    {% include "partials/section_header.html" with title="Gallery" support_text="ਹਸਪਤਾਲ ਗੈਲਰੀ" intro="Featured active gallery images from admin. Use real hospital photos only." action_href=gallery_url action_label="View gallery" %}
     {% if gallery_images %}
       <div class="gallery-grid">
         {% for image in gallery_images %}
@@ -209,6 +226,7 @@
   <div class="wrapper split">
     <div>
       <h2>Contact and Location</h2>
+      <p class="punjabi-support section-punjabi">ਸੰਪਰਕ ਅਤੇ ਸਥਾਨ</p>
       {% if site.address %}<p>{{ site.address }}</p>{% else %}<p>Address is pending admin entry.</p>{% endif %}
       <div class="hero-actions">
         {% if site.main_phone %}<a class="btn btn-primary" href="{{ main_tel }}">Call Hospital</a>{% endif %}
