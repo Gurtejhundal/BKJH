@@ -5,9 +5,9 @@
 <section class="section section-surface">
   <div class="wrapper">
     <p class="muted">Facilities are physical/support areas of the hospital. They should not duplicate departments or unconfirmed services.</p>
-    <div class="card-grid section-tight">
+    <div class="card-grid facility-grid listing-grid section-tight">
       {% for facility in facilities %}
-        <article class="info-card">
+        <article class="info-card facility-card facility-card--listing">
           {% if facility.image %}
             <img class="card-image" src="{{ facility.image.url }}" alt="{{ facility.title }}" loading="lazy">
           {% else %}
@@ -15,7 +15,7 @@
           {% endif %}
           <h2>{{ facility.title }}</h2>
           <p>{{ facility.short_description }}</p>
-          {% if facility.detailed_description %}<p>{{ facility.detailed_description }}</p>{% endif %}
+          {% if facility.detailed_description and facility.detailed_description != facility.short_description %}<p>{{ facility.detailed_description }}</p>{% endif %}
         </article>
       {% empty %}
         {% include "partials/empty_state.html" with title="No facilities published" message="Only client-confirmed facilities should be published." %}

@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 
 from apps.appointments.forms import AppointmentRequestForm
-from apps.core.views import seo
+from apps.core.views import featured_reviews, seo
 from apps.gallery.models import GalleryCategory, GalleryImage
 
 from .models import (
@@ -63,6 +63,7 @@ def doctors(request):
             "doctors": items,
             "departments": Department.objects.filter(is_active=True),
             "selected_department": department_id,
+            "patient_reviews": featured_reviews(),
         },
     )
 
@@ -80,6 +81,7 @@ def opd_timing(request):
             "timings": items,
             "departments": Department.objects.filter(is_active=True),
             "selected_department": department_id,
+            "patient_reviews": featured_reviews(),
         },
     )
 
@@ -92,6 +94,7 @@ def services(request):
             "seo": seo("Services | Bibi Kaulan Ji Hospital", "View confirmed hospital services, OPD consultation, emergency support, and patient care information.", request.path),
             "services": Service.objects.filter(is_active=True),
             "featured_departments": Department.objects.filter(is_active=True, is_featured=True)[:4],
+            "patient_reviews": featured_reviews(),
         },
     )
 
@@ -104,6 +107,7 @@ def facilities(request):
             "seo": seo("Facilities | Bibi Kaulan Ji Hospital", "View hospital facilities and patient support areas at Bibi Kaulan Ji Hospital.", request.path),
             "facilities": Facility.objects.filter(is_active=True),
             "featured_services": Service.objects.filter(is_active=True, is_featured=True)[:4],
+            "patient_reviews": featured_reviews(),
         },
     )
 
@@ -160,6 +164,7 @@ def contact(request):
         {
             "seo": seo("Contact and Location | Bibi Kaulan Ji Hospital", "Find address, phone numbers, emergency contact, ambulance contact, OPD timing, and Google Maps directions.", request.path),
             "timings": timings,
+            "patient_reviews": featured_reviews(),
         },
     )
 

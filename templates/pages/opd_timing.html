@@ -1,30 +1,41 @@
 {% extends "base.html" %}
+{% load site_extras %}
 {% block content %}
-{% include "partials/page_header.html" with title="OPD Timing" support_text="ਓਪੀਡੀ ਸਮਾਂ" intro="Check active department and doctor timings before visiting." eyebrow="Visit planning" %}
-
-<section class="section section-tight">
+<section class="utility-hero">
   <div class="wrapper">
-    <form class="filter-bar" method="get">
-      <label for="department">Filter by department</label>
-      <select id="department" name="department" class="form-control">
-        <option value="">All departments</option>
-        {% for department in departments %}
-          <option value="{{ department.id }}" {% if selected_department == department.id|stringformat:"s" %}selected{% endif %}>{{ department.name }}</option>
-        {% endfor %}
-      </select>
-      <button class="btn btn-secondary" type="submit">Apply Filter</button>
-    </form>
+    <h1>OPD Timing</h1>
+    <p class="punjabi-support page-punjabi">ਓਪੀਡੀ ਸਮਾਂ</p>
+    <p>Check active doctor and department timings before visiting.</p>
   </div>
 </section>
 
-<section class="section">
+<section class="section utility-section">
   <div class="wrapper">
-    <div class="support-box">
-      <h2>Timing note</h2>
-      <p>OPD timings can change because of emergency work, doctor availability, holidays, or hospital operations. Patients should call the hospital to confirm before travelling when needed.</p>
-    </div>
-    <div class="section-tight">
+    <div class="opd-panel">
+      <form class="filter-bar opd-filter" method="get">
+        <label for="department">Filter by department</label>
+        <select id="department" name="department" class="form-control">
+          <option value="">All departments</option>
+          {% for department in departments %}
+            <option value="{{ department.id }}" {% if selected_department == department.id|stringformat:"s" %}selected{% endif %}>{{ department.name }}</option>
+          {% endfor %}
+        </select>
+        <button class="btn btn-secondary" type="submit">Apply Filter</button>
+      </form>
+
       {% include "pages/opd_table.html" with timings=timings %}
+
+      <div class="timing-note" role="note">
+        OPD timings may change due to emergency work, doctor availability, holidays, or hospital operations. Please call the hospital before travelling when needed.
+      </div>
+
+      <div class="opd-confirm">
+        <h2>Need help confirming OPD timing?</h2>
+        <div class="opd-confirm__actions">
+          {% if site.main_phone %}<a class="btn btn-primary" href="tel:{{ site.main_phone|tel }}">Call Hospital</a>{% endif %}
+          <a class="btn btn-secondary" href="{% url 'appointments:appointment' %}">Request Appointment</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>

@@ -1,14 +1,44 @@
+{% load site_extras %}
 <section class="page-hero{% if variant %} page-hero--{{ variant }}{% endif %}">
   {% if breadcrumbs %}{% include "partials/breadcrumbs.html" %}{% endif %}
-  <div class="wrapper">
-    {% if eyebrow %}<p class="hero-badge">{{ eyebrow }}</p>{% endif %}
-    <h1>{{ title }}</h1>
-    {% if support_text %}<p class="punjabi-support page-punjabi">{{ support_text }}</p>{% endif %}
-    {% if intro %}<p>{{ intro }}</p>{% endif %}
-    {% if action_href and action_label %}
-      <div class="page-hero__actions">
-        <a class="btn {{ action_variant|default:'btn-primary' }}" href="{{ action_href }}"{% if action_external %} target="_blank" rel="noopener"{% endif %}>{{ action_label }}</a>
+  <div class="wrapper page-hero__grid">
+    <div class="page-hero__copy">
+      {% if eyebrow %}<p class="hero-badge">{{ eyebrow }}</p>{% endif %}
+      <h1>{{ title }}</h1>
+      {% if support_text %}<p class="punjabi-support page-punjabi">{{ support_text }}</p>{% endif %}
+      {% if intro %}<p>{{ intro }}</p>{% endif %}
+      {% if action_href and action_label %}
+        <div class="page-hero__actions">
+          <a class="btn {{ action_variant|default:'btn-primary' }}" href="{{ action_href }}"{% if action_external %} target="_blank" rel="noopener"{% endif %}>{{ action_label }}</a>
+        </div>
+      {% endif %}
+    </div>
+    <aside class="care-access" aria-label="Quick hospital access">
+      <div class="care-access__head">
+        <span class="care-access__mark" aria-hidden="true">{% include "partials/icon.html" with name="care" %}</span>
+        <div>
+          <strong>Plan your visit</strong>
+          <span class="punjabi-support">ਆਪਣੀ ਮੁਲਾਕਾਤ ਦੀ ਯੋਜਨਾ ਬਣਾਓ</span>
+        </div>
       </div>
-    {% endif %}
+      <div class="care-access__links">
+        <a href="{% url 'appointments:appointment' %}">
+          <span>Request appointment</span>
+          <small>Staff confirms before visit</small>
+        </a>
+        <a href="{% url 'hospital:opd_timing' %}">
+          <span>Check OPD timing</span>
+          <small>Doctor and department schedule</small>
+        </a>
+        <a href="{% url 'hospital:doctors' %}">
+          <span>Find a doctor</span>
+          <small>Qualifications and departments</small>
+        </a>
+        <a href="{% url 'hospital:contact' %}">
+          <span>Contact hospital</span>
+          <small>{% if site.main_phone %}{{ site.main_phone }}{% else %}Phone pending{% endif %}</small>
+        </a>
+      </div>
+    </aside>
   </div>
 </section>

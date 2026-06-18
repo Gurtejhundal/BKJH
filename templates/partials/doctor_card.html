@@ -1,4 +1,4 @@
-<article class="doctor-card">
+{% if doctor.appointment_enabled %}<a class="doctor-card card-link" href="{% url 'appointments:appointment' %}">{% else %}<article class="doctor-card">{% endif %}
   {% if doctor.photo %}
     <img src="{{ doctor.photo.url }}" alt="Photo of {{ doctor.full_name }}" loading="lazy">
   {% else %}
@@ -13,7 +13,7 @@
       <p class="meta">{{ doctor.opd_days_text }} {% if doctor.opd_time_text %}{{ doctor.opd_time_text }}{% endif %}</p>
     {% endif %}
     {% if doctor.appointment_enabled %}
-      <a class="text-link" href="{% url 'appointments:appointment' %}">Request Appointment</a>
+      <span class="text-link">Request Appointment</span>
     {% endif %}
   </div>
-</article>
+{% if doctor.appointment_enabled %}</a>{% else %}</article>{% endif %}

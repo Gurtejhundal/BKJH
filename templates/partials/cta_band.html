@@ -2,6 +2,7 @@
   <div class="wrapper cta-band__inner">
     <div>
       <h2>{{ title|default:"Need help before visiting?" }}</h2>
+      {% if support_text %}<p class="punjabi-support">{{ support_text }}</p>{% endif %}
       <p>{{ text|default:"Request an appointment or call the hospital directly for current information." }}</p>
     </div>
     <div class="contact-strip__actions">

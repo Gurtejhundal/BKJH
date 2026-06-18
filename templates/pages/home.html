@@ -6,45 +6,34 @@
     <div class="hero-copy">
       <h1>Trusted Healthcare in Fatehgarh Churian</h1>
       <p class="punjabi-support hero-punjabi">ਫਤਿਹਗੜ੍ਹ ਚੂੜੀਆਂ ਵਿੱਚ ਭਰੋਸੇਯੋਗ ਸਿਹਤ ਸੇਵਾ</p>
-      <p class="lead">Compassionate care. Advanced treatments. Affordable for all.</p>
-      <p class="punjabi-support hero-subline">ਦਇਆਲੂ ਦੇਖਭਾਲ। ਆਧੁਨਿਕ ਇਲਾਜ। ਸਭ ਲਈ ਕਿਫਾਇਤੀ।</p>
+      <div class="hero-intro">
+        <p class="lead">Compassionate care | Advanced treatments | Affordable.</p>
+        <p class="punjabi-support hero-subline">ਦਇਆਲੂ ਦੇਖਭਾਲ । ਆਧੁਨਿਕ ਇਲਾਜ । ਸਭ ਲਈ ਕਿਫਾਇਤੀ</p>
+      </div>
       <div class="hero-actions" aria-label="Primary patient actions">
-        {% include "partials/button.html" with href=appointment_url label="Book Appointment" support_text="ਮੁਲਾਕਾਤ ਲਈ ਬੇਨਤੀ ਕਰੋ" variant="btn-primary" %}
+        {% include "partials/button.html" with href=appointment_url label="Book Appointment" support_text="ਮੁਲਾਕਾਤ ਲਈ ਬੇਨਤੀ ਕਰੋ" variant="btn-primary" extra_classes="hero-btn hero-btn--primary" %}
         {% if site.emergency_phone %}
-          {% include "partials/button.html" with href=emergency_tel label="Call Emergency" support_text="ਐਮਰਜੈਂਸੀ ਕਾਲ ਕਰੋ" variant="btn-emergency" %}
+          {% include "partials/button.html" with href=emergency_tel label="Call Emergency" support_text="ਐਮਰਜੈਂਸੀ ਕਾਲ ਕਰੋ" variant="btn-emergency" extra_classes="hero-btn hero-btn--emergency" %}
         {% else %}
-          {% include "partials/button.html" with href=emergency_url label="Emergency Info" support_text="ਐਮਰਜੈਂਸੀ ਜਾਣਕਾਰੀ" variant="btn-emergency" %}
+          {% include "partials/button.html" with href=emergency_url label="Emergency Info" support_text="ਐਮਰਜੈਂਸੀ ਜਾਣਕਾਰੀ" variant="btn-emergency" extra_classes="hero-btn hero-btn--emergency" %}
         {% endif %}
         {% if site.google_maps_url %}
-          {% include "partials/button.html" with href=site.google_maps_url label="Get Directions" support_text="ਰਸਤਾ ਵੇਖੋ" variant="btn-secondary" external=True %}
+          {% include "partials/button.html" with href=site.google_maps_url label="Get Directions" support_text="ਰਸਤਾ ਵੇਖੋ" variant="btn-secondary" extra_classes="hero-btn hero-btn--secondary" external=True %}
         {% else %}
-          {% include "partials/button.html" with href=contact_url label="Location" support_text="ਸਥਾਨ ਵੇਖੋ" variant="btn-secondary" %}
+          {% include "partials/button.html" with href=contact_url label="Location" support_text="ਸਥਾਨ ਵੇਖੋ" variant="btn-secondary" extra_classes="hero-btn hero-btn--secondary" %}
         {% endif %}
       </div>
-      <div class="hero-society">
-        <span class="society-icon" aria-hidden="true">+</span>
-        <span>
+      <div class="hero-society" aria-label="Hospital trust information">
+        <span class="society-icon" aria-hidden="true">{% include "partials/icon.html" with name="care" %}</span>
+        <span class="hero-society__copy">
+          <small class="hero-society__eyebrow">Charitable trust support</small>
           <strong>Running under Bibi Kaulan Ji Hospitals Charitable Society</strong>
           <small class="punjabi-support">ਬੀਬੀ ਕੌਲਾਂ ਜੀ ਹਸਪਤਾਲਸ ਚੈਰੀਟੇਬਲ ਸੋਸਾਇਟੀ ਅਧੀਨ ਚੱਲ ਰਿਹਾ</small>
         </span>
       </div>
     </div>
-    <div class="hero-team" aria-label="Hospital doctors">
-      <div class="team-portrait team-portrait-side">
-        <img src="{% static 'images/doctors/dr-kashish-gupta.jpg' %}" alt="Dr. Kashish Gupta">
-        <strong>Dr. Kashish Gupta</strong>
-        <span>Facility Director</span>
-      </div>
-      <div class="team-portrait team-portrait-main">
-        <img src="{% static 'images/doctors/dr-gagandeep-kaur.jpg' %}" alt="Dr. Gagandeep Kaur">
-        <strong>Dr. Gagandeep Kaur</strong>
-        <span>MBBS, MD, DNB</span>
-      </div>
-      <div class="team-portrait team-portrait-side">
-        <img src="{% static 'images/doctors/dr-manbir-singh.jpg' %}" alt="Dr. Manbir Singh">
-        <strong>Dr. Manbir Singh</strong>
-        <span>MBBS, MD</span>
-      </div>
+    <div class="hero-image-container" aria-label="Healthcare team visual">
+      <img src="{% static 'images/joint_doctors.png' %}" alt="Healthcare professionals in a hospital corridor" class="hero-image" width="1474" height="1067">
     </div>
   </div>
 </section>
@@ -63,56 +52,72 @@
 </section>
 {% endif %}
 
-<section class="section">
+<section class="section home-quick-actions section-surface">
   <div class="wrapper">
-    {% include "partials/section_header.html" with title="Our Key Services" support_text="ਸਾਡੀਆਂ ਮੁੱਖ ਸੇਵਾਵਾਂ" intro="Hospital highlights from confirmed hospital information and admin-managed content." %}
-    <div class="key-service-grid">
-      {% for service in services %}
-        <article class="key-service-card">
-          <span class="key-service-icon" aria-hidden="true">{{ service.icon|default:"+" }}</span>
-          <h3>{{ service.title }}</h3>
-          <p>{{ service.short_description }}</p>
-        </article>
-      {% empty %}
-        {% include "partials/empty_state.html" with title="Key services pending" message="Add featured services in admin to highlight them here." %}
-      {% endfor %}
-    </div>
-    <div class="insurance-band">
-      <strong>Empanelled with Ayushman Bharat, Private & Govt. Insurance TPA for eligible cashless treatment</strong>
-      <span class="punjabi-support">ਆਯੁਸ਼ਮਾਨ ਭਾਰਤ, ਪ੍ਰਾਈਵੇਟ ਅਤੇ ਸਰਕਾਰੀ ਇੰਸ਼ੋਰੈਂਸ TPA ਨਾਲ ਕੈਸ਼ਲੈਸ ਇਲਾਜ ਲਈ ਐਮਪੈਨਲਡ</span>
-    </div>
-  </div>
-</section>
-
-<section class="section section-tight section-surface">
-  <div class="wrapper">
-    {% include "partials/section_header.html" with title="Quick patient actions" support_text="ਮਰੀਜ਼ਾਂ ਲਈ ਤੇਜ਼ ਕਾਰਵਾਈਆਂ" intro="Fast access for mobile users: appointment request, OPD timing, doctors, departments, ambulance, and location." %}
+    {% include "partials/section_header.html" with title="Quick patient actions" support_text="ਮਰੀਜ਼ਾਂ ਲਈ ਤੇਜ਼ ਕਾਰਵਾਈਆਂ" intro="Fast access for emergency contact, appointments, timings, doctors, departments, and directions." %}
     <div class="quick-grid">
-      {% include "partials/quick_action_card.html" with href=appointment_url icon="+" title="Book Appointment" support_text="ਮੁਲਾਕਾਤ ਲਈ ਬੇਨਤੀ" text="Submit a request. Staff will contact you for confirmation." %}
-      {% include "partials/quick_action_card.html" with href=opd_url icon="+" title="OPD Timing" support_text="ਓਪੀਡੀ ਸਮਾਂ" text="Check active OPD entries before visiting." %}
-      {% include "partials/quick_action_card.html" with href=doctors_url icon="+" title="Doctors" support_text="ਡਾਕਟਰ" text="View active doctors and OPD details." %}
-      {% include "partials/quick_action_card.html" with href=departments_url icon="+" title="Departments" support_text="ਵਿਭਾਗ" text="Explore available specialties." %}
-      {% include "partials/quick_action_card.html" with href=ambulance_url icon="+" title="Ambulance" support_text="ਐਂਬੂਲੈਂਸ" text="See ambulance contact and availability details." %}
-      {% if site.google_maps_url %}
-        {% include "partials/quick_action_card.html" with href=site.google_maps_url icon="+" title="Location" support_text="ਸਥਾਨ" text="Open directions to Ajnala Road." %}
+      {% if site.emergency_phone %}
+        {% include "partials/quick_action_card.html" with href=emergency_tel icon="emergency" title="Call Emergency" support_text="ਐਮਰਜੈਂਸੀ ਕਾਲ ਕਰੋ" text="Direct hospital emergency contact." tone="emergency" eyebrow="Urgent help" extra_classes="quick-action-card--priority" %}
       {% else %}
-        {% include "partials/quick_action_card.html" with href=contact_url icon="+" title="Location" support_text="ਸਥਾਨ" text="Address and map details pending." %}
+        {% include "partials/quick_action_card.html" with href=emergency_url icon="emergency" title="Emergency Info" support_text="ਐਮਰਜੈਂਸੀ ਜਾਣਕਾਰੀ" text="Emergency contact details and instructions." tone="emergency" eyebrow="Urgent help" extra_classes="quick-action-card--priority" %}
+      {% endif %}
+      {% include "partials/quick_action_card.html" with href=appointment_url icon="appointment" title="Book Appointment" support_text="ਮੁਲਾਕਾਤ ਲਈ ਬੇਨਤੀ" text="Submit a request. Staff will contact you for confirmation." tone="primary" eyebrow="Planned visit" extra_classes="quick-action-card--appointment" %}
+      {% include "partials/quick_action_card.html" with href=opd_url icon="clock" title="OPD Timing" support_text="ਓਪੀਡੀ ਸਮਾਂ" text="Check active OPD entries before visiting." %}
+      {% include "partials/quick_action_card.html" with href=doctors_url icon="doctor" title="Doctors" support_text="ਡਾਕਟਰ" text="View active doctors and OPD details." %}
+      {% include "partials/quick_action_card.html" with href=departments_url icon="department" title="Departments" support_text="ਵਿਭਾਗ" text="Explore available specialties." %}
+      {% if site.google_maps_url %}
+        {% include "partials/quick_action_card.html" with href=site.google_maps_url icon="location" title="Location / Ambulance" support_text="ਸਥਾਨ ਅਤੇ ਐਂਬੂਲੈਂਸ" text="Directions and ambulance support." %}
+      {% else %}
+        {% include "partials/quick_action_card.html" with href=ambulance_url icon="ambulance" title="Location / Ambulance" support_text="ਸਥਾਨ ਅਤੇ ਐਂਬੂਲੈਂਸ" text="Address and ambulance details." %}
       {% endif %}
     </div>
   </div>
 </section>
 
-<section class="section section-surface">
-  <div class="wrapper split">
-    <div>
-      <h2>About {{ site.hospital_name }}</h2>
-      <p class="punjabi-support section-punjabi">ਬੀਬੀ ਕੌਲਾਂ ਜੀ ਹਸਪਤਾਲ ਬਾਰੇ</p>
-      <p>{{ site.about_short|default:"Hospital introduction is pending admin entry. Add client-approved about content before launch." }}</p>
-      <a class="text-link" href="{{ about_url }}">Read About Hospital</a>
+<section class="section home-emergency-actions section-surface">
+  <div class="wrapper action-pair">
+    <article class="emergency-action-card">
+      <span class="action-card__eyebrow">Urgent response</span>
+      <h2>{{ emergency.title|default:"Emergency contact" }}</h2>
+      <p>{{ emergency.description|default:"Emergency details will appear after admin adds confirmed phone number, availability, and instructions." }}</p>
+      {% if emergency.availability_text %}<p class="action-meta"><strong>Availability:</strong> {{ emergency.availability_text }}</p>{% endif %}
+      {% if site.emergency_phone %}<p class="action-card__contact">{{ site.emergency_phone }}</p>{% endif %}
+      {% if site.emergency_phone %}<a class="btn btn-emergency" href="{{ emergency_tel }}">Call Emergency</a>{% endif %}
+    </article>
+    <article class="ambulance-action-card">
+      <span class="action-card__eyebrow">Transport support</span>
+      <h2>{{ ambulance.title|default:"Ambulance service" }}</h2>
+      <p>{{ ambulance.description|default:"Ambulance details will appear after admin confirms availability and service area." }}</p>
+      {% if ambulance.availability_text %}<p class="action-meta"><strong>Availability:</strong> {{ ambulance.availability_text }}</p>{% endif %}
+      {% if site.ambulance_phone %}<p class="action-card__contact">{{ site.ambulance_phone }}</p>{% endif %}
+      {% if site.ambulance_phone %}<a class="btn btn-primary" href="{{ ambulance_tel }}">Call Ambulance</a>{% endif %}
+    </article>
+  </div>
+</section>
+
+<section class="section home-key-services">
+  <div class="wrapper">
+    {% include "partials/section_header.html" with title="Our Key Services" support_text="ਸਾਡੀਆਂ ਮੁੱਖ ਸੇਵਾਵਾਂ" intro="Hospital highlights from confirmed hospital information and admin-managed content." %}
+    <div class="key-service-grid">
+      {% for service in services %}
+        <a class="key-service-card card-link{% if forloop.first %} key-service-card--featured{% endif %}" href="{{ appointment_url }}">
+          <span class="key-service-icon" aria-hidden="true">
+            {% if "Emergency" in service.title %}{% include "partials/icon.html" with name="emergency" %}{% elif "Dialysis" in service.title %}{% include "partials/icon.html" with name="dialysis" %}{% elif "Bronchoscopy" in service.title %}{% include "partials/icon.html" with name="lungs" %}{% elif "Urology" in service.title or "Cystoscopy" in service.title %}{% include "partials/icon.html" with name="urology" %}{% elif "Surgery" in service.title or "Surgeries" in service.title %}{% include "partials/icon.html" with name="surgery" %}{% elif "Cashless" in service.title %}{% include "partials/icon.html" with name="insurance" %}{% else %}{% include "partials/icon.html" with name="care" %}{% endif %}
+          </span>
+          <div class="key-service-card__content">
+            {% if forloop.first %}<span class="key-service-card__eyebrow">Priority service</span>{% endif %}
+            <h3>{{ service.title }}</h3>
+            <p>{{ service.short_description }}</p>
+          </div>
+        </a>
+      {% empty %}
+        {% include "partials/empty_state.html" with title="Key services pending" message="Add featured services in admin to highlight them here." %}
+      {% endfor %}
     </div>
-    <div class="support-box">
-      <h3>Content rule</h3>
-      <p>Only verified departments, doctors, timings, services, and emergency details should be published.</p>
+    <div class="insurance-band">
+      <span class="insurance-band__eyebrow">Cashless treatment support</span>
+      <strong>Empanelled with Ayushman Bharat, Private & Govt. Insurance TPA for eligible cashless treatment</strong>
+      <span class="punjabi-support">ਆਯੁਸ਼ਮਾਨ ਭਾਰਤ, ਪ੍ਰਾਈਵੇਟ ਅਤੇ ਸਰਕਾਰੀ ਇੰਸ਼ੋਰੈਂਸ TPA ਨਾਲ ਕੈਸ਼ਲੈਸ ਇਲਾਜ ਲਈ ਐਮਪੈਨਲਡ</span>
     </div>
   </div>
 </section>
@@ -120,7 +125,7 @@
 <section class="section">
   <div class="wrapper">
     {% include "partials/section_header.html" with title="Departments" support_text="ਹਸਪਤਾਲ ਦੇ ਵਿਭਾਗ" intro="Active featured departments from admin." action_href=departments_url action_label="View all departments" %}
-    <div class="card-grid">
+    <div class="card-grid department-grid">
       {% for department in departments %}
         {% include "partials/department_card.html" %}
       {% empty %}
@@ -173,29 +178,31 @@
   </div>
 </section>
 
-<section class="section section-surface">
-  <div class="wrapper action-pair">
-    <article>
-      <h2>{{ emergency.title|default:"Emergency contact" }}</h2>
-      <p>{{ emergency.description|default:"Emergency details will appear after admin adds confirmed phone number, availability, and instructions." }}</p>
-      {% if emergency.availability_text %}<p><strong>Availability:</strong> {{ emergency.availability_text }}</p>{% endif %}
-      {% if site.emergency_phone %}<a class="btn btn-emergency" href="{{ emergency_tel }}">Call Emergency</a>{% endif %}
-    </article>
-    <article>
-      <h2>{{ ambulance.title|default:"Ambulance service" }}</h2>
-      <p>{{ ambulance.description|default:"Ambulance details will appear after admin confirms availability and service area." }}</p>
-      {% if ambulance.availability_text %}<p><strong>Availability:</strong> {{ ambulance.availability_text }}</p>{% endif %}
-      {% if site.ambulance_phone %}<a class="btn btn-primary" href="{{ ambulance_tel }}">Call Ambulance</a>{% endif %}
-    </article>
+<section class="section">
+  <div class="wrapper split">
+    <div>
+      <h2>About {{ site.hospital_name }}</h2>
+      <p class="punjabi-support section-punjabi">ਬੀਬੀ ਕੌਲਾਂ ਜੀ ਹਸਪਤਾਲ ਬਾਰੇ</p>
+      <p>{{ site.about_short|default:"Hospital introduction is pending admin entry. Add client-approved about content before launch." }}</p>
+      <a class="text-link" href="{{ about_url }}">Read About Hospital</a>
+    </div>
+    <div class="support-box">
+      <h3>Content rule</h3>
+      <p>Only verified departments, doctors, timings, services, and emergency details should be published.</p>
+    </div>
   </div>
 </section>
 
 <section class="section">
   <div class="wrapper">
     {% include "partials/section_header.html" with title="Facilities and Support" support_text="ਸੁਵਿਧਾਵਾਂ ਅਤੇ ਸਹਾਇਤਾ" intro="Hospital infrastructure and support areas from admin-managed content." %}
-    <div class="card-grid">
+    <div class="card-grid facility-grid">
       {% for facility in facilities %}
-        <article class="info-card"><div class="card-icon">+</div><h3>{{ facility.title }}</h3><p>{{ facility.short_description }}</p></article>
+        <article class="info-card facility-card">
+          <div class="card-icon" aria-hidden="true">{% if "Dialysis" in facility.title %}{% include "partials/icon.html" with name="dialysis" %}{% elif "Emergency" in facility.title %}{% include "partials/icon.html" with name="emergency" %}{% elif "OPD" in facility.title %}{% include "partials/icon.html" with name="doctor" %}{% elif "Reception" in facility.title %}{% include "partials/icon.html" with name="phone" %}{% else %}{% include "partials/icon.html" with name="department" %}{% endif %}</div>
+          <h3>{{ facility.title }}</h3>
+          <p>{{ facility.short_description }}</p>
+        </article>
       {% endfor %}
       {% if not facilities %}
         {% include "partials/empty_state.html" with title="Facilities pending" message="Add featured facilities in admin after client confirmation." %}
@@ -243,4 +250,6 @@
     </div>
   </div>
 </section>
+
+{% include "partials/patient_reviews.html" %}
 {% endblock %}

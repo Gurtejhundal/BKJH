@@ -1,6 +1,7 @@
-<a class="quick-action-card" href="{{ href|default:'#' }}">
-  <span class="quick-action-card__icon" aria-hidden="true">{{ icon|default:"+" }}</span>
-  <span>
+<a class="quick-action-card{% if tone %} quick-action-card--{{ tone }}{% endif %}{% if extra_classes %} {{ extra_classes }}{% endif %}" href="{{ href|default:'#' }}">
+  <span class="quick-action-card__icon" aria-hidden="true">{% include "partials/icon.html" with name=icon|default:"care" %}</span>
+  <span class="quick-action-card__content">
+    {% if eyebrow %}<span class="quick-action-card__eyebrow">{{ eyebrow }}</span>{% endif %}
     <strong>{{ title }}</strong>
     {% if support_text %}<span class="punjabi-support">{{ support_text }}</span>{% endif %}
     {% if text %}<small>{{ text }}</small>{% endif %}

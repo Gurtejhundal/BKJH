@@ -1,0 +1,31 @@
+<section class="section section-tight patient-reviews">
+  <div class="wrapper">
+    {% include "partials/section_header.html" with title="Patient Reviews" support_text="ਮਰੀਜ਼ਾਂ ਦੇ ਵਿਚਾਰ" intro="Text and video reviews appear here only after patient/client approval." %}
+    {% if patient_reviews %}
+      <div class="review-grid">
+        {% for review in patient_reviews %}
+          <article class="review-card">
+            <div class="review-card__top">
+              <span class="review-card__type">{{ review.get_review_type_display }}</span>
+              {% if review.rating %}<span class="review-card__rating">{{ review.rating }}/5</span>{% endif %}
+            </div>
+            {% if review.review_type == "video" %}
+              <a class="review-video-link" href="{{ review.video_url }}" target="_blank" rel="noopener">Watch patient video review</a>
+            {% endif %}
+            {% if review.quote %}<blockquote>{{ review.quote }}</blockquote>{% endif %}
+            <footer>
+              <strong>{{ review.reviewer_name }}</strong>
+              {% if review.service_context %}<span>{{ review.service_context }}</span>{% endif %}
+              {% if review.source_url and review.source_label %}<a class="text-link" href="{{ review.source_url }}" target="_blank" rel="noopener">{{ review.source_label }}</a>{% endif %}
+            </footer>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="review-empty">
+        <strong>No public patient reviews yet</strong>
+        <p>Reviews will be shown only after written patient/client approval. This avoids fake testimonials and protects patient trust.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>

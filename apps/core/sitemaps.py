@@ -1,7 +1,7 @@
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
 
-from apps.hospital.models import Department, HealthCampUpdate
+from apps.gallery.hospital.models import Department, HealthCampUpdate
 
 
 class StaticViewSitemap(Sitemap):

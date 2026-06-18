@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
 from apps.core.models import Notice, SiteSetting
-from apps.hospital.models import Department, Facility, Service
+from apps.gallery.hospital.models import Department, Facility, Service
 
 
 class Command(BaseCommand):

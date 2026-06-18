@@ -1,20 +1,55 @@
+{% load site_extras %}
 {% if timings %}
-<div class="table-card">
-  <table>
-    <thead><tr><th>Department</th><th>Doctor</th><th>Days</th><th>Time</th><th>Room/location</th><th>Notes</th></tr></thead>
+<div class="table-card opd-table-card">
+  <table class="opd-table">
+    <thead>
+      <tr>
+        <th>Department</th>
+        <th>Doctor</th>
+        <th>Days</th>
+        <th>Time</th>
+        <th>Room/Location</th>
+      </tr>
+    </thead>
     <tbody>
       {% for timing in timings %}
       <tr>
-        <td>{{ timing.department|default:"General OPD" }}</td>
+        <td><strong>{{ timing.department|default:"General OPD" }}</strong></td>
         <td>{{ timing.doctor|default:"As available" }}</td>
         <td>{{ timing.days }}</td>
-        <td>{{ timing.time_range }}</td>
-        <td>{{ timing.room_or_location|default:"-" }}</td>
-        <td>{{ timing.notes|default:"-" }}</td>
+        <td><strong class="opd-time">{{ timing.time_range }}</strong></td>
+        <td>{{ timing.room_or_location|default:"OPD" }}</td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
+</div>
+
+<div class="opd-card-list" aria-label="OPD timings">
+  {% for timing in timings %}
+    <article class="opd-card">
+      <h2>{{ timing.doctor|default:"As available" }}</h2>
+      <p class="opd-card__department">{{ timing.department|default:"General OPD" }}</p>
+      <dl>
+        <div>
+          <dt>Days</dt>
+          <dd>{{ timing.days }}</dd>
+        </div>
+        <div>
+          <dt>Time</dt>
+          <dd><strong class="opd-time">{{ timing.time_range }}</strong></dd>
+        </div>
+        <div>
+          <dt>Room/location</dt>
+          <dd>{{ timing.room_or_location|default:"OPD" }}</dd>
+        </div>
+      </dl>
+      <div class="opd-card__actions">
+        <a class="text-link" href="{% url 'appointments:appointment' %}">Request Appointment</a>
+        {% if site.main_phone %}<a class="text-link" href="tel:{{ site.main_phone|tel }}">Call Hospital</a>{% endif %}
+      </div>
+    </article>
+  {% endfor %}
 </div>
 {% else %}
   {% include "partials/empty_state.html" with title="No OPD timings published" message="Verified OPD timings must be added before launch." %}

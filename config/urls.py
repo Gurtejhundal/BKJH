@@ -22,6 +22,10 @@ from django.urls import include, path
 
 from apps.core.sitemaps import DepartmentSitemap, HealthUpdateSitemap, StaticViewSitemap
 
+admin.site.site_header = "Bibi Kaulan Ji Hospital Admin"
+admin.site.site_title = "BKJH Admin"
+admin.site.index_title = "Manage website content"
+
 sitemaps = {
     "static": StaticViewSitemap,
     "departments": DepartmentSitemap,
@@ -32,7 +36,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("dashboard/", include("apps.dashboard.urls")),
     path("", include("apps.core.urls")),
-    path("", include("apps.hospital.urls")),
+    path("", include("apps.gallery.hospital.urls")),
     path("", include("apps.appointments.urls")),
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="django.contrib.sitemaps.views.sitemap"),
 ]

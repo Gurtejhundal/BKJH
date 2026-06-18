@@ -5,7 +5,7 @@ from django.core.files import File
 from django.core.management.base import BaseCommand
 
 from apps.core.models import SiteSetting
-from apps.hospital.models import (
+from apps.gallery.hospital.models import (
     AmbulanceInfo,
     Department,
     Doctor,

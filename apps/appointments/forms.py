@@ -3,7 +3,7 @@ import re
 from django import forms
 from django.utils import timezone
 
-from apps.hospital.models import Department, Doctor
+from apps.gallery.hospital.models import Department, Doctor
 
 from .models import AppointmentRequest
 

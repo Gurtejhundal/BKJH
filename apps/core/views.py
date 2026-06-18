@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from apps.gallery.models import GalleryImage
-from apps.hospital.models import (
+from apps.gallery.hospital.models import (
     AmbulanceInfo,
     Department,
     Doctor,
@@ -19,7 +19,7 @@ from apps.hospital.models import (
     Service,
 )
 
-from .models import Notice, SiteSetting
+from .models import Notice, PatientReview, SiteSetting
 
 
 def seo(title, description, path="/", og_image="images/og/default-hospital.svg", og_image_url="", robots="index,follow"):
@@ -48,13 +48,17 @@ def active_notices():
     )
 
 
+def featured_reviews(limit=3):
+    return PatientReview.objects.filter(is_active=True, is_featured=True, consent_confirmed=True)[:limit]
+
+
 def home(request):
     site = SiteSetting.get_solo()
     departments = Department.objects.filter(is_active=True, is_featured=True)[:6]
     doctors = Doctor.objects.select_related("department").filter(is_active=True).order_by("-is_featured", "display_order", "full_name")[:4]
     timings = OPDTiming.objects.select_related("department", "doctor").filter(is_active=True)[:6]
     gallery = GalleryImage.objects.select_related("category").filter(is_active=True, is_featured=True, category__is_active=True)[:6]
-    services = Service.objects.filter(is_active=True, is_featured=True)[:8]
+    services = Service.objects.filter(is_active=True, is_featured=True)[:6]
     facilities = Facility.objects.filter(is_active=True, is_featured=True)[:4]
     emergency = EmergencyInfo.objects.filter(is_active=True).first()
     ambulance = AmbulanceInfo.objects.filter(is_active=True).first()
@@ -79,6 +83,7 @@ def home(request):
             "facilities": facilities,
             "emergency": emergency,
             "ambulance": ambulance,
+            "patient_reviews": featured_reviews(),
             "hospital_schema": json.dumps(schema),
             "about_url": reverse("core:about"),
             "appointment_url": reverse("appointments:appointment"),
@@ -126,7 +131,7 @@ def hospital_schema(request, site):
 
 
 def about(request):
-    from apps.hospital.models import Facility, Service
+    from apps.gallery.hospital.models import Facility, Service
 
     return render(
         request,
@@ -139,6 +144,7 @@ def about(request):
             ),
             "services": Service.objects.filter(is_active=True, is_featured=True)[:3],
             "facilities": Facility.objects.filter(is_active=True, is_featured=True)[:3],
+            "patient_reviews": featured_reviews(),
         },
     )
 

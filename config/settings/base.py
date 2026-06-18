@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sitemaps",
     "apps.core",
-    "apps.hospital",
+    "apps.gallery.hospital",
     "apps.appointments",
     "apps.gallery",
     "apps.dashboard",

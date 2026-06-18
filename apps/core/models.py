@@ -118,3 +118,40 @@ class Notice(TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+
+class PatientReview(PublishedModel):
+    REVIEW_TYPE_CHOICES = [
+        ("text", "Text"),
+        ("video", "Video"),
+    ]
+
+    reviewer_name = models.CharField(max_length=120)
+    service_context = models.CharField(max_length=140, blank=True)
+    review_type = models.CharField(max_length=20, choices=REVIEW_TYPE_CHOICES, default="text")
+    quote = models.TextField(blank=True)
+    video_url = models.URLField(blank=True)
+    source_label = models.CharField(max_length=120, blank=True)
+    source_url = models.URLField(blank=True)
+    rating = models.PositiveSmallIntegerField(blank=True, null=True, help_text="Optional 1-5 rating from a verified source.")
+    consent_confirmed = models.BooleanField(default=False, help_text="Publish only after patient/client approval.")
+    is_featured = models.BooleanField(default=True)
+
+    class Meta(PublishedModel.Meta):
+        verbose_name = "Patient review"
+        verbose_name_plural = "Patient reviews"
+
+    def clean(self):
+        if self.review_type == "video" and not self.video_url:
+            raise ValidationError("Video reviews need a video URL.")
+        if self.review_type == "text" and not self.quote:
+            raise ValidationError("Text reviews need review text.")
+        if self.rating is not None and not 1 <= self.rating <= 5:
+            raise ValidationError("Rating must be between 1 and 5.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.reviewer_name

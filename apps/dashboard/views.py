@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from apps.appointments.models import AppointmentRequest
 from apps.core.views import seo
-from apps.hospital.models import Department
+from apps.gallery.hospital.models import Department
 
 from .forms import AppointmentStatusForm
 

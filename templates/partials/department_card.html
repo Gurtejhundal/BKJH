@@ -1,6 +1,8 @@
-<article class="info-card">
-  <div class="card-icon">{{ department.icon|default:"+" }}</div>
+<a class="info-card department-card card-link" href="{{ department.get_absolute_url }}">
+  <div class="card-icon" aria-hidden="true">
+    {% if "Emergency" in department.name %}{% include "partials/icon.html" with name="emergency" %}{% elif "Pulmonary" in department.name %}{% include "partials/icon.html" with name="lungs" %}{% elif "Pediatric" in department.name or "Paediatric" in department.name %}{% include "partials/icon.html" with name="child" %}{% elif "Ortho" in department.name %}{% include "partials/icon.html" with name="bone" %}{% elif "Medicine" in department.name %}{% include "partials/icon.html" with name="medicine" %}{% elif "Urology" in department.name %}{% include "partials/icon.html" with name="urology" %}{% elif "Dental" in department.name or "Dentistry" in department.name %}{% include "partials/icon.html" with name="care" %}{% elif "Eye" in department.name or "Ophthalmology" in department.name %}{% include "partials/icon.html" with name="care" %}{% else %}{% include "partials/icon.html" with name="department" %}{% endif %}
+  </div>
   <h3>{{ department.name }}</h3>
   <p>{{ department.short_description }}</p>
-  <a class="text-link" href="{{ department.get_absolute_url }}">View Department Details</a>
-</article>
+  <span class="text-link">View Department Details</span>
+</a>

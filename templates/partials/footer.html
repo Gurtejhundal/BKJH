@@ -20,6 +20,9 @@
       <a href="{% url 'hospital:opd_timing' %}">OPD Timing</a>
       <a href="{% url 'hospital:doctors' %}">Doctors</a>
       <a href="{% url 'hospital:departments' %}">Departments</a>
+      <a href="{% url 'hospital:facilities' %}">Facilities</a>
+      <a href="{% url 'hospital:gallery' %}">Gallery</a>
+      <a href="{% url 'core:about' %}">About Hospital</a>
       <a href="{% url 'appointments:appointment' %}">Request Appointment</a>
     </section>
     <section>
@@ -32,7 +35,13 @@
     </section>
   </div>
   <div class="wrapper footer-bottom">
-    <span>&copy; {% now "Y" %} {{ site.hospital_name }}.</span>
-    <span><a href="{% url 'core:privacy' %}">Privacy</a> <a href="{% url 'core:terms' %}">Terms</a></span>
+    <div class="footer-legal">
+      <span>&copy; {% now "Y" %} {{ site.hospital_name }}.</span>
+      <span class="footer-legal__links">
+        <a href="{% url 'core:privacy' %}">Privacy</a>
+        <a href="{% url 'core:terms' %}">Terms</a>
+      </span>
+    </div>
+    <p class="creator-credit">Digital experience crafted by <a href="https://gurtejbirsingh.vercel.app/" target="_blank" rel="noopener">Gurtejbir Singh</a>.</p>
   </div>
 </footer>
