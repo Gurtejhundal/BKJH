@@ -58,7 +58,10 @@ MIRI_PIRI_PROFILE = {
     "tagline": "Multi-speciality care in Amritsar with OPD, emergency and critical care support.",
     "address": "Opposite Namdhari Kanda, Amritsar-Tarn Taran Road, Antaryami Colony, Amritsar-143001, Punjab",
     "phone": "+91 98558 21107",
+    "opd_hours": "OPD 9:00 AM - 5:00 PM",
+    "emergency_hours": "Emergency support listed as available 24x7",
     "maps_url": "https://maps.app.goo.gl/h1oCCZ2XJcF7rKy36",
+    "maps_embed_url": "https://www.google.com/maps?q=Opposite%20Namdhari%20Kanda%2C%20Tarn%20Taran%20Road%2C%20Amritsar%2C%20Punjab&output=embed",
     "instagram_url": "https://www.instagram.com/miripirihospital/",
     "logo_static": "images/miri-piri-logo.jpg",
     "theme": "miri",
@@ -132,6 +135,7 @@ def miri_piri_schema(request):
 
 
 def miri_piri_hospital(request):
+    miri_tel = tel_url(MIRI_PIRI_PROFILE["phone"])
     services = [
         {"title": "Chest & TB", "icon": "lungs", "text": "Chest and respiratory consultation support."},
         {"title": "Orthopedics", "icon": "bone", "text": "Bone, joint and orthopedic care support."},
@@ -141,10 +145,50 @@ def miri_piri_hospital(request):
         {"title": "Critical Care", "icon": "emergency", "text": "Critical care support listed by the hospital."},
     ]
     facilities = [
-        "NICU",
-        "24 Hours ICU",
-        "Wheelchair Accessible Entrance",
-        "Parking Support",
+        {"title": "NICU", "icon": "care", "text": "Newborn and child support area listed by the hospital."},
+        {"title": "24 Hours ICU", "icon": "emergency", "text": "Critical monitoring support for admitted patients."},
+        {"title": "Emergency Services", "icon": "emergency", "text": "Urgent care support listed as available round the clock."},
+        {"title": "OPD Services", "icon": "doctor", "text": "Out-patient consultation window listed as 9:00 AM to 5:00 PM."},
+        {"title": "Wheelchair Accessible Entrance", "icon": "care", "text": "Patient access support listed on public hospital profile."},
+        {"title": "Parking Support", "icon": "location", "text": "Parking support listed for visitors near the hospital."},
+    ]
+    quick_actions = [
+        {
+            "title": "Call Hospital",
+            "support_text": "ਹਸਪਤਾਲ ਨੂੰ ਕਾਲ ਕਰੋ",
+            "text": "Speak with staff before visiting.",
+            "href": miri_tel,
+            "icon": "phone",
+        },
+        {
+            "title": "Get Directions",
+            "support_text": "ਰਸਤਾ ਵੇਖੋ",
+            "text": "Open the Tarn Taran Road location.",
+            "href": MIRI_PIRI_PROFILE["maps_url"],
+            "icon": "location",
+            "external": True,
+        },
+        {
+            "title": "OPD Hours",
+            "support_text": "ਓਪੀਡੀ ਸਮਾਂ",
+            "text": MIRI_PIRI_PROFILE["opd_hours"],
+            "href": miri_tel,
+            "icon": "clock",
+        },
+        {
+            "title": "Instagram Updates",
+            "support_text": "ਅਪਡੇਟਸ",
+            "text": "View official posts and announcements.",
+            "href": MIRI_PIRI_PROFILE["instagram_url"],
+            "icon": "gallery",
+            "external": True,
+        },
+    ]
+    patient_support = [
+        {"title": "OPD consultation", "text": "Public profile lists OPD services from 9:00 AM to 5:00 PM."},
+        {"title": "Emergency support", "text": "Public listings describe hospital availability as 24 hours."},
+        {"title": "Critical care", "text": "Critical care and ICU support are highlighted as core services."},
+        {"title": "Speciality care", "text": "Chest & TB, ortho, urology, gynae, surgery, and critical care are listed."},
     ]
     return render(
         request,
@@ -160,7 +204,9 @@ def miri_piri_hospital(request):
             "hospital_schema": json.dumps(miri_piri_schema(request)),
             "services": services,
             "facilities": facilities,
-            "miri_tel": tel_url(MIRI_PIRI_PROFILE["phone"]),
+            "quick_actions": quick_actions,
+            "patient_support": patient_support,
+            "miri_tel": miri_tel,
             "bkjh_url": reverse("core:home"),
         },
     )

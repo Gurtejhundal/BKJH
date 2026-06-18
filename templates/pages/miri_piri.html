@@ -8,7 +8,10 @@
       <span class="page-eyebrow">Second hospital</span>
       <h1>{{ page_hospital.name }}</h1>
       <p class="punjabi-support miri-hero__punjabi">{{ page_hospital.punjabi_name }}</p>
-      <p class="lead">{{ page_hospital.tagline }}</p>
+      <div class="hero-intro">
+        <p class="lead">{{ page_hospital.tagline }}</p>
+        <p class="punjabi-support hero-subline">ਅੰਮ੍ਰਿਤਸਰ ਵਿੱਚ ਓਪੀਡੀ, ਐਮਰਜੈਂਸੀ ਅਤੇ ਕ੍ਰਿਟੀਕਲ ਕੇਅਰ ਸਹਾਇਤਾ</p>
+      </div>
       <div class="hero-actions" aria-label="Miri Piri patient actions">
         <a class="btn btn-primary hero-btn" href="{{ miri_tel }}">Call Hospital</a>
         <a class="btn btn-secondary hero-btn" href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Get Directions</a>
@@ -28,18 +31,55 @@
   </div>
 </section>
 
-<section class="section section-surface" id="miri-services">
+<section class="section home-quick-actions section-surface">
   <div class="wrapper">
-    {% include "partials/section_header.html" with title="Services" support_text="ਸੇਵਾਵਾਂ" intro="Publicly listed patient services for Miri Piri Mission Hospital." %}
+    {% include "partials/section_header.html" with title="Quick patient actions" support_text="ਮਰੀਜ਼ਾਂ ਲਈ ਤੇਜ਼ ਕਾਰਵਾਈਆਂ" intro="Fast access to call, directions, OPD hours, and official updates." %}
+    <div class="quick-grid">
+      {% for action in quick_actions %}
+        <a class="quick-action-card quick-action-card--appointment" href="{{ action.href }}"{% if action.external %} target="_blank" rel="noopener"{% endif %}>
+          <span class="quick-action-card__icon" aria-hidden="true">{% include "partials/icon.html" with name=action.icon %}</span>
+          <span class="quick-action-card__content">
+            <strong>{{ action.title }}</strong>
+            <span class="punjabi-support">{{ action.support_text }}</span>
+            <small>{{ action.text }}</small>
+          </span>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section home-emergency-actions section-surface">
+  <div class="wrapper action-pair">
+    <article class="emergency-action-card">
+      <span class="action-card__eyebrow">Urgent response</span>
+      <h2>24x7 Emergency</h2>
+      <p>{{ page_hospital.emergency_hours }}. Please call before travelling when possible.</p>
+      <p class="action-card__contact">{{ page_hospital.phone }}</p>
+      <a class="btn btn-primary" href="{{ miri_tel }}">Call Hospital</a>
+    </article>
+    <article class="ambulance-action-card">
+      <span class="action-card__eyebrow">OPD support</span>
+      <h2>{{ page_hospital.opd_hours }}</h2>
+      <p>OPD timing is listed publicly. Confirm availability by phone before visiting on holidays or emergency-heavy days.</p>
+      <a class="btn btn-secondary" href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Open Location</a>
+    </article>
+  </div>
+</section>
+
+<section class="section home-key-services" id="miri-services">
+  <div class="wrapper">
+    {% include "partials/section_header.html" with title="Our Key Services" support_text="ਸਾਡੀਆਂ ਮੁੱਖ ਸੇਵਾਵਾਂ" intro="Publicly listed patient services for Miri Piri Mission Hospital." %}
     <div class="key-service-grid">
       {% for service in services %}
-        <article class="key-service-card">
+        <a class="key-service-card card-link{% if forloop.first %} key-service-card--featured{% endif %}" href="{{ miri_tel }}">
           <span class="key-service-icon" aria-hidden="true">{% include "partials/icon.html" with name=service.icon %}</span>
           <div class="key-service-card__content">
+            {% if forloop.first %}<span class="key-service-card__eyebrow">Patient service</span>{% endif %}
             <h3>{{ service.title }}</h3>
             <p>{{ service.text }}</p>
           </div>
-        </article>
+        </a>
       {% endfor %}
     </div>
   </div>
@@ -47,13 +87,13 @@
 
 <section class="section" id="miri-facilities">
   <div class="wrapper">
-    {% include "partials/section_header.html" with title="Facilities and Diagnostics" support_text="ਸੁਵਿਧਾਵਾਂ" intro="Core support areas listed for patient planning." %}
-    <div class="facility-grid">
+    {% include "partials/section_header.html" with title="Facilities and Support" support_text="ਸੁਵਿਧਾਵਾਂ ਅਤੇ ਸਹਾਇਤਾ" intro="Core support areas listed for patient planning." %}
+    <div class="card-grid facility-grid">
       {% for facility in facilities %}
-        <article class="facility-card">
-          <div class="card-icon" aria-hidden="true">{% if "X-Ray" in facility %}{% include "partials/icon.html" with name="gallery" %}{% elif "Lab" in facility %}{% include "partials/icon.html" with name="medicine" %}{% elif "Pharmacy" in facility %}{% include "partials/icon.html" with name="care" %}{% else %}{% include "partials/icon.html" with name="department" %}{% endif %}</div>
-          <h3>{{ facility }}</h3>
-          <p>Available hospital support area.</p>
+        <article class="info-card facility-card">
+          <div class="card-icon" aria-hidden="true">{% include "partials/icon.html" with name=facility.icon %}</div>
+          <h3>{{ facility.title }}</h3>
+          <p>{{ facility.text }}</p>
         </article>
       {% endfor %}
     </div>
@@ -63,19 +103,61 @@
 <section class="section section-surface">
   <div class="wrapper split">
     <div>
-      <h2>Location and Contact</h2>
-      <p class="punjabi-support section-punjabi">ਸਥਾਨ ਅਤੇ ਸੰਪਰਕ</p>
+      <h2>About {{ page_hospital.name }}</h2>
+      <p class="punjabi-support section-punjabi">ਮੀਰੀ ਪੀਰੀ ਮਿਸ਼ਨ ਹਸਪਤਾਲ ਬਾਰੇ</p>
+      <p>Miri Piri Mission Hospital serves patients on Amritsar-Tarn Taran Road with OPD, emergency, critical care, and speciality consultation support.</p>
+      <p>Only public, client-verifiable details are shown here. Doctor names, detailed schedules, gallery photos, and patient reviews should be added after hospital approval.</p>
+    </div>
+    <div class="support-box miri-support-list">
+      <h3>Patient planning</h3>
+      {% for item in patient_support %}
+        <div class="miri-support-list__item">
+          <strong>{{ item.title }}</strong>
+          <p>{{ item.text }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section-surface" id="miri-location">
+  <div class="wrapper split">
+    <div>
+      <h2>Contact and Location</h2>
+      <p class="punjabi-support section-punjabi">ਸੰਪਰਕ ਅਤੇ ਸਥਾਨ</p>
       <p>{{ page_hospital.address }}</p>
       <p><strong>Phone:</strong> {{ page_hospital.phone }}</p>
+      <p><strong>OPD:</strong> {{ page_hospital.opd_hours }}</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="{{ miri_tel }}">Call Hospital</a>
         <a class="btn btn-secondary" href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Open Google Maps</a>
       </div>
     </div>
+    <div class="map-frame miri-map-frame">
+      <iframe src="{{ page_hospital.maps_embed_url }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="{{ page_hospital.name }} map"></iframe>
+      <div class="miri-map-frame__caption">
+        <span class="card-icon" aria-hidden="true">{% include "partials/icon.html" with name="location" %}</span>
+        <div>
+          <strong>{{ page_hospital.name }}</strong>
+          <p>{{ page_hospital.address }}</p>
+          <a class="text-link" href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Open full map</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrapper split">
+    <div>
+      <h2>Official Updates</h2>
+      <p class="punjabi-support section-punjabi">ਅਧਿਕਾਰਤ ਅਪਡੇਟਸ</p>
+      <p>Use the official Instagram profile for recent hospital posts, camps, announcements, and service updates.</p>
+      <a class="btn btn-secondary" href="{{ page_hospital.instagram_url }}" target="_blank" rel="noopener">Open Instagram</a>
+    </div>
     <div class="support-box miri-social-box">
-      <h3>Follow Updates</h3>
-      <p>Use the official Instagram page for recent hospital posts and announcements.</p>
-      <a class="text-link" href="{{ page_hospital.instagram_url }}" target="_blank" rel="noopener">Open Instagram</a>
+      <h3>Information policy</h3>
+      <p>Hospital content should stay practical and verified. Add real doctors, OPD schedules, photos, reviews, and facility details only after client approval.</p>
     </div>
   </div>
 </section>
