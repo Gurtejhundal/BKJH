@@ -4,11 +4,16 @@
     <div>
       <h2>Need help before visiting?</h2>
       <p class="punjabi-support">ਆਉਣ ਤੋਂ ਪਹਿਲਾਂ ਮਦਦ ਚਾਹੀਦੀ ਹੈ?</p>
-      <p>Call the hospital, check OPD timings, or request an appointment. Staff will confirm appointment requests by phone.</p>
+      <p>Call the hospital, check location, or contact staff before visiting.</p>
     </div>
     <div class="contact-strip__actions">
-      {% if site.main_phone %}<a class="btn btn-primary" href="tel:{{ site.main_phone|tel }}">Call Hospital</a>{% endif %}
-      <a class="btn btn-secondary" href="{% url 'hospital:opd_timing' %}">View OPD Timing</a>
+      {% if page_hospital %}
+        <a class="btn btn-primary" href="{{ miri_tel }}">Call Hospital</a>
+        <a class="btn btn-secondary" href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Open Location</a>
+      {% else %}
+        {% if site.main_phone %}<a class="btn btn-primary" href="tel:{{ site.main_phone|tel }}">Call Hospital</a>{% endif %}
+        <a class="btn btn-secondary" href="{% url 'hospital:opd_timing' %}">View OPD Timing</a>
+      {% endif %}
     </div>
   </div>
 </section>

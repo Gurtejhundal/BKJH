@@ -1,15 +1,17 @@
 {% load static site_extras %}
 <header class="site-header">
   <div class="wrapper header-inner">
-    <a class="brand" href="{% url 'core:home' %}" aria-label="{{ site.hospital_name }} home">
-      {% if site.logo %}
+    <a class="brand" href="{% if page_hospital %}{% url 'core:miri_piri_hospital' %}{% else %}{% url 'core:home' %}{% endif %}" aria-label="{% if page_hospital %}{{ page_hospital.name }}{% else %}{{ site.hospital_name }}{% endif %} home">
+      {% if page_hospital %}
+        <img src="{% static page_hospital.logo_static %}" alt="{{ page_hospital.name }} logo">
+      {% elif site.logo %}
         <img src="{{ site.logo.url }}" alt="{{ site.hospital_name }} logo">
       {% else %}
         <img src="{% static 'images/bkjh-logo.png' %}" alt="{{ site.hospital_name }} logo">
       {% endif %}
       <span>
-        <strong>{{ site.hospital_name }}</strong>
-        <span class="brand-punjabi">ਬੀਬੀ ਕੌਲਾਂ ਜੀ ਹਸਪਤਾਲ</span>
+        <strong>{% if page_hospital %}{{ page_hospital.name }}{% else %}{{ site.hospital_name }}{% endif %}</strong>
+        <span class="brand-punjabi">{% if page_hospital %}{{ page_hospital.punjabi_name }}{% else %}ਬੀਬੀ ਕੌਲਾਂ ਜੀ ਹਸਪਤਾਲ{% endif %}</span>
       </span>
     </a>
     <button class="menu-button" type="button" data-menu-toggle aria-expanded="false" aria-controls="main-nav">
@@ -17,16 +19,27 @@
       <span>Menu</span>
     </button>
     <nav id="main-nav" class="main-nav" data-main-nav aria-label="Main navigation">
-      <a class="{% if request.resolver_match.url_name == 'home' %}is-active{% endif %}" href="{% url 'core:home' %}">Home</a>
-      <a class="{% if request.resolver_match.url_name == 'services' %}is-active{% endif %}" href="{% url 'hospital:services' %}">Services</a>
-      <a class="{% if request.resolver_match.url_name == 'doctors' %}is-active{% endif %}" href="{% url 'hospital:doctors' %}">Doctors</a>
-      <a class="{% if request.resolver_match.url_name == 'opd_timing' %}is-active{% endif %}" href="{% url 'hospital:opd_timing' %}">Timings</a>
-      <a class="{% if request.resolver_match.url_name == 'departments' or request.resolver_match.url_name == 'department_detail' %}is-active{% endif %}" href="{% url 'hospital:departments' %}">Departments</a>
-      <a class="{% if request.resolver_match.url_name == 'appointment' %}is-active{% endif %}" href="{% url 'appointments:appointment' %}">Appointment</a>
-      <a class="{% if request.resolver_match.url_name == 'contact' %}is-active{% endif %}" href="{% url 'hospital:contact' %}">Contact</a>
+      {% if page_hospital %}
+        <a class="is-active" href="{% url 'core:miri_piri_hospital' %}">Home</a>
+        <a href="#miri-services">Services</a>
+        <a href="#miri-facilities">Facilities</a>
+        <a href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Location</a>
+        <a href="{{ page_hospital.instagram_url }}" target="_blank" rel="noopener">Instagram</a>
+        <a href="{% url 'core:home' %}">Bibi Kaulan Ji Hospital</a>
+      {% else %}
+        <a class="{% if request.resolver_match.url_name == 'home' %}is-active{% endif %}" href="{% url 'core:home' %}">Home</a>
+        <a class="{% if request.resolver_match.url_name == 'services' %}is-active{% endif %}" href="{% url 'hospital:services' %}">Services</a>
+        <a class="{% if request.resolver_match.url_name == 'doctors' %}is-active{% endif %}" href="{% url 'hospital:doctors' %}">Doctors</a>
+        <a class="{% if request.resolver_match.url_name == 'opd_timing' %}is-active{% endif %}" href="{% url 'hospital:opd_timing' %}">Timings</a>
+        <a class="{% if request.resolver_match.url_name == 'departments' or request.resolver_match.url_name == 'department_detail' %}is-active{% endif %}" href="{% url 'hospital:departments' %}">Departments</a>
+        <a class="{% if request.resolver_match.url_name == 'appointment' %}is-active{% endif %}" href="{% url 'appointments:appointment' %}">Appointment</a>
+        <a class="{% if request.resolver_match.url_name == 'contact' %}is-active{% endif %}" href="{% url 'hospital:contact' %}">Contact</a>
+      {% endif %}
     </nav>
     <div class="header-actions">
-      {% if site.emergency_phone %}
+      {% if page_hospital %}
+        <a class="btn btn-primary header-emergency" href="{{ miri_tel }}"><span>Call Hospital</span><strong>{{ page_hospital.phone }}</strong></a>
+      {% elif site.emergency_phone %}
         <a class="btn btn-emergency header-emergency" href="tel:{{ site.emergency_phone|tel }}"><span>Emergency</span><strong>{{ site.emergency_phone }}</strong></a>
       {% else %}
         <a class="btn btn-secondary" href="{% url 'appointments:appointment' %}">Request Appointment</a>

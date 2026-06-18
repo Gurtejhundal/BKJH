@@ -3,40 +3,56 @@
   <div class="wrapper footer-grid">
     <section>
       <div class="footer-brand">
-        {% if site.logo %}
+        {% if page_hospital %}
+          <img src="{% static page_hospital.logo_static %}" alt="{{ page_hospital.name }} logo">
+        {% elif site.logo %}
           <img src="{{ site.logo.url }}" alt="{{ site.hospital_name }} logo">
         {% else %}
           <img src="{% static 'images/bkjh-logo.png' %}" alt="{{ site.hospital_name }} logo">
         {% endif %}
-        <h2>{{ site.hospital_name }}</h2>
+        <h2>{% if page_hospital %}{{ page_hospital.name }}{% else %}{{ site.hospital_name }}{% endif %}</h2>
       </div>
-      <p class="punjabi-support">ਬੀਬੀ ਕੌਲਾਂ ਜੀ ਹਸਪਤਾਲ</p>
-      <p>{{ site.short_tagline }}</p>
-      {% if site.address %}<p>{{ site.address }}</p>{% endif %}
+      <p class="punjabi-support">{% if page_hospital %}{{ page_hospital.punjabi_name }}{% else %}ਬੀਬੀ ਕੌਲਾਂ ਜੀ ਹਸਪਤਾਲ{% endif %}</p>
+      <p>{% if page_hospital %}{{ page_hospital.tagline }}{% else %}{{ site.short_tagline }}{% endif %}</p>
+      {% if page_hospital %}<p>{{ page_hospital.address }}</p>{% elif site.address %}<p>{{ site.address }}</p>{% endif %}
     </section>
     <section>
       <h2>Patient links</h2>
       <p class="punjabi-support">ਮਰੀਜ਼ਾਂ ਲਈ ਲਿੰਕ</p>
-      <a href="{% url 'hospital:opd_timing' %}">OPD Timing</a>
-      <a href="{% url 'hospital:doctors' %}">Doctors</a>
-      <a href="{% url 'hospital:departments' %}">Departments</a>
-      <a href="{% url 'hospital:facilities' %}">Facilities</a>
-      <a href="{% url 'hospital:gallery' %}">Gallery</a>
-      <a href="{% url 'core:about' %}">About Hospital</a>
-      <a href="{% url 'appointments:appointment' %}">Request Appointment</a>
+      {% if page_hospital %}
+        <a href="#miri-services">Services</a>
+        <a href="#miri-facilities">Facilities</a>
+        <a href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Location</a>
+        <a href="{{ page_hospital.instagram_url }}" target="_blank" rel="noopener">Instagram</a>
+        <a href="{% url 'core:home' %}">Bibi Kaulan Ji Hospital</a>
+      {% else %}
+        <a href="{% url 'hospital:opd_timing' %}">OPD Timing</a>
+        <a href="{% url 'hospital:doctors' %}">Doctors</a>
+        <a href="{% url 'hospital:departments' %}">Departments</a>
+        <a href="{% url 'hospital:facilities' %}">Facilities</a>
+        <a href="{% url 'hospital:gallery' %}">Gallery</a>
+        <a href="{% url 'core:about' %}">About Hospital</a>
+        <a href="{% url 'appointments:appointment' %}">Request Appointment</a>
+      {% endif %}
     </section>
     <section>
       <h2>Contact</h2>
       <p class="punjabi-support">ਸੰਪਰਕ</p>
-      {% if site.main_phone %}<a href="tel:{{ site.main_phone|tel }}">Main: {{ site.main_phone }}</a>{% endif %}
-      {% if site.emergency_phone %}<a href="tel:{{ site.emergency_phone|tel }}">Emergency: {{ site.emergency_phone }}</a>{% endif %}
-      {% if site.ambulance_phone %}<a href="tel:{{ site.ambulance_phone|tel }}">Ambulance: {{ site.ambulance_phone }}</a>{% endif %}
-      {% if site.google_maps_url %}<a href="{{ site.google_maps_url }}" rel="noopener" target="_blank">Open Google Maps</a>{% endif %}
+      {% if page_hospital %}
+        <a href="{{ miri_tel }}">Main: {{ page_hospital.phone }}</a>
+        <a href="{{ page_hospital.maps_url }}" rel="noopener" target="_blank">Open Google Maps</a>
+        <a href="{{ page_hospital.instagram_url }}" rel="noopener" target="_blank">Instagram</a>
+      {% else %}
+        {% if site.main_phone %}<a href="tel:{{ site.main_phone|tel }}">Main: {{ site.main_phone }}</a>{% endif %}
+        {% if site.emergency_phone %}<a href="tel:{{ site.emergency_phone|tel }}">Emergency: {{ site.emergency_phone }}</a>{% endif %}
+        {% if site.ambulance_phone %}<a href="tel:{{ site.ambulance_phone|tel }}">Ambulance: {{ site.ambulance_phone }}</a>{% endif %}
+        {% if site.google_maps_url %}<a href="{{ site.google_maps_url }}" rel="noopener" target="_blank">Open Google Maps</a>{% endif %}
+      {% endif %}
     </section>
   </div>
   <div class="wrapper footer-bottom">
     <div class="footer-legal">
-      <span>&copy; {% now "Y" %} {{ site.hospital_name }}.</span>
+      <span>&copy; {% now "Y" %} {% if page_hospital %}{{ page_hospital.name }}{% else %}{{ site.hospital_name }}{% endif %}.</span>
       <span class="footer-legal__links">
         <a href="{% url 'core:privacy' %}">Privacy</a>
         <a href="{% url 'core:terms' %}">Terms</a>

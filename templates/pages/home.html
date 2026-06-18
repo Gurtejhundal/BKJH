@@ -23,14 +23,15 @@
           {% include "partials/button.html" with href=contact_url label="Location" support_text="ਸਥਾਨ ਵੇਖੋ" variant="btn-secondary" extra_classes="hero-btn hero-btn--secondary" %}
         {% endif %}
       </div>
-      <div class="hero-society" aria-label="Hospital trust information">
-        <span class="society-icon" aria-hidden="true">{% include "partials/icon.html" with name="care" %}</span>
+      <a class="hero-society hospital-switch-card" href="{{ miri_piri_url }}" aria-label="Open Miri Piri Mission Hospital website">
+        <span class="society-icon hospital-switch-card__logo" aria-hidden="true"><img src="{% static 'images/miri-piri-logo.jpg' %}" alt=""></span>
         <span class="hero-society__copy">
-          <small class="hero-society__eyebrow">Charitable trust support</small>
-          <strong>Running under Bibi Kaulan Ji Hospitals Charitable Society</strong>
-          <small class="punjabi-support">ਬੀਬੀ ਕੌਲਾਂ ਜੀ ਹਸਪਤਾਲਸ ਚੈਰੀਟੇਬਲ ਸੋਸਾਇਟੀ ਅਧੀਨ ਚੱਲ ਰਿਹਾ</small>
+          <small class="hero-society__eyebrow">Our second hospital</small>
+          <strong>Miri Piri Mission Hospital</strong>
+          <small class="punjabi-support">ਮੀਰੀ ਪੀਰੀ ਮਿਸ਼ਨ ਹਸਪਤਾਲ ਦੀ ਵੈੱਬਸਾਈਟ ਵੇਖੋ</small>
         </span>
-      </div>
+        <span class="hospital-switch-card__action">Visit site</span>
+      </a>
     </div>
     <div class="hero-image-container" aria-label="Healthcare team visual">
       <img src="{% static 'images/joint_doctors.png' %}" alt="Healthcare professionals in a hospital corridor" class="hero-image" width="1474" height="1067">

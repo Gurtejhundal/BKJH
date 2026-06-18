@@ -52,6 +52,19 @@ def featured_reviews(limit=3):
     return PatientReview.objects.filter(is_active=True, is_featured=True, consent_confirmed=True)[:limit]
 
 
+MIRI_PIRI_PROFILE = {
+    "name": "Miri Piri Mission Hospital",
+    "punjabi_name": "ਮੀਰੀ ਪੀਰੀ ਮਿਸ਼ਨ ਹਸਪਤਾਲ",
+    "tagline": "Multi-speciality care in Amritsar with OPD, emergency and critical care support.",
+    "address": "Opposite Namdhari Kanda, Amritsar-Tarn Taran Road, Antaryami Colony, Amritsar-143001, Punjab",
+    "phone": "+91 98558 21107",
+    "maps_url": "https://maps.app.goo.gl/h1oCCZ2XJcF7rKy36",
+    "instagram_url": "https://www.instagram.com/miripirihospital/",
+    "logo_static": "images/miri-piri-logo.jpg",
+    "theme": "miri",
+}
+
+
 def home(request):
     site = SiteSetting.get_solo()
     departments = Department.objects.filter(is_active=True, is_featured=True)[:6]
@@ -97,6 +110,58 @@ def home(request):
             "main_tel": tel_url(site.main_phone),
             "emergency_tel": tel_url(site.emergency_phone or (emergency.emergency_phone if emergency else "")),
             "ambulance_tel": tel_url(site.ambulance_phone or (ambulance.ambulance_phone if ambulance else "")),
+            "miri_piri_url": reverse("core:miri_piri_hospital"),
+        },
+    )
+
+
+def miri_piri_schema(request):
+    return {
+        "@context": "https://schema.org",
+        "@type": "Hospital",
+        "name": MIRI_PIRI_PROFILE["name"],
+        "url": request.build_absolute_uri(reverse("core:miri_piri_hospital")),
+        "telephone": MIRI_PIRI_PROFILE["phone"],
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": MIRI_PIRI_PROFILE["address"],
+            "addressCountry": "IN",
+        },
+        "sameAs": [MIRI_PIRI_PROFILE["maps_url"], MIRI_PIRI_PROFILE["instagram_url"]],
+    }
+
+
+def miri_piri_hospital(request):
+    services = [
+        {"title": "Chest & TB", "icon": "lungs", "text": "Chest and respiratory consultation support."},
+        {"title": "Orthopedics", "icon": "bone", "text": "Bone, joint and orthopedic care support."},
+        {"title": "Urology", "icon": "urology", "text": "Urology consultation and procedure support."},
+        {"title": "Gynae", "icon": "medicine", "text": "Women care and maternity consultation support."},
+        {"title": "General Surgery", "icon": "surgery", "text": "Surgical consultation and procedure support."},
+        {"title": "Critical Care", "icon": "emergency", "text": "Critical care support listed by the hospital."},
+    ]
+    facilities = [
+        "NICU",
+        "24 Hours ICU",
+        "Wheelchair Accessible Entrance",
+        "Parking Support",
+    ]
+    return render(
+        request,
+        "pages/miri_piri.html",
+        {
+            "seo": seo(
+                "Miri Piri Mission Hospital | Tarn Taran Road",
+                "Miri Piri Mission Hospital provides OPD, emergency, critical care, specialty consultation and hospital support on Amritsar-Tarn Taran Road.",
+                request.path,
+                og_image="images/miri-piri-logo.jpg",
+            ),
+            "page_hospital": MIRI_PIRI_PROFILE,
+            "hospital_schema": json.dumps(miri_piri_schema(request)),
+            "services": services,
+            "facilities": facilities,
+            "miri_tel": tel_url(MIRI_PIRI_PROFILE["phone"]),
+            "bkjh_url": reverse("core:home"),
         },
     )
 

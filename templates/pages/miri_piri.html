@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body_class %}theme-miri{% endblock %}
+{% block content %}
+<section class="miri-hero">
+  <div class="wrapper miri-hero__grid">
+    <div class="miri-hero__copy">
+      <span class="page-eyebrow">Second hospital</span>
+      <h1>{{ page_hospital.name }}</h1>
+      <p class="punjabi-support miri-hero__punjabi">{{ page_hospital.punjabi_name }}</p>
+      <p class="lead">{{ page_hospital.tagline }}</p>
+      <div class="hero-actions" aria-label="Miri Piri patient actions">
+        <a class="btn btn-primary hero-btn" href="{{ miri_tel }}">Call Hospital</a>
+        <a class="btn btn-secondary hero-btn" href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Get Directions</a>
+        <a class="btn btn-secondary hero-btn" href="{{ page_hospital.instagram_url }}" target="_blank" rel="noopener">Instagram</a>
+      </div>
+      <a class="miri-linkback" href="{{ bkjh_url }}">
+        <span class="miri-linkback__mark" aria-hidden="true">{% include "partials/icon.html" with name="department" %}</span>
+        <span>
+          <small>Also visit</small>
+          <strong>Bibi Kaulan Ji Hospital</strong>
+        </span>
+      </a>
+    </div>
+    <div class="miri-hero__brand" aria-label="{{ page_hospital.name }} logo">
+      <img src="{% static page_hospital.logo_static %}" alt="{{ page_hospital.name }} logo">
+    </div>
+  </div>
+</section>
+
+<section class="section section-surface" id="miri-services">
+  <div class="wrapper">
+    {% include "partials/section_header.html" with title="Services" support_text="ਸੇਵਾਵਾਂ" intro="Publicly listed patient services for Miri Piri Mission Hospital." %}
+    <div class="key-service-grid">
+      {% for service in services %}
+        <article class="key-service-card">
+          <span class="key-service-icon" aria-hidden="true">{% include "partials/icon.html" with name=service.icon %}</span>
+          <div class="key-service-card__content">
+            <h3>{{ service.title }}</h3>
+            <p>{{ service.text }}</p>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section" id="miri-facilities">
+  <div class="wrapper">
+    {% include "partials/section_header.html" with title="Facilities and Diagnostics" support_text="ਸੁਵਿਧਾਵਾਂ" intro="Core support areas listed for patient planning." %}
+    <div class="facility-grid">
+      {% for facility in facilities %}
+        <article class="facility-card">
+          <div class="card-icon" aria-hidden="true">{% if "X-Ray" in facility %}{% include "partials/icon.html" with name="gallery" %}{% elif "Lab" in facility %}{% include "partials/icon.html" with name="medicine" %}{% elif "Pharmacy" in facility %}{% include "partials/icon.html" with name="care" %}{% else %}{% include "partials/icon.html" with name="department" %}{% endif %}</div>
+          <h3>{{ facility }}</h3>
+          <p>Available hospital support area.</p>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section-surface">
+  <div class="wrapper split">
+    <div>
+      <h2>Location and Contact</h2>
+      <p class="punjabi-support section-punjabi">ਸਥਾਨ ਅਤੇ ਸੰਪਰਕ</p>
+      <p>{{ page_hospital.address }}</p>
+      <p><strong>Phone:</strong> {{ page_hospital.phone }}</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="{{ miri_tel }}">Call Hospital</a>
+        <a class="btn btn-secondary" href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Open Google Maps</a>
+      </div>
+    </div>
+    <div class="support-box miri-social-box">
+      <h3>Follow Updates</h3>
+      <p>Use the official Instagram page for recent hospital posts and announcements.</p>
+      <a class="text-link" href="{{ page_hospital.instagram_url }}" target="_blank" rel="noopener">Open Instagram</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

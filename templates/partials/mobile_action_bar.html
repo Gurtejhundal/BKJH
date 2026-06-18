@@ -1,7 +1,14 @@
 {% load site_extras %}
 <nav class="mobile-action-bar" aria-label="Quick patient actions">
-  {% if site.main_phone %}<a href="tel:{{ site.main_phone|tel }}">Call</a>{% else %}<a href="{% url 'hospital:contact' %}">Call</a>{% endif %}
-  <a href="{% url 'appointments:appointment' %}">Appointment</a>
-  {% if site.google_maps_url %}<a href="{{ site.google_maps_url }}" target="_blank" rel="noopener">Location</a>{% else %}<a href="{% url 'hospital:contact' %}">Location</a>{% endif %}
-  {% if site.emergency_phone %}<a class="danger" href="tel:{{ site.emergency_phone|tel }}">Emergency</a>{% else %}<a class="danger" href="{% url 'hospital:emergency' %}">Emergency</a>{% endif %}
+  {% if page_hospital %}
+    <a href="{{ miri_tel }}">Call</a>
+    <a href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Location</a>
+    <a href="{{ page_hospital.instagram_url }}" target="_blank" rel="noopener">Instagram</a>
+    <a class="danger" href="{% url 'core:home' %}">BKJH</a>
+  {% else %}
+    {% if site.main_phone %}<a href="tel:{{ site.main_phone|tel }}">Call</a>{% else %}<a href="{% url 'hospital:contact' %}">Call</a>{% endif %}
+    <a href="{% url 'appointments:appointment' %}">Appointment</a>
+    {% if site.google_maps_url %}<a href="{{ site.google_maps_url }}" target="_blank" rel="noopener">Location</a>{% else %}<a href="{% url 'hospital:contact' %}">Location</a>{% endif %}
+    {% if site.emergency_phone %}<a class="danger" href="tel:{{ site.emergency_phone|tel }}">Emergency</a>{% else %}<a class="danger" href="{% url 'hospital:emergency' %}">Emergency</a>{% endif %}
+  {% endif %}
 </nav>

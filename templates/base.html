@@ -13,7 +13,7 @@
   <script src="{% static 'js/site.js' %}" defer></script>
   {% block extra_js %}{% endblock %}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
   <a class="skip-link" href="#main-content">Skip to main content</a>
   {% include "partials/emergency_strip.html" %}
   {% include "partials/header.html" %}

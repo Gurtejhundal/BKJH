@@ -3051,3 +3051,210 @@ textarea.form-control {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
+
+/* Miri Piri Mission Hospital shared-site theme */
+.hospital-switch-card {
+  grid-template-columns: 56px 1fr auto;
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.hospital-switch-card:hover,
+.hospital-switch-card:focus-visible {
+  border-color: rgba(18, 143, 138, 0.38);
+  box-shadow: 0 14px 30px rgba(0, 66, 51, 0.09);
+  transform: translateY(-1px);
+}
+
+.hospital-switch-card__logo {
+  overflow: hidden;
+  background: #fff;
+}
+
+.hospital-switch-card__logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.hospital-switch-card__action {
+  margin-left: auto;
+  padding: 9px 12px;
+  border: 1px solid rgba(0, 107, 84, 0.16);
+  border-radius: 10px;
+  color: var(--color-primary);
+  font-size: 0.86rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.theme-miri {
+  --color-primary-dark: #075b5d;
+  --color-primary: #128f8a;
+  --color-accent: #1eb7b0;
+  --color-accent-soft: #e5f8f6;
+  --color-heading: #12323a;
+  --color-surface: #f3fbfa;
+  --color-border: #cde9e6;
+}
+
+.theme-miri .emergency-strip,
+.theme-miri .site-footer {
+  background: #075b5d;
+}
+
+.theme-miri .btn-primary,
+.theme-miri .mobile-action-bar a {
+  background: #128f8a;
+  color: #fff;
+}
+
+.theme-miri .mobile-action-bar .danger {
+  color: #075b5d;
+  background: #e5f8f6;
+}
+
+.theme-miri .header-emergency {
+  background: #128f8a;
+}
+
+.miri-hero {
+  padding-block: 56px;
+  background:
+    linear-gradient(90deg, rgba(229, 248, 246, 0.92), rgba(255, 255, 255, 0.97) 58%, rgba(243, 251, 250, 1)),
+    var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.miri-hero__grid {
+  display: grid;
+  gap: var(--space-6);
+  align-items: center;
+}
+
+.miri-hero__copy {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.miri-hero h1 {
+  max-width: 11ch;
+  margin: 0;
+  color: #075b5d;
+  font-size: clamp(2.45rem, 5vw, 4.8rem);
+  line-height: 1.02;
+}
+
+.miri-hero__punjabi {
+  color: #128f8a;
+  font-size: clamp(1.15rem, 2.7vw, 1.7rem);
+  font-weight: 800;
+}
+
+.miri-hero .lead {
+  max-width: 44rem;
+  color: #24464d;
+}
+
+.miri-hero__brand {
+  display: grid;
+  place-items: center;
+  min-height: 320px;
+  padding: clamp(24px, 5vw, 54px);
+  border: 1px solid rgba(18, 143, 138, 0.18);
+  border-radius: 26px;
+  background: #fff;
+  box-shadow: 0 18px 46px rgba(7, 91, 93, 0.09);
+}
+
+.miri-hero__brand img {
+  width: min(360px, 80vw);
+  height: auto;
+}
+
+.miri-linkback {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  width: fit-content;
+  margin-top: var(--space-2);
+  padding: 14px 16px;
+  border: 1px solid rgba(18, 143, 138, 0.18);
+  border-radius: 14px;
+  background: #fff;
+  color: #12323a;
+  text-decoration: none;
+}
+
+.miri-linkback__mark {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #e5f8f6;
+  color: #128f8a;
+}
+
+.miri-linkback small {
+  display: block;
+  color: var(--color-muted);
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.miri-social-box {
+  border-color: rgba(18, 143, 138, 0.18);
+  background: #fff;
+}
+
+.theme-miri #miri-facilities .facility-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-4);
+}
+
+.theme-miri #miri-facilities .facility-card {
+  min-height: 150px;
+}
+
+@media (max-width: 640px) {
+  .hospital-switch-card {
+    grid-template-columns: 44px 1fr;
+  }
+
+  .hospital-switch-card__action {
+    grid-column: 2;
+    width: fit-content;
+    margin-left: 0;
+  }
+
+  .miri-hero {
+    padding-block: 38px 28px;
+  }
+
+  .miri-hero h1 {
+    max-width: none;
+    font-size: clamp(2.1rem, 10vw, 3rem);
+  }
+
+  .miri-hero__brand {
+    min-height: 240px;
+    margin-top: calc(var(--mobile-action-height) + var(--space-5));
+    padding: 22px;
+    border-radius: 18px;
+  }
+
+  .miri-hero__brand img {
+    width: min(250px, 72vw);
+  }
+}
+
+@media (min-width: 900px) {
+  .miri-hero__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.72fr);
+  }
+}
