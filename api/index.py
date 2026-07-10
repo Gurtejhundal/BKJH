@@ -1,7 +1,9 @@
 import os
 from pathlib import Path
+from tempfile import gettempdir
 
-os.environ.setdefault("DATABASE_URL", "sqlite:////tmp/bkjh-preview.sqlite3")
+preview_db_path = (Path(gettempdir()) / "bkjh-preview.sqlite3").as_posix()
+os.environ.setdefault("DATABASE_URL", f"sqlite:///{preview_db_path}")
 
 from django.core.management import call_command  # noqa: E402
 
