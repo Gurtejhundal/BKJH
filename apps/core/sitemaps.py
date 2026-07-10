@@ -11,6 +11,7 @@ class StaticViewSitemap(Sitemap):
     def items(self):
         return [
             "core:home",
+            "core:miri_piri_hospital",
             "core:about",
             "hospital:departments",
             "hospital:doctors",
@@ -34,7 +35,7 @@ class DepartmentSitemap(Sitemap):
     priority = 0.7
 
     def items(self):
-        return Department.objects.filter(is_active=True)
+        return Department.objects.filter(is_active=True).exclude(hospital_scope="miri")
 
 
 class HealthUpdateSitemap(Sitemap):

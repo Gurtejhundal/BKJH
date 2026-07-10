@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 
 from apps.appointments.forms import AppointmentRequestForm
-from apps.core.views import featured_reviews, seo
+from apps.core.views import featured_reviews, hospital_scope_filter, seo
 from apps.gallery.models import GalleryCategory, GalleryImage
 
 from .models import (
@@ -18,7 +18,7 @@ from .models import (
 
 def departments(request):
     query = request.GET.get("q", "").strip()
-    items = Department.objects.filter(is_active=True)
+    items = Department.objects.filter(hospital_scope_filter("bkjh"), is_active=True)
     if query:
         items = items.filter(name__icontains=query)
     return render(
@@ -33,7 +33,7 @@ def departments(request):
 
 
 def department_detail(request, slug):
-    department = get_object_or_404(Department, slug=slug, is_active=True)
+    department = get_object_or_404(Department.objects.filter(hospital_scope_filter("bkjh")), slug=slug, is_active=True)
     doctors = department.doctors.filter(is_active=True)
     timings = department.opd_timings.select_related("doctor").filter(is_active=True)
     title = department.seo_title or f"{department.name} Department | Bibi Kaulan Ji Hospital"
@@ -52,7 +52,7 @@ def department_detail(request, slug):
 
 def doctors(request):
     department_id = request.GET.get("department")
-    items = Doctor.objects.select_related("department").filter(is_active=True)
+    items = Doctor.objects.select_related("department").filter(hospital_scope_filter("bkjh"), is_active=True)
     if department_id:
         items = items.filter(department_id=department_id)
     return render(
@@ -61,7 +61,7 @@ def doctors(request):
         {
             "seo": seo("Doctors | Bibi Kaulan Ji Hospital", "Find doctor information, departments, OPD days, OPD timings, and appointment request options.", request.path),
             "doctors": items,
-            "departments": Department.objects.filter(is_active=True),
+            "departments": Department.objects.filter(hospital_scope_filter("bkjh"), is_active=True),
             "selected_department": department_id,
             "patient_reviews": featured_reviews(),
         },
@@ -70,7 +70,7 @@ def doctors(request):
 
 def opd_timing(request):
     department_id = request.GET.get("department")
-    items = OPDTiming.objects.select_related("department", "doctor").filter(is_active=True)
+    items = OPDTiming.objects.select_related("department", "doctor").filter(hospital_scope_filter("bkjh"), is_active=True)
     if department_id:
         items = items.filter(department_id=department_id)
     return render(
@@ -79,7 +79,7 @@ def opd_timing(request):
         {
             "seo": seo("OPD Timing | Bibi Kaulan Ji Hospital", "Check OPD timings, doctor availability, departments, and appointment information for Bibi Kaulan Ji Hospital.", request.path),
             "timings": items,
-            "departments": Department.objects.filter(is_active=True),
+            "departments": Department.objects.filter(hospital_scope_filter("bkjh"), is_active=True),
             "selected_department": department_id,
             "patient_reviews": featured_reviews(),
         },
@@ -92,8 +92,8 @@ def services(request):
         "pages/services.html",
         {
             "seo": seo("Services | Bibi Kaulan Ji Hospital", "View confirmed hospital services, OPD consultation, emergency support, and patient care information.", request.path),
-            "services": Service.objects.filter(is_active=True),
-            "featured_departments": Department.objects.filter(is_active=True, is_featured=True)[:4],
+            "services": Service.objects.filter(hospital_scope_filter("bkjh"), is_active=True),
+            "featured_departments": Department.objects.filter(hospital_scope_filter("bkjh"), is_active=True, is_featured=True)[:4],
             "patient_reviews": featured_reviews(),
         },
     )
@@ -105,8 +105,8 @@ def facilities(request):
         "pages/facilities.html",
         {
             "seo": seo("Facilities | Bibi Kaulan Ji Hospital", "View hospital facilities and patient support areas at Bibi Kaulan Ji Hospital.", request.path),
-            "facilities": Facility.objects.filter(is_active=True),
-            "featured_services": Service.objects.filter(is_active=True, is_featured=True)[:4],
+            "facilities": Facility.objects.filter(hospital_scope_filter("bkjh"), is_active=True),
+            "featured_services": Service.objects.filter(hospital_scope_filter("bkjh"), is_active=True, is_featured=True)[:4],
             "patient_reviews": featured_reviews(),
         },
     )
@@ -121,7 +121,7 @@ def emergency(request):
             "seo": seo("Emergency Service | Bibi Kaulan Ji Hospital", "Find emergency contact information, hospital location, and ambulance support details.", request.path),
             "emergency": info,
             "ambulance": AmbulanceInfo.objects.filter(is_active=True).first(),
-            "timings": OPDTiming.objects.select_related("department", "doctor").filter(is_active=True)[:3],
+            "timings": OPDTiming.objects.select_related("department", "doctor").filter(hospital_scope_filter("bkjh"), is_active=True)[:3],
         },
     )
 
@@ -157,7 +157,7 @@ def gallery(request):
 
 
 def contact(request):
-    timings = OPDTiming.objects.select_related("department", "doctor").filter(is_active=True)[:6]
+    timings = OPDTiming.objects.select_related("department", "doctor").filter(hospital_scope_filter("bkjh"), is_active=True)[:6]
     return render(
         request,
         "pages/contact.html",

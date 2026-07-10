@@ -17,13 +17,6 @@
         <a class="btn btn-secondary hero-btn" href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Get Directions</a>
         <a class="btn btn-secondary hero-btn" href="{{ page_hospital.instagram_url }}" target="_blank" rel="noopener">Instagram</a>
       </div>
-      <a class="miri-linkback" href="{{ bkjh_url }}">
-        <span class="miri-linkback__mark" aria-hidden="true">{% include "partials/icon.html" with name="department" %}</span>
-        <span>
-          <small>Also visit</small>
-          <strong>Bibi Kaulan Ji Hospital</strong>
-        </span>
-      </a>
     </div>
     <div class="miri-hero__brand" aria-label="{{ page_hospital.name }} logo">
       <img src="{% static page_hospital.logo_static %}" alt="{{ page_hospital.name }} logo">
@@ -73,13 +66,41 @@
     <div class="key-service-grid">
       {% for service in services %}
         <a class="key-service-card card-link{% if forloop.first %} key-service-card--featured{% endif %}" href="{{ miri_tel }}">
-          <span class="key-service-icon" aria-hidden="true">{% include "partials/icon.html" with name=service.icon %}</span>
+          <span class="key-service-icon" aria-hidden="true">{% include "partials/icon.html" with name=service.icon|default:"care" %}</span>
           <div class="key-service-card__content">
             {% if forloop.first %}<span class="key-service-card__eyebrow">Patient service</span>{% endif %}
             <h3>{{ service.title }}</h3>
-            <p>{{ service.text }}</p>
+            <p>{{ service.short_description }}</p>
           </div>
         </a>
+      {% empty %}
+        {% include "partials/empty_state.html" with title="Services pending" message="Add active Miri Piri services in admin to show them here." %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section-surface" id="miri-departments">
+  <div class="wrapper">
+    {% include "partials/section_header.html" with title="Departments" support_text="ਹਸਪਤਾਲ ਦੇ ਵਿਭਾਗ" intro="The same active departments maintained by the hospital team for both hospitals." %}
+    <div class="card-grid department-grid">
+      {% for department in departments %}
+        {% include "partials/department_card.html" %}
+      {% empty %}
+        {% include "partials/empty_state.html" with title="Departments pending" message="Add active featured departments in admin to show them on both hospital homepages." %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrapper">
+    {% include "partials/section_header.html" with title="Doctors" support_text="Doctor team" intro="Active doctors available for Miri Piri Mission Hospital." %}
+    <div class="doctor-grid">
+      {% for doctor in doctors %}
+        {% include "partials/doctor_card.html" %}
+      {% empty %}
+        {% include "partials/empty_state.html" with title="Doctors pending" message="Add active Miri Piri doctors in admin after confirmation." %}
       {% endfor %}
     </div>
   </div>
@@ -87,14 +108,16 @@
 
 <section class="section" id="miri-facilities">
   <div class="wrapper">
-    {% include "partials/section_header.html" with title="Facilities and Support" support_text="ਸੁਵਿਧਾਵਾਂ ਅਤੇ ਸਹਾਇਤਾ" intro="Core support areas listed for patient planning." %}
+    {% include "partials/section_header.html" with title="Facilities and Support" support_text="ਸੁਵਿਧਾਵਾਂ ਅਤੇ ਸਹਾਇਤਾ" intro="The same active facilities maintained by the hospital team for both hospitals." %}
     <div class="card-grid facility-grid">
       {% for facility in facilities %}
         <article class="info-card facility-card">
-          <div class="card-icon" aria-hidden="true">{% include "partials/icon.html" with name=facility.icon %}</div>
+          <div class="card-icon" aria-hidden="true">{% if "Dialysis" in facility.title %}{% include "partials/icon.html" with name="dialysis" %}{% elif "Emergency" in facility.title %}{% include "partials/icon.html" with name="emergency" %}{% elif "OPD" in facility.title %}{% include "partials/icon.html" with name="doctor" %}{% elif "Reception" in facility.title %}{% include "partials/icon.html" with name="phone" %}{% else %}{% include "partials/icon.html" with name="department" %}{% endif %}</div>
           <h3>{{ facility.title }}</h3>
-          <p>{{ facility.text }}</p>
+          <p>{{ facility.short_description }}</p>
         </article>
+      {% empty %}
+        {% include "partials/empty_state.html" with title="Facilities pending" message="Add active featured facilities in admin to show them on both hospital homepages." %}
       {% endfor %}
     </div>
   </div>
@@ -159,6 +182,20 @@
       <h3>Information policy</h3>
       <p>Hospital content should stay practical and verified. Add real doctors, OPD schedules, photos, reviews, and facility details only after client approval.</p>
     </div>
+  </div>
+</section>
+
+<section class="section hospital-switch-section section-surface">
+  <div class="wrapper">
+    <a class="hospital-switch-card hospital-switch-card--wide" href="{{ bkjh_url }}" aria-label="Open Bibi Kaulan Ji Hospital website">
+      <span class="society-icon hospital-switch-card__logo" aria-hidden="true"><img src="{% static 'images/bkjh-logo.png' %}" alt=""></span>
+      <span class="hero-society__copy">
+        <small class="hero-society__eyebrow">Main hospital</small>
+        <strong>Bibi Kaulan Ji Hospital</strong>
+        <small class="punjabi-support">Bibi Kaulan Ji Hospital website</small>
+      </span>
+      <span class="hospital-switch-card__action">Visit site</span>
+    </a>
   </div>
 </section>
 {% endblock %}

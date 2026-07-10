@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
 {% load static site_extras %}
 {% block content %}
 <section class="hero">
@@ -23,15 +23,6 @@
           {% include "partials/button.html" with href=contact_url label="Location" support_text="ਸਥਾਨ ਵੇਖੋ" variant="btn-secondary" extra_classes="hero-btn hero-btn--secondary" %}
         {% endif %}
       </div>
-      <a class="hero-society hospital-switch-card" href="{{ miri_piri_url }}" aria-label="Open Miri Piri Mission Hospital website">
-        <span class="society-icon hospital-switch-card__logo" aria-hidden="true"><img src="{% static 'images/miri-piri-logo.jpg' %}" alt=""></span>
-        <span class="hero-society__copy">
-          <small class="hero-society__eyebrow">Our second hospital</small>
-          <strong>Miri Piri Mission Hospital</strong>
-          <small class="punjabi-support">ਮੀਰੀ ਪੀਰੀ ਮਿਸ਼ਨ ਹਸਪਤਾਲ ਦੀ ਵੈੱਬਸਾਈਟ ਵੇਖੋ</small>
-        </span>
-        <span class="hospital-switch-card__action">Visit site</span>
-      </a>
     </div>
     <div class="hero-image-container" aria-label="Healthcare team visual">
       <img src="{% static 'images/joint_doctors.png' %}" alt="Healthcare professionals in a hospital corridor" class="hero-image" width="1474" height="1067">
@@ -103,7 +94,7 @@
       {% for service in services %}
         <a class="key-service-card card-link{% if forloop.first %} key-service-card--featured{% endif %}" href="{{ appointment_url }}">
           <span class="key-service-icon" aria-hidden="true">
-            {% if "Emergency" in service.title %}{% include "partials/icon.html" with name="emergency" %}{% elif "Dialysis" in service.title %}{% include "partials/icon.html" with name="dialysis" %}{% elif "Bronchoscopy" in service.title %}{% include "partials/icon.html" with name="lungs" %}{% elif "Urology" in service.title or "Cystoscopy" in service.title %}{% include "partials/icon.html" with name="urology" %}{% elif "Surgery" in service.title or "Surgeries" in service.title %}{% include "partials/icon.html" with name="surgery" %}{% elif "Cashless" in service.title %}{% include "partials/icon.html" with name="insurance" %}{% else %}{% include "partials/icon.html" with name="care" %}{% endif %}
+            {% if service.icon %}{% include "partials/icon.html" with name=service.icon %}{% elif "Emergency" in service.title %}{% include "partials/icon.html" with name="emergency" %}{% elif "Dialysis" in service.title %}{% include "partials/icon.html" with name="dialysis" %}{% elif "Bronchoscopy" in service.title %}{% include "partials/icon.html" with name="lungs" %}{% elif "Urology" in service.title or "Cystoscopy" in service.title %}{% include "partials/icon.html" with name="urology" %}{% elif "Surgery" in service.title or "Surgeries" in service.title %}{% include "partials/icon.html" with name="surgery" %}{% elif "Cashless" in service.title %}{% include "partials/icon.html" with name="insurance" %}{% else %}{% include "partials/icon.html" with name="care" %}{% endif %}
           </span>
           <div class="key-service-card__content">
             {% if forloop.first %}<span class="key-service-card__eyebrow">Priority service</span>{% endif %}
@@ -253,4 +244,18 @@
 </section>
 
 {% include "partials/patient_reviews.html" %}
+
+<section class="section hospital-switch-section section-surface">
+  <div class="wrapper">
+    <a class="hospital-switch-card hospital-switch-card--wide" href="{{ miri_piri_url }}" aria-label="Open Miri Piri Mission Hospital website">
+      <span class="society-icon hospital-switch-card__logo" aria-hidden="true"><img src="{% static 'images/miri-piri-logo.jpg' %}" alt=""></span>
+      <span class="hero-society__copy">
+        <small class="hero-society__eyebrow">Second hospital</small>
+        <strong>Miri Piri Mission Hospital</strong>
+        <small class="punjabi-support">Miri Piri Mission Hospital website</small>
+      </span>
+      <span class="hospital-switch-card__action">Visit site</span>
+    </a>
+  </div>
+</section>
 {% endblock %}

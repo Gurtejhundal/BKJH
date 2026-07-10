@@ -6,6 +6,13 @@ from apps.core.models import PublishedModel, SEOMixin, TimeStampedModel
 from apps.core.validators import validate_image_file
 
 
+HOSPITAL_SCOPE_CHOICES = [
+    ("both", "Both hospitals"),
+    ("bkjh", "Bibi Kaulan Ji Hospital only"),
+    ("miri", "Miri Piri Mission Hospital only"),
+]
+
+
 def unique_slug(instance, source_value):
     base = slugify(source_value)[:50] or "item"
     slug = base
@@ -31,6 +38,7 @@ class Department(PublishedModel, SEOMixin):
     )
     services_list = models.TextField(blank=True, help_text="One service per line.")
     is_featured = models.BooleanField(default=False)
+    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="both")
 
     class Meta(PublishedModel.Meta):
         verbose_name = "Department"
@@ -64,6 +72,7 @@ class Doctor(PublishedModel):
     opd_time_text = models.CharField(max_length=160, blank=True)
     appointment_enabled = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
+    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="both")
 
     class Meta(PublishedModel.Meta):
         verbose_name = "Doctor"
@@ -90,6 +99,7 @@ class OPDTiming(PublishedModel):
     end_time = models.TimeField(blank=True, null=True)
     room_or_location = models.CharField(max_length=120, blank=True)
     notes = models.CharField(max_length=240, blank=True)
+    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="both")
 
     class Meta(PublishedModel.Meta):
         verbose_name = "OPD timing"
@@ -113,6 +123,7 @@ class Service(PublishedModel, SEOMixin):
     icon = models.CharField(max_length=80, blank=True)
     image = models.ImageField(upload_to="services/%Y/%m/", blank=True, validators=[validate_image_file])
     is_featured = models.BooleanField(default=False)
+    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="both")
 
     class Meta(PublishedModel.Meta):
         verbose_name = "Service"
@@ -134,6 +145,7 @@ class Facility(PublishedModel, SEOMixin):
     detailed_description = models.TextField(blank=True)
     image = models.ImageField(upload_to="facilities/%Y/%m/", blank=True, validators=[validate_image_file])
     is_featured = models.BooleanField(default=False)
+    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="both")
 
     class Meta(PublishedModel.Meta):
         verbose_name = "Facility"

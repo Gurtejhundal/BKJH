@@ -1,0 +1,242 @@
+:root {
+  --bkjh-admin-primary: #006b54;
+  --bkjh-admin-primary-dark: #004c3d;
+  --bkjh-admin-accent: #168f7b;
+  --bkjh-admin-surface: #f4f8f7;
+  --bkjh-admin-border: #d7e4e0;
+  --primary: var(--bkjh-admin-primary);
+  --secondary: var(--bkjh-admin-primary-dark);
+  --accent: #f5d76e;
+  --header-bg: var(--bkjh-admin-primary-dark);
+  --header-color: #fff;
+  --breadcrumbs-bg: #075f4d;
+  --breadcrumbs-link-fg: #fff;
+  --link-fg: #006b54;
+  --link-hover-color: #004c3d;
+  --button-bg: #006b54;
+  --button-hover-bg: #004c3d;
+  --default-button-bg: #006b54;
+  --default-button-hover-bg: #004c3d;
+}
+
+body {
+  background: var(--bkjh-admin-surface);
+}
+
+#header {
+  min-height: 66px;
+  padding: 10px 24px;
+  box-shadow: 0 2px 12px rgba(0, 44, 35, 0.16);
+}
+
+.bkjh-admin-brand {
+  display: grid;
+  gap: 2px;
+}
+
+.bkjh-admin-brand a {
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 750;
+  letter-spacing: 0;
+}
+
+.bkjh-admin-brand span {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.76rem;
+  font-weight: 500;
+}
+
+#user-tools {
+  font-size: 0.78rem;
+}
+
+div.breadcrumbs {
+  padding: 10px 24px;
+}
+
+#content {
+  max-width: 1500px;
+  margin-inline: auto;
+  padding: 24px;
+}
+
+#content h1 {
+  margin-bottom: 20px;
+  color: #17332d;
+  font-size: 1.65rem;
+  letter-spacing: 0;
+}
+
+.module,
+.inline-group,
+#changelist-filter,
+.submit-row {
+  border: 1px solid var(--bkjh-admin-border);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(14, 66, 54, 0.045);
+}
+
+.module h2,
+.module caption,
+.inline-group h2 {
+  padding: 11px 14px;
+  background: #e8f3f0;
+  color: #143a31;
+  font-size: 0.9rem;
+  font-weight: 750;
+}
+
+.module h2 a,
+.module caption a {
+  color: inherit;
+}
+
+.form-row {
+  padding: 12px 14px;
+  border-bottom-color: #e7efed;
+}
+
+.form-row label {
+  color: #29463f;
+  font-weight: 650;
+}
+
+.help,
+p.help,
+form .aligned p.help {
+  color: #60756f;
+}
+
+fieldset .description {
+  margin: 0;
+  padding: 10px 14px;
+  border-bottom: 1px solid #e7efed;
+  color: #526b64;
+  background: #fbfdfc;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="url"],
+input[type="number"],
+input[type="tel"],
+textarea,
+select,
+.vTextField {
+  border-color: #bfd3ce;
+  border-radius: 6px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--bkjh-admin-accent);
+  outline: 3px solid rgba(22, 143, 123, 0.14);
+}
+
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input,
+a.button {
+  min-height: 34px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.submit-row {
+  padding: 12px;
+}
+
+.submit-row input.default {
+  min-width: 124px;
+}
+
+#changelist table thead th {
+  background: #edf5f3;
+  color: #24483f;
+}
+
+#changelist table tbody tr:nth-child(even) {
+  background: #fbfdfc;
+}
+
+#changelist table tbody tr:hover {
+  background: #eef8f5;
+}
+
+#changelist-filter h2 {
+  border-radius: 8px 8px 0 0;
+}
+
+.object-tools a:link,
+.object-tools a:visited {
+  border-radius: 6px;
+  background: var(--bkjh-admin-primary);
+  font-weight: 700;
+}
+
+.messagelist li {
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a,
+  .button,
+  input,
+  select,
+  textarea,
+  .module,
+  #changelist table tbody tr {
+    transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+  }
+
+  .button:hover,
+  input[type="submit"]:hover,
+  .object-tools a:hover {
+    transform: translateY(-1px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+@media (max-width: 767px) {
+  #header {
+    min-height: auto;
+    padding: 10px 14px;
+  }
+
+  .bkjh-admin-brand span {
+    display: none;
+  }
+
+  #content {
+    padding: 16px 12px;
+  }
+
+  .submit-row {
+    display: grid;
+    gap: 8px;
+  }
+
+  .submit-row input,
+  .submit-row a.deletelink {
+    width: 100%;
+    margin: 0;
+    text-align: center;
+  }
+
+  #changelist .results {
+    overflow-x: auto;
+  }
+}

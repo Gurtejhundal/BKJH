@@ -22,9 +22,9 @@
       {% if page_hospital %}
         <a class="is-active" href="{% url 'core:miri_piri_hospital' %}">Home</a>
         <a href="#miri-services">Services</a>
+        <a href="#miri-departments">Departments</a>
         <a href="#miri-facilities">Facilities</a>
         <a href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Location</a>
-        <a href="{{ page_hospital.instagram_url }}" target="_blank" rel="noopener">Instagram</a>
         <a href="{% url 'core:home' %}">Bibi Kaulan Ji Hospital</a>
       {% else %}
         <a class="{% if request.resolver_match.url_name == 'home' %}is-active{% endif %}" href="{% url 'core:home' %}">Home</a>

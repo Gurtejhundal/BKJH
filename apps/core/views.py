@@ -52,10 +52,14 @@ def featured_reviews(limit=3):
     return PatientReview.objects.filter(is_active=True, is_featured=True, consent_confirmed=True)[:limit]
 
 
+def hospital_scope_filter(hospital_key):
+    return Q(hospital_scope="both") | Q(hospital_scope=hospital_key)
+
+
 MIRI_PIRI_PROFILE = {
     "name": "Miri Piri Mission Hospital",
     "punjabi_name": "ਮੀਰੀ ਪੀਰੀ ਮਿਸ਼ਨ ਹਸਪਤਾਲ",
-    "tagline": "Multi-speciality care in Amritsar with OPD, emergency and critical care support.",
+    "tagline": "OPD and critical care support in Amritsar.",
     "address": "Opposite Namdhari Kanda, Amritsar-Tarn Taran Road, Antaryami Colony, Amritsar-143001, Punjab",
     "phone": "+91 98558 21107",
     "opd_hours": "OPD 9:00 AM - 5:00 PM",
@@ -70,12 +74,13 @@ MIRI_PIRI_PROFILE = {
 
 def home(request):
     site = SiteSetting.get_solo()
-    departments = Department.objects.filter(is_active=True, is_featured=True)[:6]
-    doctors = Doctor.objects.select_related("department").filter(is_active=True).order_by("-is_featured", "display_order", "full_name")[:4]
-    timings = OPDTiming.objects.select_related("department", "doctor").filter(is_active=True)[:6]
+    bkjh_scope = hospital_scope_filter("bkjh")
+    departments = Department.objects.filter(bkjh_scope, is_active=True, is_featured=True)[:6]
+    doctors = Doctor.objects.select_related("department").filter(bkjh_scope, is_active=True).order_by("-is_featured", "display_order", "full_name")[:4]
+    timings = OPDTiming.objects.select_related("department", "doctor").filter(bkjh_scope, is_active=True)[:6]
     gallery = GalleryImage.objects.select_related("category").filter(is_active=True, is_featured=True, category__is_active=True)[:6]
-    services = Service.objects.filter(is_active=True, is_featured=True)[:6]
-    facilities = Facility.objects.filter(is_active=True, is_featured=True)[:4]
+    services = Service.objects.filter(bkjh_scope, is_active=True, is_featured=True)[:6]
+    facilities = Facility.objects.filter(bkjh_scope, is_active=True, is_featured=True)[:4]
     emergency = EmergencyInfo.objects.filter(is_active=True).first()
     ambulance = AmbulanceInfo.objects.filter(is_active=True).first()
     schema = hospital_schema(request, site)
@@ -136,22 +141,11 @@ def miri_piri_schema(request):
 
 def miri_piri_hospital(request):
     miri_tel = tel_url(MIRI_PIRI_PROFILE["phone"])
-    services = [
-        {"title": "Chest & TB", "icon": "lungs", "text": "Chest and respiratory consultation support."},
-        {"title": "Orthopedics", "icon": "bone", "text": "Bone, joint and orthopedic care support."},
-        {"title": "Urology", "icon": "urology", "text": "Urology consultation and procedure support."},
-        {"title": "Gynae", "icon": "medicine", "text": "Women care and maternity consultation support."},
-        {"title": "General Surgery", "icon": "surgery", "text": "Surgical consultation and procedure support."},
-        {"title": "Critical Care", "icon": "emergency", "text": "Critical care support listed by the hospital."},
-    ]
-    facilities = [
-        {"title": "NICU", "icon": "care", "text": "Newborn and child support area listed by the hospital."},
-        {"title": "24 Hours ICU", "icon": "emergency", "text": "Critical monitoring support for admitted patients."},
-        {"title": "Emergency Services", "icon": "emergency", "text": "Urgent care support listed as available round the clock."},
-        {"title": "OPD Services", "icon": "doctor", "text": "Out-patient consultation window listed as 9:00 AM to 5:00 PM."},
-        {"title": "Wheelchair Accessible Entrance", "icon": "care", "text": "Patient access support listed on public hospital profile."},
-        {"title": "Parking Support", "icon": "location", "text": "Parking support listed for visitors near the hospital."},
-    ]
+    miri_scope = hospital_scope_filter("miri")
+    departments = Department.objects.filter(miri_scope, is_active=True, is_featured=True).order_by("-hospital_scope", "display_order", "name")[:8]
+    facilities = Facility.objects.filter(miri_scope, is_active=True, is_featured=True).order_by("-hospital_scope", "display_order", "title")[:6]
+    services = Service.objects.filter(miri_scope, is_active=True, is_featured=True).order_by("-hospital_scope", "display_order", "title")[:8]
+    doctors = Doctor.objects.select_related("department").filter(miri_scope, is_active=True).order_by("-hospital_scope", "-is_featured", "display_order", "full_name")[:6]
     quick_actions = [
         {
             "title": "Call Hospital",
@@ -203,7 +197,9 @@ def miri_piri_hospital(request):
             "page_hospital": MIRI_PIRI_PROFILE,
             "hospital_schema": json.dumps(miri_piri_schema(request)),
             "services": services,
+            "departments": departments,
             "facilities": facilities,
+            "doctors": doctors,
             "quick_actions": quick_actions,
             "patient_support": patient_support,
             "miri_tel": miri_tel,

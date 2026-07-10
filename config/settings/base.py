@@ -1,7 +1,10 @@
 import os
 from pathlib import Path
 from urllib.parse import urlparse
+import mimetypes
 
+mimetypes.add_type("text/css", ".css", True)
+mimetypes.add_type("image/svg+xml", ".svg", True)
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 
@@ -27,8 +30,8 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = env_bool("DEBUG", False)
 
-ALLOWED_HOSTS = env_list("ALLOWED_HOSTS", ["localhost", "127.0.0.1"])
-CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS")
+ALLOWED_HOSTS = env_list("ALLOWED_HOSTS", ["localhost", "127.0.0.1", ".vercel.app"])
+CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS", ["https://*.vercel.app"])
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -127,6 +130,7 @@ STORAGES = {
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
     "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
 }
+WHITENOISE_USE_FINDERS = env_bool("WHITENOISE_USE_FINDERS", env_bool("VERCEL", False))
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
