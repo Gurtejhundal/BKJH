@@ -131,6 +131,8 @@ STORAGES = {
     "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
 }
 WHITENOISE_USE_FINDERS = env_bool("WHITENOISE_USE_FINDERS", env_bool("VERCEL", False))
+if env_bool("VERCEL", False):
+    STORAGES["staticfiles"] = {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"}
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
