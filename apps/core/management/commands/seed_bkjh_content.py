@@ -1,4 +1,5 @@
 from datetime import time
+import os
 from pathlib import Path
 
 from django.core.files import File
@@ -18,6 +19,7 @@ from apps.gallery.hospital.models import (
 
 
 BASE_DIR = Path(__file__).resolve().parents[4]
+IS_VERCEL = bool(os.environ.get("VERCEL"))
 
 
 def upsert(model, lookup, defaults):
@@ -316,7 +318,7 @@ class Command(BaseCommand):
                     "display_order": order,
                 },
             )
-            if photo_name and not doctor.photo:
+            if photo_name and not doctor.photo and not IS_VERCEL:
                 photo_path = BASE_DIR / "static" / "images" / "doctors" / photo_name
                 if photo_path.exists():
                     with photo_path.open("rb") as handle:
@@ -373,7 +375,8 @@ class Command(BaseCommand):
             },
         )
 
-        self.seed_gallery()
+        if not IS_VERCEL:
+            self.seed_gallery()
         self.stdout.write(self.style.SUCCESS("Hospital website content seeded."))
 
     def seed_gallery(self):
