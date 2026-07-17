@@ -1,7 +1,7 @@
+{% if patient_reviews %}
 <section class="section section-tight patient-reviews">
   <div class="wrapper">
-    {% include "partials/section_header.html" with title="Patient Reviews" support_text="ਮਰੀਜ਼ਾਂ ਦੇ ਵਿਚਾਰ" intro="Text and video reviews appear here only after patient/client approval." %}
-    {% if patient_reviews %}
+    {% include "partials/section_header.html" with title="Patient Reviews" support_text="ਮਰੀਜ਼ਾਂ ਦੇ ਵਿਚਾਰ" intro="Experiences shared by patients and families." %}
       <div class="review-grid">
         {% for review in patient_reviews %}
           <article class="review-card">
@@ -21,11 +21,6 @@
           </article>
         {% endfor %}
       </div>
-    {% else %}
-      <div class="review-empty">
-        <strong>No public patient reviews yet</strong>
-        <p>Reviews will be shown only after written patient/client approval. This avoids fake testimonials and protects patient trust.</p>
-      </div>
-    {% endif %}
   </div>
 </section>
+{% endif %}

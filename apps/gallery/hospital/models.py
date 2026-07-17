@@ -1,8 +1,9 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 
-from apps.core.models import HOSPITAL_SCOPE_CHOICES, PublishedModel, SEOMixin, TimeStampedModel
+from apps.core.models import HOSPITAL_SCOPE_CHOICES, PublishedModel, SEOMixin, TimeStampedModel, scope_contains
 from apps.core.validators import validate_image_file
 
 
@@ -26,7 +27,7 @@ class Department(PublishedModel, SEOMixin):
     detailed_description = models.TextField(blank=True)
     services_list = models.TextField(blank=True, help_text="One service per line.")
     is_featured = models.BooleanField(default=False)
-    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="both")
+    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="bkjh")
 
     class Meta(PublishedModel.Meta):
         verbose_name = "Department"
@@ -65,7 +66,7 @@ class Doctor(PublishedModel):
     opd_time_text = models.CharField(max_length=160, blank=True)
     appointment_enabled = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
-    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="both")
+    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="bkjh")
 
     class Meta(PublishedModel.Meta):
         verbose_name = "Doctor"
@@ -74,7 +75,14 @@ class Doctor(PublishedModel):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = unique_slug(self, self.full_name)
+        self.full_clean()
         return super().save(*args, **kwargs)
+
+    def clean(self):
+        if self.department and not scope_contains(self.department.hospital_scope, self.hospital_scope):
+            raise ValidationError(
+                {"department": "The selected department is not published for every hospital assigned to this doctor."}
+            )
 
     def initials(self):
         parts = [part[0] for part in self.full_name.split() if part]
@@ -92,7 +100,7 @@ class OPDTiming(PublishedModel):
     end_time = models.TimeField(blank=True, null=True)
     room_or_location = models.CharField(max_length=120, blank=True)
     notes = models.CharField(max_length=240, blank=True)
-    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="both")
+    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="bkjh")
 
     class Meta(PublishedModel.Meta):
         verbose_name = "OPD timing"
@@ -102,6 +110,21 @@ class OPDTiming(PublishedModel):
         if self.start_time and self.end_time:
             return f"{self.start_time.strftime('%I:%M %p').lstrip('0')} - {self.end_time.strftime('%I:%M %p').lstrip('0')}"
         return "Contact hospital"
+
+    def clean(self):
+        errors = {}
+        if self.department and not scope_contains(self.department.hospital_scope, self.hospital_scope):
+            errors["department"] = "This department is not available for every hospital assigned to the timing."
+        if self.doctor and not scope_contains(self.doctor.hospital_scope, self.hospital_scope):
+            errors["doctor"] = "This doctor is not available for every hospital assigned to the timing."
+        if self.doctor and self.department and self.doctor.department_id not in {None, self.department_id}:
+            errors["doctor"] = "The selected doctor belongs to a different department."
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         label = self.doctor or self.department or "OPD"
@@ -115,7 +138,7 @@ class Service(PublishedModel, SEOMixin):
     detailed_description = models.TextField(blank=True)
     icon = models.CharField(max_length=80, blank=True)
     is_featured = models.BooleanField(default=False)
-    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="both")
+    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="bkjh")
 
     class Meta(PublishedModel.Meta):
         verbose_name = "Service"
@@ -136,7 +159,7 @@ class Facility(PublishedModel, SEOMixin):
     short_description = models.TextField()
     detailed_description = models.TextField(blank=True)
     is_featured = models.BooleanField(default=False)
-    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="both")
+    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="bkjh")
 
     class Meta(PublishedModel.Meta):
         verbose_name = "Facility"
@@ -192,6 +215,14 @@ class EmergencyInfo(TimeStampedModel):
     def __str__(self):
         return self.title
 
+    def clean(self):
+        if self.is_active and not self.emergency_phone:
+            raise ValidationError({"emergency_phone": "An active emergency record requires a phone number."})
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
 
 class AmbulanceInfo(TimeStampedModel):
     title = models.CharField(max_length=140, default="Ambulance Service")
@@ -208,3 +239,11 @@ class AmbulanceInfo(TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+    def clean(self):
+        if self.is_active and not self.ambulance_phone:
+            raise ValidationError({"ambulance_phone": "An active ambulance record requires a phone number."})
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)

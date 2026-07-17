@@ -14,6 +14,12 @@ class DashboardTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn("/admin/login/", response["Location"])
 
+    def test_admin_requires_login(self):
+        response = self.client.get(reverse("admin:index"))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("/admin/login/", response["Location"])
+
     def test_staff_can_update_status(self):
         user = get_user_model().objects.create_user(
             username="staff",

@@ -52,5 +52,5 @@
   {% endfor %}
 </div>
 {% else %}
-  {% include "partials/empty_state.html" with title="No OPD timings published" message="Verified OPD timings must be added before launch." %}
+  {% include "partials/empty_state.html" with title="No OPD timings found" message="Try another department or call the hospital before travelling." %}
 {% endif %}

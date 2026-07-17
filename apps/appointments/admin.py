@@ -38,7 +38,7 @@ class AppointmentRequestAdmin(admin.ModelAdmin):
     save_on_top = True
     actions = (mark_contacted, mark_confirmed, mark_completed, mark_cancelled)
     fieldsets = (
-        ("Patient contact", {"description": "Use this phone number for staff confirmation.", "fields": ("hospital_scope", "patient_name", "phone")}),
+        ("Patient contact", {"description": "Hospital source is required and identifies which team must follow up this request.", "fields": ("hospital_scope", "patient_name", "phone")}),
         ("Requested visit", {"description": "Preferred date/time is a request, not a confirmed appointment until staff updates the status.", "fields": ("department", "preferred_doctor", "preferred_date", "preferred_time_text", "message")}),
         ("Hospital follow-up", {"description": "Keep status and internal note updated so staff can track patient follow-up.", "fields": ("status", "admin_note")}),
         ("Admin timestamps", {"classes": ("collapse",), "fields": ("created_at", "updated_at")}),

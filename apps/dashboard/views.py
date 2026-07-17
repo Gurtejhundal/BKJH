@@ -14,11 +14,14 @@ from .forms import AppointmentStatusForm
 
 @staff_member_required
 def appointment_dashboard(request):
+    hospital = request.GET.get("hospital", "")
     status = request.GET.get("status", "")
     date = request.GET.get("date", "")
     department_id = request.GET.get("department", "")
     query = request.GET.get("q", "").strip()
     appointments = AppointmentRequest.objects.select_related("department", "preferred_doctor")
+    if hospital in {"bkjh", "miri"}:
+        appointments = appointments.filter(hospital_scope=hospital)
     if status:
         appointments = appointments.filter(status=status)
     if date:
@@ -35,14 +38,19 @@ def appointment_dashboard(request):
         {
             "appointments": page,
             "status_choices": AppointmentRequest.STATUS_CHOICES,
-            "departments": Department.objects.filter(is_active=True),
+            "departments": Department.objects.filter(is_active=True).filter(
+                Q(hospital_scope="both") | Q(hospital_scope=hospital)
+            ) if hospital in {"bkjh", "miri"} else Department.objects.filter(is_active=True),
+            "selected_hospital": hospital,
             "selected_status": status,
             "selected_date": date,
             "selected_department": department_id,
             "query": query,
-            "seo": seo("Appointment Dashboard | Bibi Kaulan Ji Hospital", "Protected staff appointment dashboard.", request.path, robots="noindex,nofollow"),
+            "seo": seo("Appointment Dashboard | BKGH Hospitals", "Protected staff appointment dashboard.", request.path, robots="noindex,nofollow"),
             "pending_count": AppointmentRequest.objects.filter(status=AppointmentRequest.STATUS_PENDING).count(),
             "today_count": AppointmentRequest.objects.filter(preferred_date=timezone.localdate()).count(),
+            "bkjh_pending_count": AppointmentRequest.objects.filter(hospital_scope="bkjh", status=AppointmentRequest.STATUS_PENDING).count(),
+            "miri_pending_count": AppointmentRequest.objects.filter(hospital_scope="miri", status=AppointmentRequest.STATUS_PENDING).count(),
         },
     )
 

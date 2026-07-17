@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load site_extras %}
 {% block content %}
-{% include "partials/page_header.html" with title="Ambulance Service" support_text="ਐਂਬੂਲੈਂਸ ਸੇਵਾ" intro="Ambulance contact, service area, and availability notes from admin." eyebrow="Transport support" %}
+{% include "partials/page_header.html" with title="Ambulance Service" support_text="ਐਂਬੂਲੈਂਸ ਸੇਵਾ" intro="Ambulance contact, service area, and visit guidance." eyebrow="Transport support" %}
 
 <section class="section">
   <div class="wrapper split">
     <div>
-      <h2>{{ ambulance.title|default:"Ambulance information pending" }}</h2>
-      <p>{{ ambulance.description|default:"Ambulance details are pending client confirmation. Availability and service area should be verified before launch." }}</p>
+      <h2>{{ ambulance.title|default:"Ambulance assistance" }}</h2>
+      <p>{{ ambulance.description|default:"Call the hospital for current ambulance assistance and service-area information." }}</p>
       {% if ambulance.availability_text %}<p><strong>Availability:</strong> {{ ambulance.availability_text }}</p>{% endif %}
       {% if ambulance.service_area %}<p><strong>Service area:</strong> {{ ambulance.service_area }}</p>{% endif %}
       {% if ambulance.ambulance_phone or site.ambulance_phone %}

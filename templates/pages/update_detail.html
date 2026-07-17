@@ -16,11 +16,7 @@
 <section class="section">
   <article class="wrapper content-page">
     <p class="meta">{{ update.date }}</p>
-    {% if update.image %}
-      <img class="content-image" src="{{ update.image.url }}" alt="{{ update.title }}" loading="lazy">
-    {% else %}
-      {% include "partials/image_fallback.html" with label=update.title initials="BK" message="Update image pending" %}
-    {% endif %}
+    {% if update.image %}<img class="content-image" src="{{ update.image.url }}" alt="{{ update.title }}" loading="lazy">{% endif %}
     <p>{{ update.detailed_description|default:update.short_description }}</p>
   </article>
 </section>

@@ -22,6 +22,7 @@ class AppointmentRequestForm(forms.ModelForm):
     class Meta:
         model = AppointmentRequest
         fields = [
+            "hospital_scope",
             "patient_name",
             "phone",
             "department",
@@ -35,6 +36,7 @@ class AppointmentRequestForm(forms.ModelForm):
             "message": forms.Textarea(attrs={"rows": 4}),
         }
         labels = {
+            "hospital_scope": "Hospital",
             "patient_name": "Patient name",
             "phone": "Phone number",
             "preferred_doctor": "Preferred doctor",
@@ -42,13 +44,29 @@ class AppointmentRequestForm(forms.ModelForm):
             "message": "Message or reason for visit",
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, hospital_code="bkjh", **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs.setdefault("class", "form-control")
-        bkjh_scope = Q(hospital_scope="both") | Q(hospital_scope="bkjh")
-        self.fields["department"].queryset = Department.objects.filter(bkjh_scope, is_active=True)
-        self.fields["preferred_doctor"].queryset = Doctor.objects.select_related("department").filter(bkjh_scope, is_active=True)
+        selected_hospital = hospital_code if hospital_code in {"bkjh", "miri"} else "bkjh"
+        if self.is_bound:
+            selected_hospital = self.data.get(self.add_prefix("hospital_scope"), selected_hospital)
+        else:
+            selected_hospital = self.initial.get("hospital_scope", selected_hospital)
+        if selected_hospital not in {"bkjh", "miri"}:
+            selected_hospital = "bkjh"
+        hospital_scope = Q(hospital_scope="both") | Q(hospital_scope=selected_hospital)
+        self.fields["hospital_scope"].choices = [
+            ("bkjh", "Bibi Kaulan Ji Hospital - Fatehgarh Churian"),
+            ("miri", "Miri Piri Mission Hospital - Amritsar"),
+        ]
+        self.fields["hospital_scope"].initial = selected_hospital
+        self.fields["department"].queryset = Department.objects.filter(hospital_scope, is_active=True)
+        self.fields["preferred_doctor"].queryset = Doctor.objects.select_related("department").filter(
+            hospital_scope,
+            is_active=True,
+            appointment_enabled=True,
+        )
         self.fields["department"].empty_label = "Select department"
         self.fields["preferred_doctor"].empty_label = "Any available doctor"
         self.fields["message"].required = False
@@ -61,6 +79,18 @@ class AppointmentRequestForm(forms.ModelForm):
         if doctor and department and doctor.department_id != department.id:
             raise forms.ValidationError("Selected doctor is not linked to the selected department.")
         return doctor
+
+    def clean(self):
+        cleaned_data = super().clean()
+        hospital = cleaned_data.get("hospital_scope")
+        department = cleaned_data.get("department")
+        doctor = cleaned_data.get("preferred_doctor")
+        allowed_scopes = {hospital, "both"}
+        if hospital and department and department.hospital_scope not in allowed_scopes:
+            self.add_error("department", "This department is not available at the selected hospital.")
+        if hospital and doctor and doctor.hospital_scope not in allowed_scopes:
+            self.add_error("preferred_doctor", "This doctor is not available at the selected hospital.")
+        return cleaned_data
 
     def clean_phone(self):
         phone = self.cleaned_data["phone"].strip()

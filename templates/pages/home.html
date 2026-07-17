@@ -66,30 +66,37 @@
   </div>
 </section>
 
+{% if emergency or ambulance %}
 <section class="section home-emergency-actions section-surface">
   <div class="wrapper action-pair">
+    {% if emergency %}
     <article class="emergency-action-card">
       <span class="action-card__eyebrow">Urgent response</span>
       <h2>{{ emergency.title|default:"Emergency contact" }}</h2>
-      <p>{{ emergency.description|default:"Emergency details will appear after admin adds confirmed phone number, availability, and instructions." }}</p>
+      <p>{{ emergency.description|default:"Call the hospital directly for urgent care information and current emergency guidance." }}</p>
       {% if emergency.availability_text %}<p class="action-meta"><strong>Availability:</strong> {{ emergency.availability_text }}</p>{% endif %}
       {% if site.emergency_phone %}<p class="action-card__contact">{{ site.emergency_phone }}</p>{% endif %}
       {% if site.emergency_phone %}<a class="btn btn-emergency" href="{{ emergency_tel }}">Call Emergency</a>{% endif %}
     </article>
+    {% endif %}
+    {% if ambulance %}
     <article class="ambulance-action-card">
       <span class="action-card__eyebrow">Transport support</span>
       <h2>{{ ambulance.title|default:"Ambulance service" }}</h2>
-      <p>{{ ambulance.description|default:"Ambulance details will appear after admin confirms availability and service area." }}</p>
+      <p>{{ ambulance.description|default:"Call the hospital for current ambulance assistance and service-area information." }}</p>
       {% if ambulance.availability_text %}<p class="action-meta"><strong>Availability:</strong> {{ ambulance.availability_text }}</p>{% endif %}
       {% if site.ambulance_phone %}<p class="action-card__contact">{{ site.ambulance_phone }}</p>{% endif %}
       {% if site.ambulance_phone %}<a class="btn btn-primary" href="{{ ambulance_tel }}">Call Ambulance</a>{% endif %}
     </article>
+    {% endif %}
   </div>
 </section>
+{% endif %}
 
+{% if services %}
 <section class="section home-key-services">
   <div class="wrapper">
-    {% include "partials/section_header.html" with title="Our Key Services" support_text="ਸਾਡੀਆਂ ਮੁੱਖ ਸੇਵਾਵਾਂ" intro="Hospital highlights from confirmed hospital information and admin-managed content." %}
+    {% include "partials/section_header.html" with title="Our Key Services" support_text="ਸਾਡੀਆਂ ਮੁੱਖ ਸੇਵਾਵਾਂ" intro="Hospital services and patient support available at Bibi Kaulan Ji Hospital." %}
     <div class="key-service-grid">
       {% for service in services %}
         <a class="key-service-card card-link{% if forloop.first %} key-service-card--featured{% endif %}" href="{{ appointment_url }}">
@@ -102,8 +109,6 @@
             <p>{{ service.short_description }}</p>
           </div>
         </a>
-      {% empty %}
-        {% include "partials/empty_state.html" with title="Key services pending" message="Add featured services in admin to highlight them here." %}
       {% endfor %}
     </div>
     <div class="insurance-band">
@@ -113,39 +118,41 @@
     </div>
   </div>
 </section>
+{% endif %}
 
+{% if departments %}
 <section class="section">
   <div class="wrapper">
-    {% include "partials/section_header.html" with title="Departments" support_text="ਹਸਪਤਾਲ ਦੇ ਵਿਭਾਗ" intro="Active featured departments from admin." action_href=departments_url action_label="View all departments" %}
+    {% include "partials/section_header.html" with title="Departments" support_text="ਹਸਪਤਾਲ ਦੇ ਵਿਭਾਗ" intro="Explore speciality departments and patient services." action_href=departments_url action_label="View all departments" %}
     <div class="card-grid department-grid">
       {% for department in departments %}
         {% include "partials/department_card.html" %}
-      {% empty %}
-        {% include "partials/empty_state.html" with title="Departments pending" message="Add active, featured departments in Django Admin to show them here." %}
       {% endfor %}
     </div>
   </div>
 </section>
+{% endif %}
 
+{% if doctors %}
 <section class="section section-surface">
   <div class="wrapper">
-    {% include "partials/section_header.html" with title="Doctors" support_text="ਸਾਡੀ ਡਾਕਟਰ ਟੀਮ" intro="Active doctors from admin with OPD information when available." action_href=doctors_url action_label="View doctors" %}
+    {% include "partials/section_header.html" with title="Doctors" support_text="ਸਾਡੀ ਡਾਕਟਰ ਟੀਮ" intro="Doctor, department, and OPD information for planning your visit." action_href=doctors_url action_label="View doctors" %}
     <div class="doctor-grid">
       {% for doctor in doctors %}
         {% include "partials/doctor_card.html" %}
-      {% empty %}
-        {% include "partials/empty_state.html" with title="Doctor list pending" message="Add verified doctor names, qualifications, departments, and timings from admin." %}
       {% endfor %}
     </div>
   </div>
 </section>
+{% endif %}
 
+{% if timings %}
 <section class="section">
   <div class="wrapper split">
     <div>
       <h2>OPD Timing</h2>
       <p class="punjabi-support section-punjabi">ਓਪੀਡੀ ਸਮਾਂ</p>
-      <p>Timings below come from active OPD entries in admin. Do not rely on old timings; update admin whenever schedules change.</p>
+      <p>OPD timings may change due to emergencies, holidays, or doctor availability. Please call before travelling when needed.</p>
       <a class="btn btn-secondary" href="{{ opd_url }}">Full OPD Timing</a>
     </div>
     <div class="table-card">
@@ -163,31 +170,32 @@
             {% endfor %}
           </tbody>
         </table>
-      {% else %}
-        {% include "partials/empty_state.html" with title="OPD timings pending" message="Add verified active OPD timings in admin." %}
       {% endif %}
     </div>
   </div>
 </section>
+{% endif %}
 
 <section class="section">
   <div class="wrapper split">
     <div>
       <h2>About {{ site.hospital_name }}</h2>
       <p class="punjabi-support section-punjabi">ਬੀਬੀ ਕੌਲਾਂ ਜੀ ਹਸਪਤਾਲ ਬਾਰੇ</p>
-      <p>{{ site.about_short|default:"Hospital introduction is pending admin entry. Add client-approved about content before launch." }}</p>
+      <p>{{ site.about_short|default:"Bibi Kaulan Ji Hospital serves patients in Fatehgarh Churian and nearby areas with OPD, emergency, and hospital support." }}</p>
       <a class="text-link" href="{{ about_url }}">Read About Hospital</a>
     </div>
-    <div class="support-box">
-      <h3>Content rule</h3>
-      <p>Only verified departments, doctors, timings, services, and emergency details should be published.</p>
+    <div class="support-box home-visit-support">
+      <h3>Before your visit</h3>
+      <p>Call the hospital when you need to confirm doctor availability, OPD timing, or the correct department.</p>
+      {% if site.call_phone %}<a class="text-link" href="{{ main_tel }}">Call {{ site.call_phone }}</a>{% endif %}
     </div>
   </div>
 </section>
 
+{% if facilities %}
 <section class="section">
   <div class="wrapper">
-    {% include "partials/section_header.html" with title="Facilities and Support" support_text="ਸੁਵਿਧਾਵਾਂ ਅਤੇ ਸਹਾਇਤਾ" intro="Hospital infrastructure and support areas from admin-managed content." %}
+    {% include "partials/section_header.html" with title="Facilities and Support" support_text="ਸੁਵਿਧਾਵਾਂ ਅਤੇ ਸਹਾਇਤਾ" intro="Hospital facilities and patient support areas at Bibi Kaulan Ji Hospital." %}
     <div class="card-grid facility-grid">
       {% for facility in facilities %}
         <article class="info-card facility-card">
@@ -196,18 +204,16 @@
           <p>{{ facility.short_description }}</p>
         </article>
       {% endfor %}
-      {% if not facilities %}
-        {% include "partials/empty_state.html" with title="Facilities pending" message="Add featured facilities in admin after client confirmation." %}
-      {% endif %}
     </div>
   </div>
 </section>
+{% endif %}
 
+{% if gallery_images %}
 <section class="section section-surface">
   <div class="wrapper">
     {% include "partials/section_header.html" with title="Hospital Gallery" support_text="ਹਸਪਤਾਲ ਗੈਲਰੀ" intro="A look inside patient areas and hospital facilities." action_href=gallery_url action_label="View gallery" %}
-    {% if gallery_images %}
-      <div class="gallery-grid">
+    <div class="gallery-grid">
         {% for image in gallery_images %}
           <figure>
             {% if image.static_image_path %}
@@ -218,19 +224,17 @@
             <figcaption><strong>{{ image.title }}</strong>{% if image.caption %}<span>{{ image.caption }}</span>{% endif %}</figcaption>
           </figure>
         {% endfor %}
-      </div>
-    {% else %}
-      {% include "partials/empty_state.html" with title="Gallery being prepared" message="Approved hospital photos will appear here." %}
-    {% endif %}
+    </div>
   </div>
 </section>
+{% endif %}
 
 <section class="section">
   <div class="wrapper split">
     <div>
       <h2>Contact and Location</h2>
       <p class="punjabi-support section-punjabi">ਸੰਪਰਕ ਅਤੇ ਸਥਾਨ</p>
-      {% if site.address %}<p>{{ site.address }}</p>{% else %}<p>Address is pending admin entry.</p>{% endif %}
+      {% if site.address %}<p>{{ site.address }}</p>{% endif %}
       <div class="hero-actions">
         {% if site.call_phone %}<a class="btn btn-primary" href="{{ main_tel }}">Call Hospital</a>{% endif %}
         {% if site.google_maps_url %}<a class="btn btn-secondary" href="{{ site.google_maps_url }}" target="_blank" rel="noopener">Open Google Maps</a>{% endif %}
@@ -240,14 +244,12 @@
     <div class="map-frame">
       {% if site.google_maps_embed_url %}
         <iframe src="{{ site.google_maps_embed_url }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="{{ site.hospital_name }} map"></iframe>
-      {% else %}
-        <div class="map-fallback">Google Maps embed pending admin entry.</div>
       {% endif %}
     </div>
   </div>
 </section>
 
-{% include "partials/patient_reviews.html" %}
+{% if patient_reviews %}{% include "partials/patient_reviews.html" %}{% endif %}
 
 <section class="section hospital-switch-section section-surface">
   <div class="wrapper">

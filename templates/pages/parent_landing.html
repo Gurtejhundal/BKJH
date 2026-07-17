@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static site_extras %}
+{% load static %}
 
 {% block body_class %}parent-landing{% endblock %}
 
@@ -11,23 +11,28 @@
       <h1>{{ parent_settings.hero_title }}</h1>
       {% if parent_settings.hero_punjabi %}<p class="punjabi-support parent-hero__punjabi">{{ parent_settings.hero_punjabi }}</p>{% endif %}
       <p class="parent-hero__lead">{{ parent_settings.hero_description }}</p>
-      <div class="parent-hero__actions" aria-label="Parent website actions">
-        <a class="btn btn-primary" href="#hospitals">View Hospitals</a>
+      <div class="parent-hero__actions" aria-label="BKGH Hospitals actions">
+        <a class="btn btn-primary" href="#hospitals">Choose Hospital</a>
         {% if parent_tel %}<a class="btn btn-secondary" href="{{ parent_tel }}">Call for Help</a>{% endif %}
-        {% if site.google_maps_url %}<a class="btn btn-secondary" href="#locations">Get Directions</a>{% endif %}
+        <a class="text-link" href="#locations">View Locations</a>
       </div>
     </div>
+
     <div class="network-visual reveal-on-scroll" aria-label="Two hospitals in the BKGH network">
-      <div class="network-visual__node network-visual__node--bibi">
-        {% if site.logo %}<img src="{{ site.logo.url }}" alt="" aria-hidden="true">{% else %}<img src="{% static site.static_logo_path %}" alt="" aria-hidden="true">{% endif %}
-        <div><span>{{ site.hospital_name }}</span><small>Fatehgarh Churian</small></div>
+      <div class="network-visual__header">
+        <span>BKGH hospital network</span>
+        <small>Two locations, one clear starting point</small>
       </div>
-      <div class="network-visual__bridge" aria-hidden="true">
-        <span>BKGH</span>
-      </div>
-      <div class="network-visual__node network-visual__node--miri">
-        {% if miri_profile.logo %}<img src="{{ miri_profile.logo.url }}" alt="" aria-hidden="true">{% else %}<img src="{% static miri_profile.static_logo_path %}" alt="" aria-hidden="true">{% endif %}
-        <div><span>{{ miri_profile.hospital_name }}</span><small>Amritsar</small></div>
+      <div class="network-visual__campuses">
+        <div class="network-visual__node network-visual__node--bibi">
+          {% if site.logo %}<img src="{{ site.logo.url }}" alt="">{% else %}<img src="{% static site.static_logo_path %}" alt="">{% endif %}
+          <div><strong>{{ site.hospital_name }}</strong><small>Fatehgarh Churian</small></div>
+        </div>
+        <span class="network-visual__line" aria-hidden="true"></span>
+        <div class="network-visual__node network-visual__node--miri">
+          {% if miri_profile.logo %}<img src="{{ miri_profile.logo.url }}" alt="">{% else %}<img src="{% static miri_profile.static_logo_path %}" alt="">{% endif %}
+          <div><strong>{{ miri_profile.hospital_name }}</strong><small>Amritsar</small></div>
+        </div>
       </div>
     </div>
   </div>
@@ -37,17 +42,20 @@
   <div class="wrapper">
     <div class="section-header parent-section-header">
       <span class="section-eyebrow">Choose your hospital</span>
-      <h2>Visit the hospital website you need</h2>
-      <p>Each hospital page contains its own services, contact details, location guidance, and patient information.</p>
+      <h2>Start with the location you plan to visit</h2>
+      <p>Each hospital website has its own doctors, services, patient information, contact details, and directions.</p>
     </div>
+
     <div class="hospital-selector-grid">
       <article class="hospital-selector-card hospital-selector-card--bibi reveal-on-scroll">
         <div class="hospital-selector-card__top">
           {% if site.logo %}<img src="{{ site.logo.url }}" alt="{{ site.hospital_name }} logo">{% else %}<img src="{% static site.static_logo_path %}" alt="{{ site.hospital_name }} logo">{% endif %}
           <span class="hospital-selector-card__label">Fatehgarh Churian</span>
         </div>
-        <h3>{{ site.hospital_name }}</h3>
-        {% if site.punjabi_name %}<p class="punjabi-support">{{ site.punjabi_name }}</p>{% endif %}
+        <div class="hospital-selector-card__identity">
+          <h3>{{ site.hospital_name }}</h3>
+          {% if site.punjabi_name %}<p class="punjabi-support">{{ site.punjabi_name }}</p>{% endif %}
+        </div>
         <p class="hospital-selector-card__location">{{ site.address }}</p>
         <ul class="hospital-highlight-list" aria-label="Bibi Kaulan Ji Hospital highlights">
           {% for item in bibi_highlights %}<li>{{ item }}</li>{% endfor %}
@@ -64,99 +72,87 @@
           {% if miri_profile.logo %}<img src="{{ miri_profile.logo.url }}" alt="{{ miri_profile.hospital_name }} logo">{% else %}<img src="{% static miri_profile.static_logo_path %}" alt="{{ miri_profile.hospital_name }} logo">{% endif %}
           <span class="hospital-selector-card__label">Amritsar</span>
         </div>
-        <h3>{{ miri_profile.hospital_name }}</h3>
-        {% if miri_profile.punjabi_name %}<p class="punjabi-support">{{ miri_profile.punjabi_name }}</p>{% endif %}
+        <div class="hospital-selector-card__identity">
+          <h3>{{ miri_profile.hospital_name }}</h3>
+          {% if miri_profile.punjabi_name %}<p class="punjabi-support">{{ miri_profile.punjabi_name }}</p>{% endif %}
+        </div>
         <p class="hospital-selector-card__location">{{ miri_profile.address }}</p>
         <ul class="hospital-highlight-list" aria-label="Miri Piri Mission Hospital highlights">
           {% for item in miri_highlights %}<li>{{ item }}</li>{% endfor %}
         </ul>
         <div class="hospital-selector-card__actions">
           <a class="btn btn-primary" href="{{ miri_url }}">Visit Miri Piri Mission Hospital</a>
-          <a class="btn btn-secondary" href="{{ miri_tel }}">Call Hospital</a>
-          <a class="text-link" href="{{ miri_profile.maps_url }}" target="_blank" rel="noopener">Get Directions</a>
+          {% if miri_tel %}<a class="btn btn-secondary" href="{{ miri_tel }}">Call Hospital</a>{% endif %}
+          {% if miri_profile.maps_url %}<a class="text-link" href="{{ miri_profile.maps_url }}" target="_blank" rel="noopener">Get Directions</a>{% endif %}
         </div>
       </article>
     </div>
   </div>
 </section>
 
-<section class="section section-surface parent-care-promise" id="shared-services">
+<section class="section parent-choice-guide" id="about-network">
+  <div class="wrapper">
+    <div class="section-header parent-section-header">
+      <span class="section-eyebrow">How to choose</span>
+      <h2>Use your location as the first guide</h2>
+    </div>
+    <div class="choice-guide-grid">
+      <article>
+        <span class="choice-guide-grid__number">01</span>
+        <h3>Fatehgarh Churian and nearby Gurdaspur</h3>
+        <p>Start with Bibi Kaulan Ji Hospital on Ajnala Road.</p>
+        <a class="text-link" href="{{ bibi_url }}">Open hospital website</a>
+      </article>
+      <article>
+        <span class="choice-guide-grid__number">02</span>
+        <h3>Amritsar and Tarn Taran Road</h3>
+        <p>Start with Miri Piri Mission Hospital in Amritsar.</p>
+        <a class="text-link" href="{{ miri_url }}">Open hospital website</a>
+      </article>
+      <article>
+        <span class="choice-guide-grid__number">03</span>
+        <h3>Not sure before travelling?</h3>
+        <p>Call the hospital team for practical guidance before your visit.</p>
+        {% if parent_tel %}<a class="text-link" href="{{ parent_tel }}">Call for help</a>{% endif %}
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section parent-care-promise" id="shared-services">
   <div class="wrapper parent-promise-grid">
-    <div class="parent-promise-copy reveal-on-scroll" id="about-network">
+    <div class="parent-promise-copy reveal-on-scroll">
       <span class="section-eyebrow">Shared care promise</span>
       <h2>{{ parent_settings.shared_care_title }}</h2>
       <p>{{ parent_settings.shared_care_description }}</p>
     </div>
-    <div class="promise-list reveal-on-scroll" aria-label="BKGH care promise">
-      <div>
-        {% include "partials/icon.html" with name="care" %}
-        <strong>Patient-first guidance</strong>
-        <span>Choose the right hospital before travelling.</span>
-      </div>
-      <div>
-        {% include "partials/icon.html" with name="doctor" %}
-        <strong>OPD and consultation</strong>
-        <span>Hospital pages keep doctor and timing information visible.</span>
-      </div>
-      <div>
-        {% include "partials/icon.html" with name="emergency" %}
-        <strong>Emergency access</strong>
-        <span>Urgent contact routes remain easy to find.</span>
-      </div>
-      <div>
-        {% include "partials/icon.html" with name="location" %}
-        <strong>Location guidance</strong>
-        <span>Map links help patients reach the correct campus.</span>
-      </div>
+    <div class="promise-list reveal-on-scroll" aria-label="BKGH patient information promise">
+      <div>{% include "partials/icon.html" with name="care" %}<strong>Clear hospital information</strong><span>Know which hospital page and contact details you are viewing.</span></div>
+      <div>{% include "partials/icon.html" with name="phone" %}<strong>Contact before visiting</strong><span>Call when timing or availability needs confirmation.</span></div>
+      <div>{% include "partials/icon.html" with name="clock" %}<strong>OPD and emergency guidance</strong><span>Use each hospital page for its current patient information.</span></div>
+      <div>{% include "partials/icon.html" with name="location" %}<strong>Patient-first directions</strong><span>Open the correct hospital location before travelling.</span></div>
     </div>
   </div>
 </section>
 
-<section class="section parent-quick-help">
+<section class="section parent-locations" id="locations">
   <div class="wrapper">
     <div class="section-header parent-section-header">
-      <span class="section-eyebrow">Quick help</span>
-      <h2>Need a faster route?</h2>
-      <p>Use these actions if you already know what you need.</p>
-    </div>
-    <div class="parent-help-grid">
-      <a class="parent-help-card" href="{% if parent_tel %}{{ parent_tel }}{% else %}#parent-contact{% endif %}">
-        {% include "partials/icon.html" with name="phone" %}
-        <span>Call for hospital guidance</span>
-      </a>
-      <a class="parent-help-card" href="{% url 'hospital:opd_timing' %}">
-        {% include "partials/icon.html" with name="clock" %}
-        <span>Find OPD timings</span>
-      </a>
-      <a class="parent-help-card" href="#hospitals">
-        {% include "partials/icon.html" with name="department" %}
-        <span>Choose a hospital</span>
-      </a>
-      <a class="parent-help-card" href="#locations">
-        {% include "partials/icon.html" with name="location" %}
-        <span>Open location</span>
-      </a>
-    </div>
-  </div>
-</section>
-
-<section class="section section-surface parent-locations" id="locations">
-  <div class="wrapper">
-    <div class="section-header parent-section-header">
-      <span class="section-eyebrow">Locations</span>
-      <h2>Hospital location links</h2>
-      <p>Use the map buttons to confirm the route before travelling.</p>
+      <span class="section-eyebrow">Two locations</span>
+      <h2>Confirm your destination before leaving</h2>
     </div>
     <div class="location-card-grid">
-      <article class="location-card">
+      <article class="location-card location-card--bibi">
+        <span>Fatehgarh Churian</span>
         <h3>{{ site.hospital_name }}</h3>
         <p>{{ site.address }}</p>
-        {% if site.google_maps_url %}<a class="btn btn-secondary" href="{{ site.google_maps_url }}" target="_blank" rel="noopener">Open Bibi Kaulan Location</a>{% endif %}
+        {% if site.google_maps_url %}<a class="btn btn-secondary" href="{{ site.google_maps_url }}" target="_blank" rel="noopener">Open Location</a>{% endif %}
       </article>
-      <article class="location-card">
+      <article class="location-card location-card--miri">
+        <span>Amritsar</span>
         <h3>{{ miri_profile.hospital_name }}</h3>
-        <p>{{ miri_profile.address|default:"Location details pending confirmation." }}</p>
-        <a class="btn btn-secondary" href="{{ miri_profile.maps_url }}" target="_blank" rel="noopener">Open Miri Piri Location</a>
+        <p>{{ miri_profile.address }}</p>
+        {% if miri_profile.maps_url %}<a class="btn btn-secondary" href="{{ miri_profile.maps_url }}" target="_blank" rel="noopener">Open Location</a>{% endif %}
       </article>
     </div>
   </div>

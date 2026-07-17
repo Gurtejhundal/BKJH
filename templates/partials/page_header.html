@@ -22,21 +22,21 @@
         </div>
       </div>
       <div class="care-access__links">
-        <a href="{% url 'appointments:appointment' %}">
+        <a href="{% if page_hospital %}{{ miri_appointment_url }}{% else %}{% url 'appointments:appointment' %}{% endif %}">
           <span>Request appointment</span>
           <small>Staff confirms before visit</small>
         </a>
-        <a href="{% url 'hospital:opd_timing' %}">
-          <span>Check OPD timing</span>
-          <small>Doctor and department schedule</small>
+        <a href="{% if page_hospital %}{% url 'core:miri_piri_hospital' %}#miri-doctors{% else %}{% url 'hospital:opd_timing' %}{% endif %}">
+          <span>{% if page_hospital %}Doctor availability{% else %}Check OPD timing{% endif %}</span>
+          <small>{% if page_hospital %}Miri Piri visit information{% else %}Doctor and department schedule{% endif %}</small>
         </a>
-        <a href="{% url 'hospital:doctors' %}">
-          <span>Doctor list</span>
-          <small>Published doctors and OPD details</small>
+        <a href="{% if page_hospital %}{% url 'core:miri_piri_hospital' %}#miri-departments{% else %}{% url 'hospital:doctors' %}{% endif %}">
+          <span>{% if page_hospital %}Departments{% else %}Doctor list{% endif %}</span>
+          <small>{% if page_hospital %}Amritsar hospital services{% else %}Published doctors and OPD details{% endif %}</small>
         </a>
-        <a href="{% url 'hospital:contact' %}">
+        <a href="{% if page_hospital %}{{ miri_tel }}{% else %}{% url 'hospital:contact' %}{% endif %}">
           <span>Contact hospital</span>
-          <small>{% if site.call_phone %}{{ site.call_phone }}{% else %}Phone pending{% endif %}</small>
+          <small>{% if page_hospital %}{{ page_hospital.call_phone|default:page_hospital.phone }}{% else %}{{ site.call_phone|default:"View contact details" }}{% endif %}</small>
         </a>
       </div>
     </aside>

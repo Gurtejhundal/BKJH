@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 
-from apps.core.models import HOSPITAL_SCOPE_CHOICES, PublishedModel
+from apps.core.models import HOSPITAL_SCOPE_CHOICES, PublishedModel, scope_contains
 from apps.core.validators import validate_image_file
 
 
@@ -60,8 +60,13 @@ class GalleryImage(PublishedModel):
     def clean(self):
         from django.core.exceptions import ValidationError
 
+        errors = {}
         if not self.image and not self.static_image_path:
-            raise ValidationError("Upload an image or provide a built-in image path.")
+            errors["image"] = "Upload an image or provide a built-in image path."
+        if self.category and not scope_contains(self.category.hospital_scope, self.hospital_scope):
+            errors["category"] = "The selected category is not published for every hospital assigned to this image."
+        if errors:
+            raise ValidationError(errors)
 
     def save(self, *args, **kwargs):
         self.full_clean()

@@ -61,6 +61,27 @@ def hospital_scope_filter(hospital_key):
     return Q(hospital_scope="both") | Q(hospital_scope=hospital_key)
 
 
+def hospital_highlights(hospital_key, profile, limit=4):
+    specific = list(
+        Service.objects.filter(
+            hospital_scope=hospital_key,
+            is_active=True,
+            is_featured=True,
+        ).values_list("title", flat=True)
+    )
+    shared = list(
+        Service.objects.filter(
+            hospital_scope="both",
+            is_active=True,
+            is_featured=True,
+        ).values_list("title", flat=True)
+    )
+    candidates = specific + shared
+    if hospital_key == "miri" and profile.opd_hours:
+        candidates.insert(0, profile.opd_hours)
+    return list(dict.fromkeys(candidates))[:limit]
+
+
 def home(request):
     site = HospitalProfile.get_by_code("bkjh")
     miri_profile = HospitalProfile.get_by_code("miri")
@@ -88,12 +109,8 @@ def home(request):
     }
     if parent_settings.helpdesk_phone or site.call_phone:
         schema["telephone"] = parent_settings.helpdesk_phone or site.call_phone
-    bibi_highlights = Service.objects.filter(
-        hospital_scope_filter("bkjh"), is_active=True, is_featured=True
-    ).values_list("title", flat=True)[:4]
-    miri_highlights = Service.objects.filter(
-        hospital_scope_filter("miri"), is_active=True, is_featured=True
-    ).values_list("title", flat=True)[:4]
+    bibi_highlights = hospital_highlights("bkjh", site)
+    miri_highlights = hospital_highlights("miri", miri_profile)
     return render(
         request,
         "pages/parent_landing.html",
@@ -238,10 +255,22 @@ def miri_piri_hospital(request):
         },
     ]
     patient_support = [
-        {"title": "OPD consultation", "text": "Public profile lists OPD services from 9:00 AM to 5:00 PM."},
-        {"title": "Emergency support", "text": "Public listings describe hospital availability as 24 hours."},
-        {"title": "Critical care", "text": "Critical care and ICU support are highlighted as core services."},
-        {"title": "Speciality care", "text": "Chest & TB, ortho, urology, gynae, surgery, and critical care are listed."},
+        {
+            "title": "OPD consultation",
+            "text": miri_profile.opd_hours or "Call the hospital to confirm current OPD hours.",
+        },
+        {
+            "title": "Emergency support",
+            "text": miri_profile.emergency_hours or "Call the hospital to confirm current emergency support.",
+        },
+        {
+            "title": "Hospital contact",
+            "text": f"Call {miri_profile.call_phone or miri_profile.main_phone} before travelling when needed.",
+        },
+        {
+            "title": "Location",
+            "text": "Open the hospital map before travelling to the Amritsar-Tarn Taran Road location.",
+        },
     ]
     return render(
         request,
@@ -263,6 +292,8 @@ def miri_piri_hospital(request):
             "quick_actions": quick_actions,
             "patient_support": patient_support,
             "miri_tel": miri_tel,
+            "miri_appointment_url": f"{reverse('appointments:appointment')}?hospital=miri",
+            "miri_detail_page": True,
             "bkjh_url": reverse("core:bibi_kaulan_hospital"),
         },
     )
@@ -300,6 +331,7 @@ def hospital_schema(request, site):
 def about(request):
     from apps.gallery.hospital.models import Facility, Service
 
+    bkjh_scope = hospital_scope_filter("bkjh")
     return render(
         request,
         "pages/about.html",
@@ -309,8 +341,8 @@ def about(request):
                 "Learn about Bibi Kaulan Ji Hospital, patient care approach, facilities, and hospital services.",
                 request.path,
             ),
-            "services": Service.objects.filter(is_active=True, is_featured=True)[:3],
-            "facilities": Facility.objects.filter(is_active=True, is_featured=True)[:3],
+            "services": Service.objects.filter(bkjh_scope, is_active=True, is_featured=True)[:3],
+            "facilities": Facility.objects.filter(bkjh_scope, is_active=True, is_featured=True)[:3],
             "patient_reviews": featured_reviews(),
         },
     )

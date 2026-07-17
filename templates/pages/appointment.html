@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% load site_extras %}
+{% block body_class %}{% if appointment_hospital.code == "miri" %}theme-miri{% endif %}{% endblock %}
 {% block content %}
-{% include "partials/page_header.html" with title="Request Appointment" support_text="ਮੁਲਾਕਾਤ ਲਈ ਬੇਨਤੀ ਕਰੋ" intro="Submit a request and hospital staff will contact you for confirmation." eyebrow="Appointment request" %}
+{% include "partials/page_header.html" with title="Request Appointment" support_text="ਮੁਲਾਕਾਤ ਲਈ ਬੇਨਤੀ ਕਰੋ" intro=appointment_hospital.hospital_name eyebrow="Appointment request" %}
 
 <section class="section">
   <div class="wrapper split">
@@ -10,7 +11,7 @@
       <h2>Important</h2>
       <p>This is not an automatic booking engine. Please keep your phone available after submitting the request.</p>
       <p>For urgent medical concerns, do not wait for online confirmation. Call the hospital directly.</p>
-      {% if site.emergency_phone %}<a class="btn btn-emergency" href="tel:{{ site.emergency_phone|tel }}">Call Emergency</a>{% endif %}
+      {% if appointment_hospital.call_phone %}<a class="btn btn-emergency" href="tel:{{ appointment_hospital.call_phone|tel }}">Call Hospital</a>{% endif %}
     </aside>
   </div>
 </section>

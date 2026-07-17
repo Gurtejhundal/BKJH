@@ -18,7 +18,7 @@
     {% for department in departments %}
       {% include "partials/department_card.html" %}
     {% empty %}
-      {% include "partials/empty_state.html" with title="No departments published" message="Add active departments from Django Admin after client confirmation." %}
+      {% include "partials/empty_state.html" with title="No departments found" message="Try a different search or call the hospital for department guidance." %}
     {% endfor %}
   </div>
 </section>

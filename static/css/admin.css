@@ -274,6 +274,68 @@ a.button {
   gap: 16px;
 }
 
+.cms-hospital-lanes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.cms-hospital-lane {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid var(--bkjh-admin-border);
+  border-top: 4px solid var(--bkjh-admin-primary);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.cms-hospital-lane--miri {
+  border-top-color: #167f82;
+}
+
+.cms-hospital-lane h2,
+.cms-hospital-lane p {
+  margin: 0;
+}
+
+.cms-hospital-lane h2 {
+  color: #17332d;
+  font-size: 1.02rem;
+}
+
+.cms-hospital-lane p {
+  color: #60756f;
+  font-size: .84rem;
+}
+
+.cms-hospital-lane nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cms-hospital-lane nav a {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 10px;
+  border: 1px solid #cfe0dc;
+  border-radius: 6px;
+  background: #fbfdfc;
+  color: var(--bkjh-admin-primary-dark);
+  font-size: .8rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.cms-hospital-lane nav a:hover,
+.cms-hospital-lane nav a:focus-visible {
+  border-color: var(--bkjh-admin-primary);
+  background: #e8f3f0;
+}
+
 .cms-hub-card {
   display: grid;
   grid-template-columns: 44px 1fr;
@@ -365,6 +427,10 @@ a.button {
 }
 
 @media (max-width: 767px) {
+  .cms-hospital-lanes {
+    grid-template-columns: 1fr;
+  }
+
   .cms-hub-card {
     min-height: 0;
     padding: 16px;

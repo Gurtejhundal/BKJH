@@ -4,12 +4,12 @@
     <a href="#hospitals">Hospitals</a>
     {% if parent_settings.helpdesk_phone %}<a href="tel:{{ parent_settings.helpdesk_phone|tel }}">Helpdesk</a>{% elif site.call_phone %}<a href="tel:{{ site.call_phone|tel }}">Helpdesk</a>{% endif %}
     <a href="{% url 'core:bibi_kaulan_hospital' %}">BKJH</a>
-    <a class="danger" href="{% url 'core:miri_piri_hospital' %}">Miri Piri</a>
+    <a href="{% url 'core:miri_piri_hospital' %}">Miri Piri</a>
   {% elif page_hospital %}
     <a href="{{ miri_tel }}">Call</a>
+    <a href="{{ miri_appointment_url|default:'/appointment/?hospital=miri' }}">Appointment</a>
     <a href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Location</a>
-    <a href="{{ page_hospital.instagram_url }}" target="_blank" rel="noopener">Instagram</a>
-    <a class="danger" href="{% url 'core:bibi_kaulan_hospital' %}">BKJH</a>
+    <a href="{% url 'core:home' %}">BKGH</a>
   {% else %}
     {% if site.call_phone %}<a href="tel:{{ site.call_phone|tel }}">Call</a>{% else %}<a href="{% url 'hospital:contact' %}">Call</a>{% endif %}
     <a href="{% url 'appointments:appointment' %}">Appointment</a>

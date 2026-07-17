@@ -1,14 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
-{% include "partials/page_header.html" with title="Services" support_text="ਮਰੀਜ਼ਾਂ ਲਈ ਸੇਵਾਵਾਂ" intro="Patient-facing services published from verified admin content." eyebrow="Patient services" %}
+{% include "partials/page_header.html" with title="Services" support_text="ਮਰੀਜ਼ਾਂ ਲਈ ਸੇਵਾਵਾਂ" intro="Hospital care, procedures, and patient support services." eyebrow="Patient services" %}
 
 <section class="section section-surface">
   <div class="wrapper">
-    <p class="muted">Services are different from departments. Services describe patient-facing care or support options. Publish only services confirmed by the hospital.</p>
     <div class="card-grid service-list-grid section-tight">
       {% for service in services %}
         <a class="info-card card-link service-card service-card--listing" href="{% url 'appointments:appointment' %}">
-          {% if service.image %}<img class="card-image" src="{{ service.image.url }}" alt="{{ service.title }}" loading="lazy">{% endif %}
           <div class="card-icon" aria-hidden="true">
             {% if "Emergency" in service.title %}{% include "partials/icon.html" with name="emergency" %}{% elif "Dialysis" in service.title %}{% include "partials/icon.html" with name="dialysis" %}{% elif "Bronchoscopy" in service.title %}{% include "partials/icon.html" with name="lungs" %}{% elif "Urology" in service.title or "Cystoscopy" in service.title %}{% include "partials/icon.html" with name="urology" %}{% elif "Surgery" in service.title or "Surgeries" in service.title %}{% include "partials/icon.html" with name="surgery" %}{% elif "Cashless" in service.title %}{% include "partials/icon.html" with name="insurance" %}{% else %}{% include "partials/icon.html" with name="care" %}{% endif %}
           </div>
@@ -18,7 +16,7 @@
           <span class="text-link">Request Appointment</span>
         </a>
       {% empty %}
-        {% include "partials/empty_state.html" with title="No services published" message="Only client-confirmed services should be published." %}
+        {% include "partials/empty_state.html" with title="Service information unavailable" message="Call the hospital for current service information." %}
       {% endfor %}
     </div>
   </div>

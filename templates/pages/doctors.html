@@ -22,7 +22,7 @@
     {% for doctor in doctors %}
       {% include "partials/doctor_card.html" %}
     {% empty %}
-      {% include "partials/empty_state.html" with title="No doctors published" message="Doctor details should only be added after client approval." %}
+      {% include "partials/empty_state.html" with title="No doctors found" message="Try another department or call the hospital for doctor availability." %}
     {% endfor %}
   </div>
 </section>

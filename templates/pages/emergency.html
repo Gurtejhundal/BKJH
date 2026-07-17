@@ -6,8 +6,8 @@
 <section class="section">
   <div class="wrapper split">
     <div>
-      <h2>{{ emergency.title|default:"Emergency information pending" }}</h2>
-      <p>{{ emergency.description|default:"Emergency service details are pending client confirmation. The site does not claim 24/7 availability unless admin content confirms it." }}</p>
+      <h2>{{ emergency.title|default:"Emergency information" }}</h2>
+      <p>{{ emergency.description|default:"Call the hospital directly for current emergency guidance and urgent care information." }}</p>
       {% if emergency.availability_text %}<p><strong>Availability:</strong> {{ emergency.availability_text }}</p>{% endif %}
       {% if emergency.instructions %}<p>{{ emergency.instructions }}</p>{% endif %}
       {% if emergency.emergency_phone or site.emergency_phone %}

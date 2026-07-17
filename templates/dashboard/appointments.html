@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 {% block extra_js %}<script src="https://unpkg.com/htmx.org@1.9.12" defer></script>{% endblock %}
 {% block content %}
-<section class="page-hero"><div class="wrapper"><h1>Appointment Dashboard</h1><p>Review requests, filter by status, and update follow-up notes.</p></div></section>
+<section class="page-hero"><div class="wrapper"><h1>Appointment Dashboard</h1><p>Review requests by hospital, filter by status, and update patient follow-up.</p></div></section>
 <section class="section section-tight">
   <div class="wrapper dashboard-summary">
     <div><strong>{{ pending_count }}</strong><span>Pending requests</span></div>
+    <a href="?hospital=bkjh"><strong>{{ bkjh_pending_count }}</strong><span>Bibi Kaulan pending</span></a>
+    <a href="?hospital=miri"><strong>{{ miri_pending_count }}</strong><span>Miri Piri pending</span></a>
     <div><strong>{{ today_count }}</strong><span>Preferred today</span></div>
     <div><strong>{{ appointments.paginator.count }}</strong><span>Matching requests</span></div>
   </div>
@@ -12,6 +14,12 @@
 <section class="section">
   <div class="wrapper">
     <form class="filter-bar dashboard-filter" method="get">
+      <label for="hospital">Hospital</label>
+      <select id="hospital" name="hospital" class="form-control">
+        <option value="">Both hospitals</option>
+        <option value="bkjh" {% if selected_hospital == "bkjh" %}selected{% endif %}>Bibi Kaulan Ji Hospital</option>
+        <option value="miri" {% if selected_hospital == "miri" %}selected{% endif %}>Miri Piri Mission Hospital</option>
+      </select>
       <label for="status">Status</label>
       <select id="status" name="status" class="form-control">
         <option value="">All statuses</option>
@@ -48,9 +56,9 @@
     </div>
     {% if appointments.has_other_pages %}
       <nav class="pagination" aria-label="Appointment pages">
-        {% if appointments.has_previous %}<a class="text-link" href="?page={{ appointments.previous_page_number }}&status={{ selected_status }}&department={{ selected_department }}&date={{ selected_date }}&q={{ query }}">Previous</a>{% endif %}
+        {% if appointments.has_previous %}<a class="text-link" href="?page={{ appointments.previous_page_number }}&hospital={{ selected_hospital }}&status={{ selected_status }}&department={{ selected_department }}&date={{ selected_date }}&q={{ query }}">Previous</a>{% endif %}
         <span>Page {{ appointments.number }} of {{ appointments.paginator.num_pages }}</span>
-        {% if appointments.has_next %}<a class="text-link" href="?page={{ appointments.next_page_number }}&status={{ selected_status }}&department={{ selected_department }}&date={{ selected_date }}&q={{ query }}">Next</a>{% endif %}
+        {% if appointments.has_next %}<a class="text-link" href="?page={{ appointments.next_page_number }}&hospital={{ selected_hospital }}&status={{ selected_status }}&department={{ selected_department }}&date={{ selected_date }}&q={{ query }}">Next</a>{% endif %}
       </nav>
     {% endif %}
   </div>

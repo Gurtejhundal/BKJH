@@ -3,7 +3,7 @@
   <div class="wrapper header-inner">
     <a class="brand" href="{% if parent_landing %}{% url 'core:home' %}{% elif page_hospital %}{% url 'core:miri_piri_hospital' %}{% else %}{% url 'core:bibi_kaulan_hospital' %}{% endif %}" aria-label="{% if parent_landing %}BKGH Hospitals{% elif page_hospital %}{{ page_hospital.name }}{% else %}{{ site.hospital_name }}{% endif %} home">
       {% if parent_landing %}
-        <span class="brand-monogram" aria-hidden="true">BKGH</span>
+        {% if site.logo %}<img src="{{ site.logo.url }}" alt="Bibi Kaulan Ji Hospitals Charitable Society logo">{% else %}<img src="{% static 'images/bkjh-logo.png' %}" alt="Bibi Kaulan Ji Hospitals Charitable Society logo">{% endif %}
       {% elif page_hospital %}
         {% if page_hospital.logo %}<img src="{{ page_hospital.logo.url }}" alt="{{ page_hospital.name }} logo">{% else %}<img src="{% static page_hospital.logo_static %}" alt="{{ page_hospital.name }} logo">{% endif %}
       {% elif site.logo %}
@@ -23,17 +23,16 @@
     <nav id="main-nav" class="main-nav" data-main-nav aria-label="Main navigation">
       {% if parent_landing %}
         <a class="is-active" href="#hospitals">Hospitals</a>
-        <a href="#shared-services">Services</a>
         <a href="#about-network">About</a>
         <a href="#parent-contact">Contact</a>
       {% elif page_hospital %}
         <a class="is-active" href="{% url 'core:miri_piri_hospital' %}">Home</a>
-        <a href="#miri-services">Services</a>
-        <a href="#miri-departments">Departments</a>
-        <a href="#miri-facilities">Facilities</a>
-        <a href="#miri-gallery">Gallery</a>
+        <a href="{% if miri_detail_page %}#miri-services{% else %}{% url 'core:miri_piri_hospital' %}#miri-services{% endif %}">Services</a>
+        <a href="{% if miri_detail_page %}#miri-departments{% else %}{% url 'core:miri_piri_hospital' %}#miri-departments{% endif %}">Departments</a>
+        <a href="{% if miri_detail_page %}#miri-doctors{% else %}{% url 'core:miri_piri_hospital' %}#miri-doctors{% endif %}">Doctors</a>
+        <a href="{{ miri_appointment_url|default:'/appointment/?hospital=miri' }}">Appointment</a>
         <a href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Location</a>
-        <a href="{% url 'core:bibi_kaulan_hospital' %}">Bibi Kaulan Ji Hospital</a>
+        <a href="{% url 'core:home' %}">BKGH Hospitals</a>
       {% else %}
         <a class="{% if request.resolver_match.url_name == 'bibi_kaulan_hospital' %}is-active{% endif %}" href="{% url 'core:bibi_kaulan_hospital' %}">Home</a>
         <a class="{% if request.resolver_match.url_name == 'services' %}is-active{% endif %}" href="{% url 'hospital:services' %}">Services</a>
@@ -48,7 +47,7 @@
       {% if parent_landing %}
         {% if parent_settings.helpdesk_phone %}<a class="btn btn-primary header-emergency" href="tel:{{ parent_settings.helpdesk_phone|tel }}"><span>Call Helpdesk</span><strong>{{ parent_settings.helpdesk_phone }}</strong></a>{% elif site.call_phone %}<a class="btn btn-primary header-emergency" href="tel:{{ site.call_phone|tel }}"><span>Call Helpdesk</span><strong>{{ site.call_phone }}</strong></a>{% endif %}
       {% elif page_hospital %}
-        <a class="btn btn-primary header-emergency" href="{{ miri_tel }}"><span>Call Hospital</span><strong>{{ page_hospital.phone }}</strong></a>
+        <a class="btn btn-primary header-emergency" href="{{ miri_tel }}"><span>Call Hospital</span><strong>{{ page_hospital.call_phone|default:page_hospital.phone }}</strong></a>
       {% elif site.emergency_phone %}
         <a class="btn btn-emergency header-emergency" href="tel:{{ site.emergency_phone|tel }}"><span>Emergency</span><strong>{{ site.emergency_phone }}</strong></a>
       {% else %}

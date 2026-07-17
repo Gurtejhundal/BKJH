@@ -7,19 +7,17 @@
   <div class="wrapper split">
     <div>
       <h2>{{ site.hospital_name }}</h2>
-      {% if site.address %}<p>{{ site.address }}</p>{% else %}<p>Address pending admin entry.</p>{% endif %}
+      {% if site.address %}<p>{{ site.address }}</p>{% endif %}
       <div class="card-grid">
-        {% include "partials/contact_card.html" with title="Call hospital" support_text="ਹਸਪਤਾਲ ਨੂੰ ਕਾਲ ਕਰੋ" value=site.call_phone phone=site.call_phone fallback="Hospital call number pending" action_label="Call hospital" %}
-        {% include "partials/contact_card.html" with title="Emergency" support_text="ਐਮਰਜੈਂਸੀ" value=site.emergency_phone phone=site.emergency_phone fallback="Emergency number pending" action_label="Call emergency" %}
-        {% include "partials/contact_card.html" with title="Ambulance" support_text="ਐਂਬੂਲੈਂਸ" value=site.ambulance_phone phone=site.ambulance_phone fallback="Ambulance number pending" action_label="Call ambulance" %}
+        {% if site.call_phone %}{% include "partials/contact_card.html" with title="Call hospital" support_text="ਹਸਪਤਾਲ ਨੂੰ ਕਾਲ ਕਰੋ" value=site.call_phone phone=site.call_phone action_label="Call hospital" %}{% endif %}
+        {% if site.emergency_phone %}{% include "partials/contact_card.html" with title="Emergency" support_text="ਐਮਰਜੈਂਸੀ" value=site.emergency_phone phone=site.emergency_phone action_label="Call emergency" %}{% endif %}
+        {% if site.ambulance_phone %}{% include "partials/contact_card.html" with title="Ambulance" support_text="ਐਂਬੂਲੈਂਸ" value=site.ambulance_phone phone=site.ambulance_phone action_label="Call ambulance" %}{% endif %}
         {% if site.whatsapp_number %}
           {% with whatsapp_number=site.whatsapp_number|whatsapp %}
           {% with whatsapp_href="https://wa.me/"|add:whatsapp_number %}
-            {% include "partials/contact_card.html" with title="WhatsApp" support_text="ਵਟਸਐਪ" value=site.whatsapp_number href=whatsapp_href fallback="WhatsApp pending" action_label="Message" external=True %}
+            {% include "partials/contact_card.html" with title="WhatsApp" support_text="ਵਟਸਐਪ" value=site.whatsapp_number href=whatsapp_href action_label="Message" external=True %}
           {% endwith %}
           {% endwith %}
-        {% else %}
-          {% include "partials/contact_card.html" with title="WhatsApp" support_text="ਵਟਸਐਪ" fallback="WhatsApp number pending" %}
         {% endif %}
       </div>
       <div class="hero-actions">
@@ -30,18 +28,16 @@
     <div class="map-frame">
       {% if site.google_maps_embed_url %}
         <iframe src="{{ site.google_maps_embed_url }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="{{ site.hospital_name }} map"></iframe>
-      {% else %}
-        <div class="map-fallback">Google Maps embed pending admin entry.</div>
       {% endif %}
     </div>
   </div>
 </section>
 
-<section class="section section-surface">
+{% if timings %}<section class="section section-surface">
   <div class="wrapper">
-    {% include "partials/section_header.html" with title="OPD timing summary" intro="Current active timings from admin." %}
+    {% include "partials/section_header.html" with title="OPD timing summary" intro="Check the current visit schedule and call before travelling when needed." %}
     {% include "pages/opd_table.html" with timings=timings %}
   </div>
-</section>
+</section>{% endif %}
 
 {% endblock %}

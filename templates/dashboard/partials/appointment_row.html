@@ -1,6 +1,7 @@
 <tr id="appointment-{{ appointment.id }}">
   <td>
     <strong>{{ appointment.patient_name }}</strong>
+    <span class="status status-hospital-{{ appointment.hospital_scope }}">{{ appointment.get_hospital_scope_display }}</span>
     <span class="meta">{{ appointment.phone }}</span>
     <span class="meta">Preferred: {{ appointment.preferred_date }}</span>
     {% if appointment.preferred_time_text %}<span class="meta">{{ appointment.preferred_time_text }}</span>{% endif %}

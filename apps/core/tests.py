@@ -1,11 +1,12 @@
 from unittest.mock import patch
 
+from django.core.exceptions import ValidationError
 from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
 
 from apps.gallery.models import GalleryCategory, GalleryImage
-from apps.gallery.hospital.models import Department, Doctor, Facility
+from apps.gallery.hospital.models import Department, Doctor, Facility, Service
 
 from .models import HospitalProfile, ParentSiteSetting, PatientReview
 
@@ -89,6 +90,8 @@ class PublicRouteTests(TestCase):
             code="bkjh",
             hospital_name="Bibi Kaulan Ji Hospital",
             call_phone="+91 97805 15050",
+            address="Ajnala Road, Fatehgarh Churian, Punjab",
+            google_maps_url="https://maps.example.com/bkjh",
             static_logo_path="images/bkjh-logo.png",
         )
         ParentSiteSetting.objects.create(helpdesk_phone="+91 97805 15050")
@@ -96,6 +99,42 @@ class PublicRouteTests(TestCase):
         response = self.client.get(reverse("core:bibi_kaulan_hospital"))
 
         self.assertContains(response, 'href="tel:+919780515050"')
+
+    def test_parent_gateway_uses_parent_navigation_and_bkjh_logo(self):
+        response = self.client.get(reverse("core:home"))
+
+        self.assertContains(response, "Two Hospitals. One Trusted Healthcare Network.")
+        self.assertContains(response, "images/bkjh-logo.png")
+        self.assertContains(response, 'href="#hospitals"')
+        self.assertNotContains(response, 'href="/doctors/"')
+        self.assertNotContains(response, 'href="/opd-timing/"')
+
+    def test_miri_home_hides_empty_gallery_and_internal_copy(self):
+        response = self.client.get(reverse("core:miri_piri_hospital"))
+
+        self.assertNotContains(response, "Hospital Gallery")
+        self.assertNotContains(response, "Gallery being prepared")
+        self.assertNotContains(response, "same active")
+        self.assertNotContains(response, "Information policy")
+
+    def test_about_page_does_not_include_miri_only_content(self):
+        Service.objects.create(
+            title="Miri Only Service",
+            short_description="Miri service",
+            hospital_scope="miri",
+            is_featured=True,
+        )
+        Facility.objects.create(
+            title="Miri Only Facility",
+            short_description="Miri facility",
+            hospital_scope="miri",
+            is_featured=True,
+        )
+
+        response = self.client.get(reverse("core:about"))
+
+        self.assertNotContains(response, "Miri Only Service")
+        self.assertNotContains(response, "Miri Only Facility")
 
     def test_seed_applies_requested_doctor_corrections(self):
         call_command("seed_bkjh_content", verbosity=0)
@@ -124,6 +163,23 @@ class PublicRouteTests(TestCase):
         response = self.client.get(reverse("core:bibi_kaulan_hospital"))
 
         self.assertContains(response, "/static/images/hospital/bkjh-gallery-reception.jpg")
+
+    def test_gallery_image_rejects_category_from_other_hospital(self):
+        category = GalleryCategory.objects.create(
+            name="Miri Gallery",
+            hospital_scope="miri",
+            is_active=True,
+        )
+        image = GalleryImage(
+            category=category,
+            title="Wrong hospital image",
+            static_image_path="images/hospital/example.jpg",
+            alt_text="Hospital interior",
+            hospital_scope="bkjh",
+        )
+
+        with self.assertRaises(ValidationError):
+            image.save()
 
     @patch("apps.core.management.commands.seed_bkjh_content.IS_VERCEL", True)
     def test_vercel_seed_uses_static_gallery_paths_without_media_writes(self):

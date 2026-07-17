@@ -6,8 +6,8 @@
   <div class="wrapper split">
     <div>
       <h2>Local hospital care, clearly explained</h2>
-      <p>{{ site.about_short|default:"Hospital introduction is pending admin entry. Add client-approved history, doctor information, care approach, and facility details before launch." }}</p>
-      <p>We keep this page factual. Awards, years, certifications, patient counts, and facility claims should be added only when the hospital confirms them.</p>
+      <p>{{ site.about_short|default:"Bibi Kaulan Ji Hospital serves patients in Fatehgarh Churian and nearby areas with OPD, emergency, and hospital support." }}</p>
+      <p>Use the hospital contact number when you need help confirming the correct department, doctor availability, or visit timing.</p>
     </div>
     <aside class="support-box">
       <h3>Care values</h3>
@@ -15,15 +15,15 @@
         <li>Clear communication for patients and families.</li>
         <li>Simple appointment request process.</li>
         <li>Direct phone and location access.</li>
-        <li>Published information only after admin approval.</li>
+        <li>Practical guidance before travelling.</li>
       </ul>
     </aside>
   </div>
 </section>
 
-<section class="section section-surface">
+{% if services or facilities %}<section class="section section-surface">
   <div class="wrapper">
-    {% include "partials/section_header.html" with title="Services and facilities preview" intro="Shown only when active featured records are added in admin." %}
+    {% include "partials/section_header.html" with title="Services and facilities preview" intro="A quick view of hospital services and patient support areas." %}
     <div class="card-grid">
       {% for service in services %}
         <article class="info-card"><h3>{{ service.title }}</h3><p>{{ service.short_description }}</p></article>
@@ -31,12 +31,9 @@
       {% for facility in facilities %}
         <article class="info-card"><h3>{{ facility.title }}</h3><p>{{ facility.short_description }}</p></article>
       {% endfor %}
-      {% if not services and not facilities %}
-        {% include "partials/empty_state.html" with title="About page content pending" message="Add featured services/facilities from admin after client confirmation." %}
-      {% endif %}
     </div>
   </div>
-</section>
+</section>{% endif %}
 
 {% include "partials/patient_reviews.html" %}
 {% endblock %}

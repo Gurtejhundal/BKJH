@@ -11,6 +11,35 @@
     <p>Choose a section below. Every published record is connected to the public BKGH, Bibi Kaulan Ji, or Miri Piri website.</p>
   </header>
 
+  <div class="cms-hospital-lanes" aria-label="Hospital content shortcuts">
+    <section class="cms-hospital-lane cms-hospital-lane--bkjh">
+      <div>
+        <span>Bibi Kaulan Ji Hospital</span>
+        <strong>Fatehgarh Churian content</strong>
+      </div>
+      <nav aria-label="Bibi Kaulan Ji Hospital controls">
+        <a href="{% url 'admin:hospital_doctor_changelist' %}?hospital_scope__exact=bkjh">Doctors</a>
+        <a href="{% url 'admin:hospital_department_changelist' %}?hospital_scope__exact=bkjh">Departments</a>
+        <a href="{% url 'admin:hospital_opdtiming_changelist' %}?hospital_scope__exact=bkjh">OPD</a>
+        <a href="{% url 'admin:appointments_appointmentrequest_changelist' %}?hospital_scope__exact=bkjh">Appointments</a>
+        <a href="{% url 'admin:gallery_galleryimage_changelist' %}?hospital_scope__exact=bkjh">Gallery</a>
+      </nav>
+    </section>
+    <section class="cms-hospital-lane cms-hospital-lane--miri">
+      <div>
+        <span>Miri Piri Mission Hospital</span>
+        <strong>Amritsar content</strong>
+      </div>
+      <nav aria-label="Miri Piri Mission Hospital controls">
+        <a href="{% url 'admin:hospital_doctor_changelist' %}?hospital_scope__exact=miri">Doctors</a>
+        <a href="{% url 'admin:hospital_department_changelist' %}?hospital_scope__exact=miri">Departments</a>
+        <a href="{% url 'admin:hospital_opdtiming_changelist' %}?hospital_scope__exact=miri">OPD</a>
+        <a href="{% url 'admin:appointments_appointmentrequest_changelist' %}?hospital_scope__exact=miri">Appointments</a>
+        <a href="{% url 'admin:gallery_galleryimage_changelist' %}?hospital_scope__exact=miri">Gallery</a>
+      </nav>
+    </section>
+  </div>
+
   <div class="cms-dashboard__grid">
     <section class="cms-hub-card">
       <span class="cms-hub-card__icon" aria-hidden="true">{% include "partials/icon.html" with name="department" %}</span>

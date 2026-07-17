@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib import messages
+from django.core.exceptions import ValidationError
 
 from .models import (
     AmbulanceInfo,
@@ -14,7 +16,24 @@ from .models import (
 
 @admin.action(description="Publish selected items")
 def mark_active(modeladmin, request, queryset):
-    queryset.update(is_active=True)
+    updated = 0
+    rejected = []
+    for item in queryset:
+        item.is_active = True
+        try:
+            item.save()
+        except ValidationError:
+            rejected.append(str(item))
+        else:
+            updated += 1
+    if updated:
+        modeladmin.message_user(request, f"Published {updated} item(s).", messages.SUCCESS)
+    if rejected:
+        modeladmin.message_user(
+            request,
+            "Could not publish records with missing or inconsistent information: " + ", ".join(rejected),
+            messages.WARNING,
+        )
 
 
 @admin.action(description="Hide selected items from website")
@@ -46,7 +65,7 @@ class DepartmentAdmin(admin.ModelAdmin):
     list_per_page = 40
     actions = (mark_active, mark_inactive, mark_featured, mark_unfeatured)
     fieldsets = (
-        ("Department details", {"description": "Use verified department names and patient-friendly descriptions. Department cards use the selected icon; hospital photos belong in Gallery.", "fields": ("name", "hospital_scope", "short_description", "detailed_description", "services_list")}),
+        ("Department details", {"description": "Choose one hospital first. Select shared only when staff have confirmed this department at both hospitals. Hospital photos belong in Gallery.", "fields": ("name", "hospital_scope", "short_description", "detailed_description", "services_list")}),
         ("Show on website", {"description": "Active departments appear publicly. Featured departments appear on the homepage.", "fields": ("is_featured", "is_active", "display_order")}),
         ("Advanced", {"classes": ("collapse",), "fields": ("slug", "icon", "seo_title", "seo_description")}),
         ("Admin timestamps", {"classes": ("collapse",), "fields": ("created_at", "updated_at")}),
@@ -68,7 +87,7 @@ class DoctorAdmin(admin.ModelAdmin):
     list_per_page = 40
     actions = (mark_active, mark_inactive, mark_featured, mark_unfeatured)
     fieldsets = (
-        ("Doctor profile", {"description": "Add only verified doctor details approved by hospital staff.", "fields": ("full_name", "hospital_scope", "photo", "qualification", "specialization", "experience_years", "department", "short_bio")}),
+        ("Doctor profile", {"description": "Assign the doctor to the confirmed hospital. Shared means the doctor actively serves both hospitals and must be selected intentionally.", "fields": ("full_name", "hospital_scope", "photo", "qualification", "specialization", "experience_years", "department", "short_bio")}),
         ("Built-in deployed photo", {"classes": ("collapse",), "description": "Used for approved doctor photos committed with the website. Leave empty for normal admin uploads.", "fields": ("static_photo_path",)}),
         ("OPD and appointment", {"description": "Use short readable timing text. Detailed timing rows can also be managed in OPD timings.", "fields": ("opd_days_text", "opd_time_text", "appointment_enabled")}),
         ("Show on website", {"description": "Active doctors appear publicly. Featured doctors appear on the homepage.", "fields": ("is_featured", "is_active", "display_order")}),
@@ -91,7 +110,7 @@ class OPDTimingAdmin(admin.ModelAdmin):
     list_per_page = 50
     actions = (mark_active, mark_inactive)
     fieldsets = (
-        ("Timing entry", {"description": "Keep OPD timings current. Patients see active rows on the OPD timing page.", "fields": ("department", "doctor", "hospital_scope", "days", "start_time", "end_time", "room_or_location")}),
+        ("Timing entry", {"description": "Choose the hospital first and use only doctors and departments available there. Patients see active rows publicly.", "fields": ("hospital_scope", "department", "doctor", "days", "start_time", "end_time", "room_or_location")}),
         ("Admin note", {"description": "Internal schedule reference or staff note. This is not repeated in the public OPD table.", "fields": ("notes",)}),
         ("Show on website", {"description": "Turn off old rows instead of deleting if staff may need history.", "fields": ("is_active", "display_order")}),
         ("Admin timestamps", {"classes": ("collapse",), "fields": ("created_at", "updated_at")}),

@@ -5,7 +5,7 @@ from .validators import validate_image_file
 
 
 HOSPITAL_SCOPE_CHOICES = [
-    ("both", "Both hospitals"),
+    ("both", "Shared intentionally across both hospitals"),
     ("bkjh", "Bibi Kaulan Ji Hospital only"),
     ("miri", "Miri Piri Mission Hospital only"),
 ]
@@ -14,6 +14,13 @@ HOSPITAL_CODE_CHOICES = [
     ("bkjh", "Bibi Kaulan Ji Hospital"),
     ("miri", "Miri Piri Mission Hospital"),
 ]
+
+
+def scope_contains(container_scope, item_scope):
+    """Return whether a related record is available everywhere the item is published."""
+    container_hospitals = {"bkjh", "miri"} if container_scope == "both" else {container_scope}
+    item_hospitals = {"bkjh", "miri"} if item_scope == "both" else {item_scope}
+    return item_hospitals.issubset(container_hospitals)
 
 
 class TimeStampedModel(models.Model):
@@ -225,6 +232,24 @@ class HospitalProfile(models.Model):
 
     def __str__(self):
         return self.hospital_name
+
+    def clean(self):
+        if not self.is_active:
+            return
+        required = {
+            "address": self.address,
+            "call_phone": self.call_phone,
+            "google_maps_url": self.google_maps_url,
+        }
+        missing = [field.replace("_", " ") for field, value in required.items() if not value]
+        if missing:
+            raise ValidationError(
+                f"Active hospital profiles require: {', '.join(missing)}."
+            )
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
 
     @property
     def name(self):

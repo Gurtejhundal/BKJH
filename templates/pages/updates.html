@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-{% include "partials/page_header.html" with title="Health Updates" support_text="ਹਸਪਤਾਲ ਅੱਪਡੇਟ" intro="Health camp information, notices, and hospital updates published from admin." eyebrow="Updates" %}
+{% include "partials/page_header.html" with title="Health Updates" support_text="ਹਸਪਤਾਲ ਅੱਪਡੇਟ" intro="Health camp information, notices, and hospital updates." eyebrow="Updates" %}
 
 <section class="section section-surface">
   <div class="wrapper card-grid">
@@ -13,7 +13,7 @@
         <a class="text-link" href="{{ update.get_absolute_url }}">Read Update</a>
       </article>
     {% empty %}
-      {% include "partials/empty_state.html" with title="No updates published" message="Health camp updates and notices can be added from admin when available." %}
+      {% include "partials/empty_state.html" with title="No current updates" message="Please check again later for hospital news and health camp information." %}
     {% endfor %}
   </div>
 </section>

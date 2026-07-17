@@ -1,6 +1,7 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
-from apps.core.models import HOSPITAL_SCOPE_CHOICES
+from apps.core.models import HOSPITAL_CODE_CHOICES, scope_contains
 
 
 class AppointmentRequest(models.Model):
@@ -18,7 +19,7 @@ class AppointmentRequest(models.Model):
         (STATUS_CANCELLED, "Cancelled"),
     ]
 
-    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="bkjh")
+    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_CODE_CHOICES, default="bkjh")
 
     patient_name = models.CharField(max_length=140)
     phone = models.CharField(max_length=30)
@@ -51,3 +52,22 @@ class AppointmentRequest(models.Model):
 
     def __str__(self):
         return f"{self.patient_name} - {self.phone}"
+
+    def clean(self):
+        errors = {}
+        if self.department and not scope_contains(self.department.hospital_scope, self.hospital_scope):
+            errors["department"] = "This department is not available at the selected hospital."
+        if self.preferred_doctor and not scope_contains(self.preferred_doctor.hospital_scope, self.hospital_scope):
+            errors["preferred_doctor"] = "This doctor is not available at the selected hospital."
+        if (
+            self.preferred_doctor
+            and self.department
+            and self.preferred_doctor.department_id not in {None, self.department_id}
+        ):
+            errors["preferred_doctor"] = "The selected doctor belongs to a different department."
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)

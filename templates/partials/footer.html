@@ -4,7 +4,7 @@
     <section>
       <div class="footer-brand">
         {% if parent_landing %}
-          <span class="brand-monogram footer-monogram" aria-hidden="true">BKGH</span>
+          {% if site.logo %}<img src="{{ site.logo.url }}" alt="Bibi Kaulan Ji Hospitals Charitable Society logo">{% else %}<img src="{% static 'images/bkjh-logo.png' %}" alt="Bibi Kaulan Ji Hospitals Charitable Society logo">{% endif %}
         {% elif page_hospital %}
           {% if page_hospital.logo %}<img src="{{ page_hospital.logo.url }}" alt="{{ page_hospital.name }} logo">{% else %}<img src="{% static page_hospital.logo_static %}" alt="{{ page_hospital.name }} logo">{% endif %}
         {% elif site.logo %}
@@ -33,12 +33,13 @@
         <a href="#shared-services">Shared care promise</a>
         <a href="#locations">Locations</a>
       {% elif page_hospital %}
-        <a href="#miri-services">Services</a>
-        <a href="#miri-departments">Departments</a>
-        <a href="#miri-facilities">Facilities</a>
-        <a href="#miri-gallery">Gallery</a>
+        <a href="{% url 'core:miri_piri_hospital' %}#miri-services">Services</a>
+        <a href="{% url 'core:miri_piri_hospital' %}#miri-departments">Departments</a>
+        <a href="{% url 'core:miri_piri_hospital' %}#miri-doctors">Doctors</a>
+        <a href="{{ miri_appointment_url|default:'/appointment/?hospital=miri' }}">Request Appointment</a>
         <a href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Location</a>
-        <a href="{{ page_hospital.instagram_url }}" target="_blank" rel="noopener">Instagram</a>
+        {% if page_hospital.instagram_url %}<a href="{{ page_hospital.instagram_url }}" target="_blank" rel="noopener">Instagram</a>{% endif %}
+        <a href="{% url 'core:home' %}">BKGH Hospitals</a>
         <a href="{% url 'core:bibi_kaulan_hospital' %}">Bibi Kaulan Ji Hospital</a>
       {% else %}
         <a href="{% url 'hospital:opd_timing' %}">OPD Timing</a>
@@ -58,7 +59,7 @@
         {% if site.google_maps_url %}<a href="{{ site.google_maps_url }}" rel="noopener" target="_blank">Bibi Kaulan Ji Hospital location</a>{% endif %}
         <a href="{{ miri_profile.maps_url }}" rel="noopener" target="_blank">Miri Piri Mission Hospital location</a>
       {% elif page_hospital %}
-        <a href="{{ miri_tel }}">Main: {{ page_hospital.phone }}</a>
+        <a href="{{ miri_tel }}">Call: {{ page_hospital.call_phone|default:page_hospital.phone }}</a>
         <a href="{{ page_hospital.maps_url }}" rel="noopener" target="_blank">Open Google Maps</a>
         <a href="{{ page_hospital.instagram_url }}" rel="noopener" target="_blank">Instagram</a>
       {% else %}

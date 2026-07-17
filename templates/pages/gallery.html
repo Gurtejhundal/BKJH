@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-{% include "partials/page_header.html" with title="Gallery" support_text="ਹਸਪਤਾਲ ਗੈਲਰੀ" intro="Approved hospital photos organized by category." eyebrow="Hospital photos" %}
+{% include "partials/page_header.html" with title="Gallery" support_text="ਹਸਪਤਾਲ ਗੈਲਰੀ" intro="A look inside hospital patient and care areas." eyebrow="Hospital photos" %}
 
 <section class="section section-tight">
   <div class="wrapper filter-links" aria-label="Gallery categories">
@@ -28,7 +28,7 @@
         {% endfor %}
       </div>
     {% else %}
-      {% include "partials/empty_state.html" with title="Gallery being prepared" message="Approved hospital photos will appear here." %}
+      {% include "partials/empty_state.html" with title="No gallery photos available" message="Please check again later for hospital photos and updates." %}
     {% endif %}
   </div>
 </section>

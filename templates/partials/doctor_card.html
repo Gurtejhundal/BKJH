@@ -1,5 +1,5 @@
 {% load static %}
-{% if doctor.appointment_enabled %}<a class="doctor-card card-link" href="{% url 'appointments:appointment' %}">{% else %}<article class="doctor-card">{% endif %}
+{% if doctor.appointment_enabled %}<a class="doctor-card card-link" href="{% if doctor_context == 'miri' %}{{ miri_appointment_url }}{% else %}{% url 'appointments:appointment' %}{% endif %}">{% else %}<article class="doctor-card">{% endif %}
   {% if doctor.static_photo_path %}
     <img src="{% static doctor.static_photo_path %}" alt="Photo of {{ doctor.full_name }}" loading="lazy" width="240" height="240">
   {% elif doctor.photo %}
@@ -9,6 +9,7 @@
   {% endif %}
   <div>
     <h3>{{ doctor.full_name }}</h3>
+    {% if doctor.hospital_scope == "both" %}<span class="doctor-availability">Available at both BKGH hospitals</span>{% elif doctor_context == "miri" %}<span class="doctor-availability">Miri Piri Mission Hospital</span>{% endif %}
     {% if doctor.qualification %}<p class="muted">{{ doctor.qualification }}</p>{% endif %}
     {% if doctor.specialization %}<p>{{ doctor.specialization }}</p>{% endif %}
     {% if doctor.department %}<p class="meta">{{ doctor.department.name }}</p>{% endif %}
