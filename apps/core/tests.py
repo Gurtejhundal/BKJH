@@ -1,5 +1,7 @@
+import os
 from unittest.mock import patch
 
+from django.contrib.auth import authenticate, get_user_model
 from django.core.exceptions import ValidationError
 from django.core.management import call_command
 from django.test import TestCase
@@ -191,3 +193,15 @@ class PublicRouteTests(TestCase):
             image.static_image_path,
             "images/hospital/bkjh-gallery-reception.jpg",
         )
+
+    def test_admin_bootstrap_uses_environment_credentials(self):
+        with patch.dict(
+            os.environ,
+            {"ADMIN_USERNAME": "cms-admin", "ADMIN_PASSWORD": "test-bootstrap-password"},
+        ):
+            call_command("bootstrap_admin", verbosity=0)
+
+        user = get_user_model().objects.get(username="cms-admin")
+        self.assertTrue(user.is_staff)
+        self.assertTrue(user.is_superuser)
+        self.assertIsNotNone(authenticate(username="cms-admin", password="test-bootstrap-password"))
