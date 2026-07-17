@@ -13,7 +13,7 @@ def site_context(request):
         "@context": "https://schema.org",
         "@type": "Hospital",
         "name": site.hospital_name,
-        "url": origin + reverse("core:home"),
+        "url": origin + reverse("core:bibi_kaulan_hospital"),
     }
     if site.address:
         schema["address"] = {

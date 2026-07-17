@@ -1,13 +1,23 @@
 {% load site_extras %}
-<section class="contact-strip">
+<section class="contact-strip" id="{% if parent_landing %}parent-contact{% endif %}">
   <div class="wrapper contact-strip__inner">
     <div>
-      <h2>Need help before visiting?</h2>
-      <p class="punjabi-support">ਆਉਣ ਤੋਂ ਪਹਿਲਾਂ ਮਦਦ ਚਾਹੀਦੀ ਹੈ?</p>
-      <p>Call the hospital, check location, or contact staff before visiting.</p>
+      {% if parent_landing %}
+        <h2>Not sure which hospital to choose?</h2>
+        <p class="punjabi-support">ਆਉਣ ਤੋਂ ਪਹਿਲਾਂ ਸਹੀ ਹਸਪਤਾਲ ਬਾਰੇ ਮਦਦ ਲਵੋ</p>
+        <p>Call the hospital team for guidance before visiting.</p>
+      {% else %}
+        <h2>Need help before visiting?</h2>
+        <p class="punjabi-support">ਆਉਣ ਤੋਂ ਪਹਿਲਾਂ ਮਦਦ ਚਾਹੀਦੀ ਹੈ?</p>
+        <p>Call the hospital, check location, or contact staff before visiting.</p>
+      {% endif %}
     </div>
     <div class="contact-strip__actions">
-      {% if page_hospital %}
+      {% if parent_landing %}
+        {% if site.main_phone %}<a class="btn btn-primary" href="tel:{{ site.main_phone|tel }}">Call Helpdesk</a>{% endif %}
+        <a class="btn btn-secondary" href="{% url 'core:bibi_kaulan_hospital' %}">View Bibi Kaulan Ji Hospital</a>
+        <a class="btn btn-secondary" href="{% url 'core:miri_piri_hospital' %}">View Miri Piri Mission Hospital</a>
+      {% elif page_hospital %}
         <a class="btn btn-primary" href="{{ miri_tel }}">Call Hospital</a>
         <a class="btn btn-secondary" href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Open Location</a>
       {% else %}

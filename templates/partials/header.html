@@ -1,8 +1,10 @@
 {% load static site_extras %}
 <header class="site-header">
   <div class="wrapper header-inner">
-    <a class="brand" href="{% if page_hospital %}{% url 'core:miri_piri_hospital' %}{% else %}{% url 'core:home' %}{% endif %}" aria-label="{% if page_hospital %}{{ page_hospital.name }}{% else %}{{ site.hospital_name }}{% endif %} home">
-      {% if page_hospital %}
+    <a class="brand" href="{% if parent_landing %}{% url 'core:home' %}{% elif page_hospital %}{% url 'core:miri_piri_hospital' %}{% else %}{% url 'core:bibi_kaulan_hospital' %}{% endif %}" aria-label="{% if parent_landing %}BKGH Hospitals{% elif page_hospital %}{{ page_hospital.name }}{% else %}{{ site.hospital_name }}{% endif %} home">
+      {% if parent_landing %}
+        <span class="brand-monogram" aria-hidden="true">BKGH</span>
+      {% elif page_hospital %}
         <img src="{% static page_hospital.logo_static %}" alt="{{ page_hospital.name }} logo">
       {% elif site.logo %}
         <img src="{{ site.logo.url }}" alt="{{ site.hospital_name }} logo">
@@ -10,8 +12,8 @@
         <img src="{% static 'images/bkjh-logo.png' %}" alt="{{ site.hospital_name }} logo">
       {% endif %}
       <span>
-        <strong>{% if page_hospital %}{{ page_hospital.name }}{% else %}{{ site.hospital_name }}{% endif %}</strong>
-        <span class="brand-punjabi">{% if page_hospital %}{{ page_hospital.punjabi_name }}{% else %}ਬੀਬੀ ਕੌਲਾਂ ਜੀ ਹਸਪਤਾਲ{% endif %}</span>
+        <strong>{% if parent_landing %}BKGH Hospitals{% elif page_hospital %}{{ page_hospital.name }}{% else %}{{ site.hospital_name }}{% endif %}</strong>
+        <span class="brand-punjabi">{% if parent_landing %}ਬੀਕੇਜੀਐਚ ਹਸਪਤਾਲ{% elif page_hospital %}{{ page_hospital.punjabi_name }}{% else %}ਬੀਬੀ ਕੌਲਾਂ ਜੀ ਹਸਪਤਾਲ{% endif %}</span>
       </span>
     </a>
     <button class="menu-button" type="button" data-menu-toggle aria-expanded="false" aria-controls="main-nav">
@@ -19,15 +21,20 @@
       <span>Menu</span>
     </button>
     <nav id="main-nav" class="main-nav" data-main-nav aria-label="Main navigation">
-      {% if page_hospital %}
+      {% if parent_landing %}
+        <a class="is-active" href="#hospitals">Hospitals</a>
+        <a href="#shared-services">Services</a>
+        <a href="#about-network">About</a>
+        <a href="#parent-contact">Contact</a>
+      {% elif page_hospital %}
         <a class="is-active" href="{% url 'core:miri_piri_hospital' %}">Home</a>
         <a href="#miri-services">Services</a>
         <a href="#miri-departments">Departments</a>
         <a href="#miri-facilities">Facilities</a>
         <a href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Location</a>
-        <a href="{% url 'core:home' %}">Bibi Kaulan Ji Hospital</a>
+        <a href="{% url 'core:bibi_kaulan_hospital' %}">Bibi Kaulan Ji Hospital</a>
       {% else %}
-        <a class="{% if request.resolver_match.url_name == 'home' %}is-active{% endif %}" href="{% url 'core:home' %}">Home</a>
+        <a class="{% if request.resolver_match.url_name == 'bibi_kaulan_hospital' %}is-active{% endif %}" href="{% url 'core:bibi_kaulan_hospital' %}">Home</a>
         <a class="{% if request.resolver_match.url_name == 'services' %}is-active{% endif %}" href="{% url 'hospital:services' %}">Services</a>
         <a class="{% if request.resolver_match.url_name == 'doctors' %}is-active{% endif %}" href="{% url 'hospital:doctors' %}">Doctors</a>
         <a class="{% if request.resolver_match.url_name == 'opd_timing' %}is-active{% endif %}" href="{% url 'hospital:opd_timing' %}">Timings</a>
@@ -37,7 +44,9 @@
       {% endif %}
     </nav>
     <div class="header-actions">
-      {% if page_hospital %}
+      {% if parent_landing %}
+        {% if site.main_phone %}<a class="btn btn-primary header-emergency" href="tel:{{ site.main_phone|tel }}"><span>Call Helpdesk</span><strong>{{ site.main_phone }}</strong></a>{% endif %}
+      {% elif page_hospital %}
         <a class="btn btn-primary header-emergency" href="{{ miri_tel }}"><span>Call Hospital</span><strong>{{ page_hospital.phone }}</strong></a>
       {% elif site.emergency_phone %}
         <a class="btn btn-emergency header-emergency" href="tel:{{ site.emergency_phone|tel }}"><span>Emergency</span><strong>{{ site.emergency_phone }}</strong></a>

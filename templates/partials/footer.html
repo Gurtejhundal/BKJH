@@ -3,29 +3,42 @@
   <div class="wrapper footer-grid">
     <section>
       <div class="footer-brand">
-        {% if page_hospital %}
+        {% if parent_landing %}
+          <span class="brand-monogram footer-monogram" aria-hidden="true">BKGH</span>
+        {% elif page_hospital %}
           <img src="{% static page_hospital.logo_static %}" alt="{{ page_hospital.name }} logo">
         {% elif site.logo %}
           <img src="{{ site.logo.url }}" alt="{{ site.hospital_name }} logo">
         {% else %}
           <img src="{% static 'images/bkjh-logo.png' %}" alt="{{ site.hospital_name }} logo">
         {% endif %}
-        <h2>{% if page_hospital %}{{ page_hospital.name }}{% else %}{{ site.hospital_name }}{% endif %}</h2>
+        <h2>{% if parent_landing %}BKGH Hospitals{% elif page_hospital %}{{ page_hospital.name }}{% else %}{{ site.hospital_name }}{% endif %}</h2>
       </div>
-      <p class="punjabi-support">{% if page_hospital %}{{ page_hospital.punjabi_name }}{% else %}ਬੀਬੀ ਕੌਲਾਂ ਜੀ ਹਸਪਤਾਲ{% endif %}</p>
-      <p>{% if page_hospital %}{{ page_hospital.tagline }}{% else %}{{ site.short_tagline }}{% endif %}</p>
-      {% if page_hospital %}<p>{{ page_hospital.address }}</p>{% elif site.address %}<p>{{ site.address }}</p>{% endif %}
+      <p class="punjabi-support">{% if parent_landing %}ਬੀਕੇਜੀਐਚ ਹਸਪਤਾਲ{% elif page_hospital %}{{ page_hospital.punjabi_name }}{% else %}ਬੀਬੀ ਕੌਲਾਂ ਜੀ ਹਸਪਤਾਲ{% endif %}</p>
+      <p>{% if parent_landing %}A parent healthcare gateway for Bibi Kaulan Ji Hospital and Miri Piri Mission Hospital.{% elif page_hospital %}{{ page_hospital.tagline }}{% else %}{{ site.short_tagline }}{% endif %}</p>
+      {% if parent_landing %}
+        <p>Serving families across Fatehgarh Churian, Amritsar, and nearby areas.</p>
+      {% elif page_hospital %}
+        <p>{{ page_hospital.address }}</p>
+      {% elif site.address %}
+        <p>{{ site.address }}</p>
+      {% endif %}
     </section>
     <section>
-      <h2>Patient links</h2>
-      <p class="punjabi-support">ਮਰੀਜ਼ਾਂ ਲਈ ਲਿੰਕ</p>
-      {% if page_hospital %}
+      <h2>{% if parent_landing %}Hospitals{% else %}Patient links{% endif %}</h2>
+      <p class="punjabi-support">{% if parent_landing %}ਹਸਪਤਾਲ ਚੁਣੋ{% else %}ਮਰੀਜ਼ਾਂ ਲਈ ਲਿੰਕ{% endif %}</p>
+      {% if parent_landing %}
+        <a href="{% url 'core:bibi_kaulan_hospital' %}">Bibi Kaulan Ji Hospital</a>
+        <a href="{% url 'core:miri_piri_hospital' %}">Miri Piri Mission Hospital</a>
+        <a href="#shared-services">Shared care promise</a>
+        <a href="#locations">Locations</a>
+      {% elif page_hospital %}
         <a href="#miri-services">Services</a>
         <a href="#miri-departments">Departments</a>
         <a href="#miri-facilities">Facilities</a>
         <a href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Location</a>
         <a href="{{ page_hospital.instagram_url }}" target="_blank" rel="noopener">Instagram</a>
-        <a href="{% url 'core:home' %}">Bibi Kaulan Ji Hospital</a>
+        <a href="{% url 'core:bibi_kaulan_hospital' %}">Bibi Kaulan Ji Hospital</a>
       {% else %}
         <a href="{% url 'hospital:opd_timing' %}">OPD Timing</a>
         <a href="{% url 'hospital:doctors' %}">Doctors</a>
@@ -39,7 +52,11 @@
     <section>
       <h2>Contact</h2>
       <p class="punjabi-support">ਸੰਪਰਕ</p>
-      {% if page_hospital %}
+      {% if parent_landing %}
+        {% if site.main_phone %}<a href="tel:{{ site.main_phone|tel }}">Helpdesk: {{ site.main_phone }}</a>{% endif %}
+        {% if site.google_maps_url %}<a href="{{ site.google_maps_url }}" rel="noopener" target="_blank">Bibi Kaulan Ji Hospital location</a>{% endif %}
+        <a href="{{ miri_profile.maps_url }}" rel="noopener" target="_blank">Miri Piri Mission Hospital location</a>
+      {% elif page_hospital %}
         <a href="{{ miri_tel }}">Main: {{ page_hospital.phone }}</a>
         <a href="{{ page_hospital.maps_url }}" rel="noopener" target="_blank">Open Google Maps</a>
         <a href="{{ page_hospital.instagram_url }}" rel="noopener" target="_blank">Instagram</a>
@@ -53,7 +70,7 @@
   </div>
   <div class="wrapper footer-bottom">
     <div class="footer-legal">
-      <span>&copy; {% now "Y" %} {% if page_hospital %}{{ page_hospital.name }}{% else %}{{ site.hospital_name }}{% endif %}.</span>
+      <span>&copy; {% now "Y" %} {% if parent_landing %}BKGH Hospitals{% elif page_hospital %}{{ page_hospital.name }}{% else %}{{ site.hospital_name }}{% endif %}.</span>
       <span class="footer-legal__links">
         <a href="{% url 'core:privacy' %}">Privacy</a>
         <a href="{% url 'core:terms' %}">Terms</a>

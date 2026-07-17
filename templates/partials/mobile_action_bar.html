@@ -1,10 +1,15 @@
 {% load site_extras %}
 <nav class="mobile-action-bar" aria-label="Quick patient actions">
-  {% if page_hospital %}
+  {% if parent_landing %}
+    <a href="#hospitals">Hospitals</a>
+    {% if site.main_phone %}<a href="tel:{{ site.main_phone|tel }}">Helpdesk</a>{% endif %}
+    <a href="{% url 'core:bibi_kaulan_hospital' %}">BKJH</a>
+    <a class="danger" href="{% url 'core:miri_piri_hospital' %}">Miri Piri</a>
+  {% elif page_hospital %}
     <a href="{{ miri_tel }}">Call</a>
     <a href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Location</a>
     <a href="{{ page_hospital.instagram_url }}" target="_blank" rel="noopener">Instagram</a>
-    <a class="danger" href="{% url 'core:home' %}">BKJH</a>
+    <a class="danger" href="{% url 'core:bibi_kaulan_hospital' %}">BKJH</a>
   {% else %}
     {% if site.main_phone %}<a href="tel:{{ site.main_phone|tel }}">Call</a>{% else %}<a href="{% url 'hospital:contact' %}">Call</a>{% endif %}
     <a href="{% url 'appointments:appointment' %}">Appointment</a>

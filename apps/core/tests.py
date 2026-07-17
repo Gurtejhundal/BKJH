@@ -8,7 +8,15 @@ from .models import PatientReview
 
 class PublicRouteTests(TestCase):
     def test_core_pages_render(self):
-        for name in ["core:home", "core:miri_piri_hospital", "core:about", "core:privacy", "core:terms", "core:robots_txt"]:
+        for name in [
+            "core:home",
+            "core:bibi_kaulan_hospital",
+            "core:miri_piri_hospital",
+            "core:about",
+            "core:privacy",
+            "core:terms",
+            "core:robots_txt",
+        ]:
             with self.subTest(name=name):
                 response = self.client.get(reverse(name))
                 self.assertEqual(response.status_code, 200)
@@ -26,7 +34,7 @@ class PublicRouteTests(TestCase):
             is_active=True,
             is_featured=True,
         )
-        response = self.client.get(reverse("core:home"))
+        response = self.client.get(reverse("core:bibi_kaulan_hospital"))
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, "Private review text")
 
@@ -60,7 +68,7 @@ class PublicRouteTests(TestCase):
             hospital_scope="both",
         )
 
-        bkjh_response = self.client.get(reverse("core:home"))
+        bkjh_response = self.client.get(reverse("core:bibi_kaulan_hospital"))
         miri_response = self.client.get(reverse("core:miri_piri_hospital"))
 
         self.assertIn(shared_department, bkjh_response.context["departments"])

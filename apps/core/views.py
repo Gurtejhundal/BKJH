@@ -74,6 +74,52 @@ MIRI_PIRI_PROFILE = {
 
 def home(request):
     site = SiteSetting.get_solo()
+    bibi_url = reverse("core:bibi_kaulan_hospital")
+    miri_url = reverse("core:miri_piri_hospital")
+    schema = {
+        "@context": "https://schema.org",
+        "@type": "MedicalOrganization",
+        "name": "BKGH Hospitals",
+        "url": request.build_absolute_uri(reverse("core:home")),
+        "description": "BKGH Hospitals connects patients with Bibi Kaulan Ji Hospital and Miri Piri Mission Hospital.",
+        "department": [
+            {
+                "@type": "Hospital",
+                "name": site.hospital_name,
+                "url": request.build_absolute_uri(bibi_url),
+            },
+            {
+                "@type": "Hospital",
+                "name": MIRI_PIRI_PROFILE["name"],
+                "url": request.build_absolute_uri(miri_url),
+            },
+        ],
+    }
+    if site.main_phone:
+        schema["telephone"] = site.main_phone
+    return render(
+        request,
+        "pages/parent_landing.html",
+        {
+            "seo": seo(
+                "BKGH Hospitals | Bibi Kaulan Ji Hospital & Miri Piri Mission Hospital",
+                "BKGH Hospitals connects patients with Bibi Kaulan Ji Hospital and Miri Piri Mission Hospital for OPD timings, doctors, emergency support, services, and location details.",
+                request.path,
+            ),
+            "parent_landing": True,
+            "hospital_schema": json.dumps(schema),
+            "bibi_url": bibi_url,
+            "miri_url": miri_url,
+            "bibi_tel": tel_url(site.main_phone),
+            "bibi_emergency_tel": tel_url(site.emergency_phone),
+            "miri_tel": tel_url(MIRI_PIRI_PROFILE["phone"]),
+            "miri_profile": MIRI_PIRI_PROFILE,
+        },
+    )
+
+
+def bibi_kaulan_hospital(request):
+    site = SiteSetting.get_solo()
     bkjh_scope = hospital_scope_filter("bkjh")
     departments = Department.objects.filter(bkjh_scope, is_active=True, is_featured=True)[:6]
     doctors = Doctor.objects.select_related("department").filter(bkjh_scope, is_active=True).order_by("-is_featured", "display_order", "full_name")[:4]
@@ -203,13 +249,13 @@ def miri_piri_hospital(request):
             "quick_actions": quick_actions,
             "patient_support": patient_support,
             "miri_tel": miri_tel,
-            "bkjh_url": reverse("core:home"),
+            "bkjh_url": reverse("core:bibi_kaulan_hospital"),
         },
     )
 
 
 def hospital_schema(request, site):
-    url = request.build_absolute_uri(reverse("core:home"))
+    url = request.build_absolute_uri(reverse("core:bibi_kaulan_hospital"))
     data = {
         "@context": "https://schema.org",
         "@type": "Hospital",

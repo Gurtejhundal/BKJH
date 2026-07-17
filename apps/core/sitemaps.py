@@ -11,6 +11,7 @@ class StaticViewSitemap(Sitemap):
     def items(self):
         return [
             "core:home",
+            "core:bibi_kaulan_hospital",
             "core:miri_piri_hospital",
             "core:about",
             "hospital:departments",
