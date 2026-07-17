@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
@@ -122,3 +124,14 @@ class PublicRouteTests(TestCase):
         response = self.client.get(reverse("core:bibi_kaulan_hospital"))
 
         self.assertContains(response, "/static/images/hospital/bkjh-gallery-reception.jpg")
+
+    @patch("apps.core.management.commands.seed_bkjh_content.IS_VERCEL", True)
+    def test_vercel_seed_uses_static_gallery_paths_without_media_writes(self):
+        call_command("seed_bkjh_content", verbosity=0)
+
+        image = GalleryImage.objects.get(title="Reception")
+        self.assertFalse(image.image)
+        self.assertEqual(
+            image.static_image_path,
+            "images/hospital/bkjh-gallery-reception.jpg",
+        )

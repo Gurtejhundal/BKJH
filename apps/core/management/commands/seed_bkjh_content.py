@@ -488,7 +488,7 @@ class Command(BaseCommand):
                     "display_order": order,
                 },
             )
-            if not image.image:
+            if not IS_VERCEL and not image.image:
                 photo_path = BASE_DIR / "static" / "images" / "hospital" / filename
                 if photo_path.exists():
                     with photo_path.open("rb") as handle:
