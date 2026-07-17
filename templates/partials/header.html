@@ -5,7 +5,7 @@
       {% if parent_landing %}
         <span class="brand-monogram" aria-hidden="true">BKGH</span>
       {% elif page_hospital %}
-        <img src="{% static page_hospital.logo_static %}" alt="{{ page_hospital.name }} logo">
+        {% if page_hospital.logo %}<img src="{{ page_hospital.logo.url }}" alt="{{ page_hospital.name }} logo">{% else %}<img src="{% static page_hospital.logo_static %}" alt="{{ page_hospital.name }} logo">{% endif %}
       {% elif site.logo %}
         <img src="{{ site.logo.url }}" alt="{{ site.hospital_name }} logo">
       {% else %}
@@ -31,6 +31,7 @@
         <a href="#miri-services">Services</a>
         <a href="#miri-departments">Departments</a>
         <a href="#miri-facilities">Facilities</a>
+        <a href="#miri-gallery">Gallery</a>
         <a href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Location</a>
         <a href="{% url 'core:bibi_kaulan_hospital' %}">Bibi Kaulan Ji Hospital</a>
       {% else %}
@@ -45,7 +46,7 @@
     </nav>
     <div class="header-actions">
       {% if parent_landing %}
-        {% if site.main_phone %}<a class="btn btn-primary header-emergency" href="tel:{{ site.main_phone|tel }}"><span>Call Helpdesk</span><strong>{{ site.main_phone }}</strong></a>{% endif %}
+        {% if parent_settings.helpdesk_phone %}<a class="btn btn-primary header-emergency" href="tel:{{ parent_settings.helpdesk_phone|tel }}"><span>Call Helpdesk</span><strong>{{ parent_settings.helpdesk_phone }}</strong></a>{% elif site.call_phone %}<a class="btn btn-primary header-emergency" href="tel:{{ site.call_phone|tel }}"><span>Call Helpdesk</span><strong>{{ site.call_phone }}</strong></a>{% endif %}
       {% elif page_hospital %}
         <a class="btn btn-primary header-emergency" href="{{ miri_tel }}"><span>Call Hospital</span><strong>{{ page_hospital.phone }}</strong></a>
       {% elif site.emergency_phone %}

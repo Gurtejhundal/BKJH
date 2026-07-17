@@ -34,8 +34,8 @@ def departments(request):
 
 def department_detail(request, slug):
     department = get_object_or_404(Department.objects.filter(hospital_scope_filter("bkjh")), slug=slug, is_active=True)
-    doctors = department.doctors.filter(is_active=True)
-    timings = department.opd_timings.select_related("doctor").filter(is_active=True)
+    doctors = department.doctors.filter(hospital_scope_filter("bkjh"), is_active=True)
+    timings = department.opd_timings.select_related("doctor").filter(hospital_scope_filter("bkjh"), is_active=True)
     title = department.seo_title or f"{department.name} Department | Bibi Kaulan Ji Hospital"
     description = department.seo_description or f"Learn about the {department.name} department, available doctors, OPD timing, and appointment support at Bibi Kaulan Ji Hospital."
     return render(
@@ -113,35 +113,39 @@ def facilities(request):
 
 
 def emergency(request):
-    info = EmergencyInfo.objects.filter(is_active=True).first()
+    info = EmergencyInfo.objects.filter(hospital_scope_filter("bkjh"), is_active=True).first()
     return render(
         request,
         "pages/emergency.html",
         {
             "seo": seo("Emergency Service | Bibi Kaulan Ji Hospital", "Find emergency contact information, hospital location, and ambulance support details.", request.path),
             "emergency": info,
-            "ambulance": AmbulanceInfo.objects.filter(is_active=True).first(),
+            "ambulance": AmbulanceInfo.objects.filter(hospital_scope_filter("bkjh"), is_active=True).first(),
             "timings": OPDTiming.objects.select_related("department", "doctor").filter(hospital_scope_filter("bkjh"), is_active=True)[:3],
         },
     )
 
 
 def ambulance(request):
-    info = AmbulanceInfo.objects.filter(is_active=True).first()
+    info = AmbulanceInfo.objects.filter(hospital_scope_filter("bkjh"), is_active=True).first()
     return render(
         request,
         "pages/ambulance.html",
         {
             "seo": seo("Ambulance Service | Bibi Kaulan Ji Hospital", "Find ambulance contact information, availability notes, service area, and directions.", request.path),
             "ambulance": info,
-            "emergency": EmergencyInfo.objects.filter(is_active=True).first(),
+            "emergency": EmergencyInfo.objects.filter(hospital_scope_filter("bkjh"), is_active=True).first(),
         },
     )
 
 
 def gallery(request):
     category_slug = request.GET.get("category")
-    images = GalleryImage.objects.select_related("category").filter(is_active=True, category__is_active=True)
+    images = GalleryImage.objects.select_related("category").filter(
+        hospital_scope_filter("bkjh"),
+        is_active=True,
+        category__is_active=True,
+    )
     if category_slug:
         images = images.filter(category__slug=category_slug)
     return render(
@@ -149,7 +153,7 @@ def gallery(request):
         "pages/gallery.html",
         {
             "seo": seo("Gallery | Bibi Kaulan Ji Hospital", "View hospital photos, facilities, camps, and real gallery updates from Bibi Kaulan Ji Hospital.", request.path),
-            "categories": GalleryCategory.objects.filter(is_active=True),
+            "categories": GalleryCategory.objects.filter(hospital_scope_filter("bkjh"), is_active=True),
             "images": images,
             "selected_category": category_slug,
         },
@@ -175,13 +179,13 @@ def updates(request):
         "pages/updates.html",
         {
             "seo": seo("Health Updates | Bibi Kaulan Ji Hospital", "Read hospital updates, health camp information, and patient notices from Bibi Kaulan Ji Hospital.", request.path),
-            "updates": HealthCampUpdate.objects.filter(is_active=True),
+            "updates": HealthCampUpdate.objects.filter(hospital_scope_filter("bkjh"), is_active=True),
         },
     )
 
 
 def update_detail(request, slug):
-    update = get_object_or_404(HealthCampUpdate, slug=slug, is_active=True)
+    update = get_object_or_404(HealthCampUpdate.objects.filter(hospital_scope_filter("bkjh")), slug=slug, is_active=True)
     title = update.seo_title or f"{update.title} | Bibi Kaulan Ji Hospital"
     description = update.seo_description or update.short_description[:300]
     return render(

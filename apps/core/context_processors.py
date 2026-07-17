@@ -3,11 +3,12 @@ import json
 from django.conf import settings
 from django.urls import reverse
 
-from .models import SiteSetting
+from .models import HospitalProfile, ParentSiteSetting
 
 
 def site_context(request):
-    site = SiteSetting.get_solo()
+    site = HospitalProfile.get_by_code("bkjh")
+    parent_settings = ParentSiteSetting.get_solo()
     origin = getattr(settings, "SITE_URL", "") or request.build_absolute_uri("/").rstrip("/")
     schema = {
         "@context": "https://schema.org",
@@ -34,7 +35,8 @@ def site_context(request):
         schema["sameAs"] = [site.google_maps_url]
     return {
         "site": site,
-        "primary_phone": site.main_phone or site.emergency_phone,
+        "parent_settings": parent_settings,
+        "primary_phone": site.call_phone or site.main_phone or site.emergency_phone,
         "canonical_origin": origin,
         "site_json_ld": json.dumps(schema),
     }

@@ -2,15 +2,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 
-from apps.core.models import PublishedModel, SEOMixin, TimeStampedModel
+from apps.core.models import HOSPITAL_SCOPE_CHOICES, PublishedModel, SEOMixin, TimeStampedModel
 from apps.core.validators import validate_image_file
-
-
-HOSPITAL_SCOPE_CHOICES = [
-    ("both", "Both hospitals"),
-    ("bkjh", "Bibi Kaulan Ji Hospital only"),
-    ("miri", "Miri Piri Mission Hospital only"),
-]
 
 
 def unique_slug(instance, source_value):
@@ -31,11 +24,6 @@ class Department(PublishedModel, SEOMixin):
     icon = models.CharField(max_length=80, blank=True, help_text="Optional short icon label or CSS icon name.")
     short_description = models.TextField()
     detailed_description = models.TextField(blank=True)
-    image = models.ImageField(
-        upload_to="departments/%Y/%m/",
-        blank=True,
-        validators=[validate_image_file],
-    )
     services_list = models.TextField(blank=True, help_text="One service per line.")
     is_featured = models.BooleanField(default=False)
     hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="both")
@@ -63,6 +51,11 @@ class Doctor(PublishedModel):
     full_name = models.CharField(max_length=160)
     slug = models.SlugField(unique=True, blank=True)
     photo = models.ImageField(upload_to="doctors/%Y/%m/", blank=True, validators=[validate_image_file])
+    static_photo_path = models.CharField(
+        max_length=220,
+        blank=True,
+        help_text="Built-in photo path used for approved deployed doctor photos.",
+    )
     qualification = models.CharField(max_length=180, blank=True)
     specialization = models.CharField(max_length=160, blank=True)
     experience_years = models.PositiveIntegerField(blank=True, null=True)
@@ -121,7 +114,6 @@ class Service(PublishedModel, SEOMixin):
     short_description = models.TextField()
     detailed_description = models.TextField(blank=True)
     icon = models.CharField(max_length=80, blank=True)
-    image = models.ImageField(upload_to="services/%Y/%m/", blank=True, validators=[validate_image_file])
     is_featured = models.BooleanField(default=False)
     hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="both")
 
@@ -143,7 +135,6 @@ class Facility(PublishedModel, SEOMixin):
     slug = models.SlugField(unique=True, blank=True)
     short_description = models.TextField()
     detailed_description = models.TextField(blank=True)
-    image = models.ImageField(upload_to="facilities/%Y/%m/", blank=True, validators=[validate_image_file])
     is_featured = models.BooleanField(default=False)
     hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="both")
 
@@ -167,6 +158,7 @@ class HealthCampUpdate(PublishedModel, SEOMixin):
     detailed_description = models.TextField(blank=True)
     date = models.DateField()
     image = models.ImageField(upload_to="updates/%Y/%m/", blank=True, validators=[validate_image_file])
+    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="bkjh")
 
     class Meta(PublishedModel.Meta):
         verbose_name = "Health camp update"
@@ -190,6 +182,7 @@ class EmergencyInfo(TimeStampedModel):
     availability_text = models.CharField(max_length=160, blank=True)
     description = models.TextField(blank=True)
     instructions = models.TextField(blank=True)
+    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="bkjh")
     is_active = models.BooleanField(default=True)
 
     class Meta:
@@ -206,6 +199,7 @@ class AmbulanceInfo(TimeStampedModel):
     availability_text = models.CharField(max_length=160, blank=True)
     service_area = models.CharField(max_length=180, blank=True)
     description = models.TextField(blank=True)
+    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="bkjh")
     is_active = models.BooleanField(default=True)
 
     class Meta:

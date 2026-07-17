@@ -19,7 +19,7 @@ from apps.gallery.hospital.models import (
     Service,
 )
 
-from .models import Notice, PatientReview, SiteSetting
+from .models import HospitalProfile, Notice, ParentSiteSetting, PatientReview
 
 
 def seo(title, description, path="/", og_image="images/og/default-hospital.svg", og_image_url="", robots="index,follow"):
@@ -40,40 +40,31 @@ def tel_url(phone):
     return f"tel:{cleaned}"
 
 
-def active_notices():
+def active_notices(hospital_key="bkjh"):
     today = timezone.localdate()
-    return Notice.objects.filter(is_active=True).filter(
+    return Notice.objects.filter(hospital_scope_filter(hospital_key), is_active=True).filter(
         Q(start_date__isnull=True) | Q(start_date__lte=today),
         Q(end_date__isnull=True) | Q(end_date__gte=today),
     )
 
 
-def featured_reviews(limit=3):
-    return PatientReview.objects.filter(is_active=True, is_featured=True, consent_confirmed=True)[:limit]
+def featured_reviews(hospital_key="bkjh", limit=3):
+    return PatientReview.objects.filter(
+        hospital_scope_filter(hospital_key),
+        is_active=True,
+        is_featured=True,
+        consent_confirmed=True,
+    )[:limit]
 
 
 def hospital_scope_filter(hospital_key):
     return Q(hospital_scope="both") | Q(hospital_scope=hospital_key)
 
 
-MIRI_PIRI_PROFILE = {
-    "name": "Miri Piri Mission Hospital",
-    "punjabi_name": "ਮੀਰੀ ਪੀਰੀ ਮਿਸ਼ਨ ਹਸਪਤਾਲ",
-    "tagline": "OPD and critical care support in Amritsar.",
-    "address": "Opposite Namdhari Kanda, Amritsar-Tarn Taran Road, Antaryami Colony, Amritsar-143001, Punjab",
-    "phone": "+91 98558 21107",
-    "opd_hours": "OPD 9:00 AM - 5:00 PM",
-    "emergency_hours": "Emergency support listed as available 24x7",
-    "maps_url": "https://maps.app.goo.gl/h1oCCZ2XJcF7rKy36",
-    "maps_embed_url": "https://www.google.com/maps?q=Opposite%20Namdhari%20Kanda%2C%20Tarn%20Taran%20Road%2C%20Amritsar%2C%20Punjab&output=embed",
-    "instagram_url": "https://www.instagram.com/miripirihospital/",
-    "logo_static": "images/miri-piri-logo.jpg",
-    "theme": "miri",
-}
-
-
 def home(request):
-    site = SiteSetting.get_solo()
+    site = HospitalProfile.get_by_code("bkjh")
+    miri_profile = HospitalProfile.get_by_code("miri")
+    parent_settings = ParentSiteSetting.get_solo()
     bibi_url = reverse("core:bibi_kaulan_hospital")
     miri_url = reverse("core:miri_piri_hospital")
     schema = {
@@ -90,45 +81,60 @@ def home(request):
             },
             {
                 "@type": "Hospital",
-                "name": MIRI_PIRI_PROFILE["name"],
+                "name": miri_profile.hospital_name,
                 "url": request.build_absolute_uri(miri_url),
             },
         ],
     }
-    if site.main_phone:
-        schema["telephone"] = site.main_phone
+    if parent_settings.helpdesk_phone or site.call_phone:
+        schema["telephone"] = parent_settings.helpdesk_phone or site.call_phone
+    bibi_highlights = Service.objects.filter(
+        hospital_scope_filter("bkjh"), is_active=True, is_featured=True
+    ).values_list("title", flat=True)[:4]
+    miri_highlights = Service.objects.filter(
+        hospital_scope_filter("miri"), is_active=True, is_featured=True
+    ).values_list("title", flat=True)[:4]
     return render(
         request,
         "pages/parent_landing.html",
         {
             "seo": seo(
-                "BKGH Hospitals | Bibi Kaulan Ji Hospital & Miri Piri Mission Hospital",
-                "BKGH Hospitals connects patients with Bibi Kaulan Ji Hospital and Miri Piri Mission Hospital for OPD timings, doctors, emergency support, services, and location details.",
+                parent_settings.meta_title,
+                parent_settings.meta_description,
                 request.path,
             ),
             "parent_landing": True,
+            "parent_settings": parent_settings,
             "hospital_schema": json.dumps(schema),
             "bibi_url": bibi_url,
             "miri_url": miri_url,
-            "bibi_tel": tel_url(site.main_phone),
+            "bibi_tel": tel_url(site.call_phone or site.main_phone),
             "bibi_emergency_tel": tel_url(site.emergency_phone),
-            "miri_tel": tel_url(MIRI_PIRI_PROFILE["phone"]),
-            "miri_profile": MIRI_PIRI_PROFILE,
+            "miri_tel": tel_url(miri_profile.call_phone or miri_profile.main_phone),
+            "parent_tel": tel_url(parent_settings.helpdesk_phone or site.call_phone or site.main_phone),
+            "miri_profile": miri_profile,
+            "bibi_highlights": bibi_highlights,
+            "miri_highlights": miri_highlights,
         },
     )
 
 
 def bibi_kaulan_hospital(request):
-    site = SiteSetting.get_solo()
+    site = HospitalProfile.get_by_code("bkjh")
     bkjh_scope = hospital_scope_filter("bkjh")
     departments = Department.objects.filter(bkjh_scope, is_active=True, is_featured=True)[:6]
     doctors = Doctor.objects.select_related("department").filter(bkjh_scope, is_active=True).order_by("-is_featured", "display_order", "full_name")[:4]
     timings = OPDTiming.objects.select_related("department", "doctor").filter(bkjh_scope, is_active=True)[:6]
-    gallery = GalleryImage.objects.select_related("category").filter(is_active=True, is_featured=True, category__is_active=True)[:6]
+    gallery = GalleryImage.objects.select_related("category").filter(
+        hospital_scope_filter("bkjh"),
+        is_active=True,
+        is_featured=True,
+        category__is_active=True,
+    )[:6]
     services = Service.objects.filter(bkjh_scope, is_active=True, is_featured=True)[:6]
     facilities = Facility.objects.filter(bkjh_scope, is_active=True, is_featured=True)[:4]
-    emergency = EmergencyInfo.objects.filter(is_active=True).first()
-    ambulance = AmbulanceInfo.objects.filter(is_active=True).first()
+    emergency = EmergencyInfo.objects.filter(hospital_scope_filter("bkjh"), is_active=True).first()
+    ambulance = AmbulanceInfo.objects.filter(hospital_scope_filter("bkjh"), is_active=True).first()
     schema = hospital_schema(request, site)
     seo_title = site.meta_title or f"{site.hospital_name} | Healthcare, OPD & Emergency Services"
     seo_description = site.meta_description or (
@@ -141,7 +147,7 @@ def bibi_kaulan_hospital(request):
         "pages/home.html",
         {
             "seo": seo(seo_title, seo_description, request.path, og_image_url=og_image_url),
-            "notices": active_notices()[:3],
+            "notices": active_notices("bkjh")[:3],
             "departments": departments,
             "doctors": doctors,
             "timings": timings,
@@ -150,7 +156,7 @@ def bibi_kaulan_hospital(request):
             "facilities": facilities,
             "emergency": emergency,
             "ambulance": ambulance,
-            "patient_reviews": featured_reviews(),
+            "patient_reviews": featured_reviews("bkjh"),
             "hospital_schema": json.dumps(schema),
             "about_url": reverse("core:about"),
             "appointment_url": reverse("appointments:appointment"),
@@ -161,7 +167,7 @@ def bibi_kaulan_hospital(request):
             "emergency_url": reverse("hospital:emergency"),
             "contact_url": reverse("hospital:contact"),
             "gallery_url": reverse("hospital:gallery"),
-            "main_tel": tel_url(site.main_phone),
+            "main_tel": tel_url(site.call_phone or site.main_phone),
             "emergency_tel": tel_url(site.emergency_phone or (emergency.emergency_phone if emergency else "")),
             "ambulance_tel": tel_url(site.ambulance_phone or (ambulance.ambulance_phone if ambulance else "")),
             "miri_piri_url": reverse("core:miri_piri_hospital"),
@@ -169,29 +175,36 @@ def bibi_kaulan_hospital(request):
     )
 
 
-def miri_piri_schema(request):
+def miri_piri_schema(request, profile):
     return {
         "@context": "https://schema.org",
         "@type": "Hospital",
-        "name": MIRI_PIRI_PROFILE["name"],
+        "name": profile.hospital_name,
         "url": request.build_absolute_uri(reverse("core:miri_piri_hospital")),
-        "telephone": MIRI_PIRI_PROFILE["phone"],
+        "telephone": profile.call_phone or profile.main_phone,
         "address": {
             "@type": "PostalAddress",
-            "streetAddress": MIRI_PIRI_PROFILE["address"],
+            "streetAddress": profile.address,
             "addressCountry": "IN",
         },
-        "sameAs": [MIRI_PIRI_PROFILE["maps_url"], MIRI_PIRI_PROFILE["instagram_url"]],
+        "sameAs": [value for value in [profile.google_maps_url, profile.instagram_url] if value],
     }
 
 
 def miri_piri_hospital(request):
-    miri_tel = tel_url(MIRI_PIRI_PROFILE["phone"])
+    miri_profile = HospitalProfile.get_by_code("miri")
+    miri_tel = tel_url(miri_profile.call_phone or miri_profile.main_phone)
     miri_scope = hospital_scope_filter("miri")
     departments = Department.objects.filter(miri_scope, is_active=True, is_featured=True).order_by("-hospital_scope", "display_order", "name")[:8]
     facilities = Facility.objects.filter(miri_scope, is_active=True, is_featured=True).order_by("-hospital_scope", "display_order", "title")[:6]
     services = Service.objects.filter(miri_scope, is_active=True, is_featured=True).order_by("-hospital_scope", "display_order", "title")[:8]
     doctors = Doctor.objects.select_related("department").filter(miri_scope, is_active=True).order_by("-hospital_scope", "-is_featured", "display_order", "full_name")[:6]
+    gallery = GalleryImage.objects.select_related("category").filter(
+        miri_scope,
+        is_active=True,
+        is_featured=True,
+        category__is_active=True,
+    )[:6]
     quick_actions = [
         {
             "title": "Call Hospital",
@@ -204,14 +217,14 @@ def miri_piri_hospital(request):
             "title": "Get Directions",
             "support_text": "ਰਸਤਾ ਵੇਖੋ",
             "text": "Open the Tarn Taran Road location.",
-            "href": MIRI_PIRI_PROFILE["maps_url"],
+            "href": miri_profile.google_maps_url,
             "icon": "location",
             "external": True,
         },
         {
             "title": "OPD Hours",
             "support_text": "ਓਪੀਡੀ ਸਮਾਂ",
-            "text": MIRI_PIRI_PROFILE["opd_hours"],
+            "text": miri_profile.opd_hours or "Call the hospital to confirm OPD hours.",
             "href": miri_tel,
             "icon": "clock",
         },
@@ -219,7 +232,7 @@ def miri_piri_hospital(request):
             "title": "Instagram Updates",
             "support_text": "ਅਪਡੇਟਸ",
             "text": "View official posts and announcements.",
-            "href": MIRI_PIRI_PROFILE["instagram_url"],
+            "href": miri_profile.instagram_url,
             "icon": "gallery",
             "external": True,
         },
@@ -235,17 +248,18 @@ def miri_piri_hospital(request):
         "pages/miri_piri.html",
         {
             "seo": seo(
-                "Miri Piri Mission Hospital | Tarn Taran Road",
-                "Miri Piri Mission Hospital provides OPD, emergency, critical care, specialty consultation and hospital support on Amritsar-Tarn Taran Road.",
+                miri_profile.meta_title or f"{miri_profile.hospital_name} | Hospital Information",
+                miri_profile.meta_description or miri_profile.short_tagline,
                 request.path,
                 og_image="images/miri-piri-logo.jpg",
             ),
-            "page_hospital": MIRI_PIRI_PROFILE,
-            "hospital_schema": json.dumps(miri_piri_schema(request)),
+            "page_hospital": miri_profile,
+            "hospital_schema": json.dumps(miri_piri_schema(request, miri_profile)),
             "services": services,
             "departments": departments,
             "facilities": facilities,
             "doctors": doctors,
+            "gallery_images": gallery,
             "quick_actions": quick_actions,
             "patient_support": patient_support,
             "miri_tel": miri_tel,

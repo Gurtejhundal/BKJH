@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="miri-hero__brand" aria-label="{{ page_hospital.name }} logo">
-      <img src="{% static page_hospital.logo_static %}" alt="{{ page_hospital.name }} logo">
+      {% if page_hospital.logo %}<img src="{{ page_hospital.logo.url }}" alt="{{ page_hospital.name }} logo">{% else %}<img src="{% static page_hospital.logo_static %}" alt="{{ page_hospital.name }} logo">{% endif %}
     </div>
   </div>
 </section>
@@ -128,8 +128,7 @@
     <div>
       <h2>About {{ page_hospital.name }}</h2>
       <p class="punjabi-support section-punjabi">ਮੀਰੀ ਪੀਰੀ ਮਿਸ਼ਨ ਹਸਪਤਾਲ ਬਾਰੇ</p>
-      <p>Miri Piri Mission Hospital serves patients on Amritsar-Tarn Taran Road with OPD, emergency, critical care, and speciality consultation support.</p>
-      <p>Only public, client-verifiable details are shown here. Doctor names, detailed schedules, gallery photos, and patient reviews should be added after hospital approval.</p>
+      <p>{{ page_hospital.about_short }}</p>
     </div>
     <div class="support-box miri-support-list">
       <h3>Patient planning</h3>
@@ -140,6 +139,28 @@
         </div>
       {% endfor %}
     </div>
+  </div>
+</section>
+
+<section class="section section-surface" id="miri-gallery">
+  <div class="wrapper">
+    {% include "partials/section_header.html" with title="Hospital Gallery" support_text="ਹਸਪਤਾਲ ਗੈਲਰੀ" intro="Approved photos published by the Miri Piri hospital team." %}
+    {% if gallery_images %}
+      <div class="gallery-grid">
+        {% for image in gallery_images %}
+          <figure>
+            {% if image.static_image_path %}
+              <img src="{% static image.static_image_path %}" alt="{{ image.alt_text }}" loading="lazy" width="1024" height="768">
+            {% elif image.image %}
+              <img src="{{ image.image.url }}" alt="{{ image.alt_text }}" loading="lazy">
+            {% endif %}
+            <figcaption><strong>{{ image.title }}</strong>{% if image.caption %}<span>{{ image.caption }}</span>{% endif %}</figcaption>
+          </figure>
+        {% endfor %}
+      </div>
+    {% else %}
+      {% include "partials/empty_state.html" with title="Gallery being prepared" message="Approved Miri Piri hospital photos will appear here." %}
+    {% endif %}
   </div>
 </section>
 

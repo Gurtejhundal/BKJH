@@ -1,5 +1,8 @@
+{% load static %}
 {% if doctor.appointment_enabled %}<a class="doctor-card card-link" href="{% url 'appointments:appointment' %}">{% else %}<article class="doctor-card">{% endif %}
-  {% if doctor.photo %}
+  {% if doctor.static_photo_path %}
+    <img src="{% static doctor.static_photo_path %}" alt="Photo of {{ doctor.full_name }}" loading="lazy" width="240" height="240">
+  {% elif doctor.photo %}
     <img src="{{ doctor.photo.url }}" alt="Photo of {{ doctor.full_name }}" loading="lazy">
   {% else %}
     <div class="avatar" aria-hidden="true">{{ doctor.initials }}</div>

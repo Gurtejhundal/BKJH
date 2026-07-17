@@ -34,3 +34,18 @@ class DashboardTests(TestCase):
         appointment.refresh_from_db()
         self.assertEqual(appointment.status, AppointmentRequest.STATUS_CONTACTED)
         self.assertEqual(appointment.admin_note, "Called once")
+
+    def test_admin_index_is_a_staff_only_bkgh_content_hub(self):
+        user = get_user_model().objects.create_superuser(
+            username="admin-user",
+            password="test-password",
+            email="admin@example.com",
+        )
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("admin:index"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Manage both hospital websites")
+        self.assertContains(response, reverse("admin:core_hospitalprofile_changelist"))
+        self.assertContains(response, reverse("admin:gallery_galleryimage_changelist"))

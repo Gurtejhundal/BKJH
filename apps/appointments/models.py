@@ -1,5 +1,7 @@
 from django.db import models
 
+from apps.core.models import HOSPITAL_SCOPE_CHOICES
+
 
 class AppointmentRequest(models.Model):
     STATUS_PENDING = "pending"
@@ -15,6 +17,8 @@ class AppointmentRequest(models.Model):
         (STATUS_COMPLETED, "Completed"),
         (STATUS_CANCELLED, "Cancelled"),
     ]
+
+    hospital_scope = models.CharField(max_length=12, choices=HOSPITAL_SCOPE_CHOICES, default="bkjh")
 
     patient_name = models.CharField(max_length=140)
     phone = models.CharField(max_length=30)

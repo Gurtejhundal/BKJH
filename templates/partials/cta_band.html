@@ -7,9 +7,9 @@
     </div>
     <div class="contact-strip__actions">
       <a class="btn btn-primary" href="{% url 'appointments:appointment' %}">Request Appointment</a>
-      {% if site.main_phone %}
+      {% if site.call_phone %}
         {% load site_extras %}
-        <a class="btn btn-secondary" href="tel:{{ site.main_phone|tel }}">Call Hospital</a>
+        <a class="btn btn-secondary" href="tel:{{ site.call_phone|tel }}">Call Hospital</a>
       {% endif %}
     </div>
   </div>

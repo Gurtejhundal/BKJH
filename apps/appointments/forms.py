@@ -1,6 +1,7 @@
 import re
 
 from django import forms
+from django.db.models import Q
 from django.utils import timezone
 
 from apps.gallery.hospital.models import Department, Doctor
@@ -45,8 +46,9 @@ class AppointmentRequestForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs.setdefault("class", "form-control")
-        self.fields["department"].queryset = Department.objects.filter(is_active=True)
-        self.fields["preferred_doctor"].queryset = Doctor.objects.select_related("department").filter(is_active=True)
+        bkjh_scope = Q(hospital_scope="both") | Q(hospital_scope="bkjh")
+        self.fields["department"].queryset = Department.objects.filter(bkjh_scope, is_active=True)
+        self.fields["preferred_doctor"].queryset = Doctor.objects.select_related("department").filter(bkjh_scope, is_active=True)
         self.fields["department"].empty_label = "Select department"
         self.fields["preferred_doctor"].empty_label = "Any available doctor"
         self.fields["message"].required = False

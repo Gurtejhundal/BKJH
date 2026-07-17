@@ -3,7 +3,7 @@
   <div class="wrapper emergency-strip__inner">
     <span class="top-location">
       {% if parent_landing %}
-        Serving families across Fatehgarh Churian, Amritsar, and nearby areas
+        {{ parent_settings.service_area_text }}
       {% elif page_hospital %}
         <a href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">{{ page_hospital.address }}</a>
       {% elif site.google_maps_url %}
@@ -12,6 +12,6 @@
         {{ site.address|default:"Ajnala Road, Fatehgarh Churian" }}
       {% endif %}
     </span>
-    <span class="top-motto"><span class="punjabi-support">ਸੇਵਾ ਹੀ ਸਾਡਾ ਧਰਮ</span><span aria-hidden="true">|</span> Service is Our Duty</span>
+    <span class="top-motto"><span class="punjabi-support">{{ parent_settings.motto_punjabi|default:"ਸੇਵਾ ਹੀ ਸਾਡਾ ਧਰਮ" }}</span><span aria-hidden="true">|</span> {{ parent_settings.motto_english }}</span>
   </div>
 </div>

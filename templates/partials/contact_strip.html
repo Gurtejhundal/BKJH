@@ -14,14 +14,14 @@
     </div>
     <div class="contact-strip__actions">
       {% if parent_landing %}
-        {% if site.main_phone %}<a class="btn btn-primary" href="tel:{{ site.main_phone|tel }}">Call Helpdesk</a>{% endif %}
+        {% if parent_settings.helpdesk_phone %}<a class="btn btn-primary" href="tel:{{ parent_settings.helpdesk_phone|tel }}">Call Helpdesk</a>{% elif site.call_phone %}<a class="btn btn-primary" href="tel:{{ site.call_phone|tel }}">Call Helpdesk</a>{% endif %}
         <a class="btn btn-secondary" href="{% url 'core:bibi_kaulan_hospital' %}">View Bibi Kaulan Ji Hospital</a>
         <a class="btn btn-secondary" href="{% url 'core:miri_piri_hospital' %}">View Miri Piri Mission Hospital</a>
       {% elif page_hospital %}
         <a class="btn btn-primary" href="{{ miri_tel }}">Call Hospital</a>
         <a class="btn btn-secondary" href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Open Location</a>
       {% else %}
-        {% if site.main_phone %}<a class="btn btn-primary" href="tel:{{ site.main_phone|tel }}">Call Hospital</a>{% endif %}
+        {% if site.call_phone %}<a class="btn btn-primary" href="tel:{{ site.call_phone|tel }}">Call Hospital</a>{% endif %}
         <a class="btn btn-secondary" href="{% url 'hospital:opd_timing' %}">View OPD Timing</a>
       {% endif %}
     </div>

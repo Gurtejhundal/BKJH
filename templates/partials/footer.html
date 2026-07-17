@@ -6,7 +6,7 @@
         {% if parent_landing %}
           <span class="brand-monogram footer-monogram" aria-hidden="true">BKGH</span>
         {% elif page_hospital %}
-          <img src="{% static page_hospital.logo_static %}" alt="{{ page_hospital.name }} logo">
+          {% if page_hospital.logo %}<img src="{{ page_hospital.logo.url }}" alt="{{ page_hospital.name }} logo">{% else %}<img src="{% static page_hospital.logo_static %}" alt="{{ page_hospital.name }} logo">{% endif %}
         {% elif site.logo %}
           <img src="{{ site.logo.url }}" alt="{{ site.hospital_name }} logo">
         {% else %}
@@ -36,6 +36,7 @@
         <a href="#miri-services">Services</a>
         <a href="#miri-departments">Departments</a>
         <a href="#miri-facilities">Facilities</a>
+        <a href="#miri-gallery">Gallery</a>
         <a href="{{ page_hospital.maps_url }}" target="_blank" rel="noopener">Location</a>
         <a href="{{ page_hospital.instagram_url }}" target="_blank" rel="noopener">Instagram</a>
         <a href="{% url 'core:bibi_kaulan_hospital' %}">Bibi Kaulan Ji Hospital</a>
@@ -53,7 +54,7 @@
       <h2>Contact</h2>
       <p class="punjabi-support">ਸੰਪਰਕ</p>
       {% if parent_landing %}
-        {% if site.main_phone %}<a href="tel:{{ site.main_phone|tel }}">Helpdesk: {{ site.main_phone }}</a>{% endif %}
+        {% if parent_settings.helpdesk_phone %}<a href="tel:{{ parent_settings.helpdesk_phone|tel }}">Helpdesk: {{ parent_settings.helpdesk_phone }}</a>{% elif site.call_phone %}<a href="tel:{{ site.call_phone|tel }}">Helpdesk: {{ site.call_phone }}</a>{% endif %}
         {% if site.google_maps_url %}<a href="{{ site.google_maps_url }}" rel="noopener" target="_blank">Bibi Kaulan Ji Hospital location</a>{% endif %}
         <a href="{{ miri_profile.maps_url }}" rel="noopener" target="_blank">Miri Piri Mission Hospital location</a>
       {% elif page_hospital %}

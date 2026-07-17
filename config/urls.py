@@ -22,9 +22,9 @@ from django.urls import include, path
 
 from apps.core.sitemaps import DepartmentSitemap, HealthUpdateSitemap, StaticViewSitemap
 
-admin.site.site_header = "Bibi Kaulan Ji Hospital Admin"
-admin.site.site_title = "BKJH Admin"
-admin.site.index_title = "Manage website content"
+admin.site.site_header = "BKGH Hospitals CMS"
+admin.site.site_title = "BKGH CMS"
+admin.site.index_title = "Manage both hospital websites"
 
 sitemaps = {
     "static": StaticViewSitemap,

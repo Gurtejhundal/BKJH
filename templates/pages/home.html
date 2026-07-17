@@ -205,18 +205,22 @@
 
 <section class="section section-surface">
   <div class="wrapper">
-    {% include "partials/section_header.html" with title="Gallery" support_text="ਹਸਪਤਾਲ ਗੈਲਰੀ" intro="Featured active gallery images from admin. Use real hospital photos only." action_href=gallery_url action_label="View gallery" %}
+    {% include "partials/section_header.html" with title="Hospital Gallery" support_text="ਹਸਪਤਾਲ ਗੈਲਰੀ" intro="A look inside patient areas and hospital facilities." action_href=gallery_url action_label="View gallery" %}
     {% if gallery_images %}
       <div class="gallery-grid">
         {% for image in gallery_images %}
           <figure>
-            <img src="{{ image.image.url }}" alt="{{ image.alt_text }}" loading="lazy">
+            {% if image.static_image_path %}
+              <img src="{% static image.static_image_path %}" alt="{{ image.alt_text }}" loading="lazy" width="1024" height="768">
+            {% elif image.image %}
+              <img src="{{ image.image.url }}" alt="{{ image.alt_text }}" loading="lazy">
+            {% endif %}
             <figcaption><strong>{{ image.title }}</strong>{% if image.caption %}<span>{{ image.caption }}</span>{% endif %}</figcaption>
           </figure>
         {% endfor %}
       </div>
     {% else %}
-      {% include "partials/empty_state.html" with title="Gallery pending" message="Upload approved real hospital photos in admin. No fake stock imagery is shown." %}
+      {% include "partials/empty_state.html" with title="Gallery being prepared" message="Approved hospital photos will appear here." %}
     {% endif %}
   </div>
 </section>
@@ -228,7 +232,7 @@
       <p class="punjabi-support section-punjabi">ਸੰਪਰਕ ਅਤੇ ਸਥਾਨ</p>
       {% if site.address %}<p>{{ site.address }}</p>{% else %}<p>Address is pending admin entry.</p>{% endif %}
       <div class="hero-actions">
-        {% if site.main_phone %}<a class="btn btn-primary" href="{{ main_tel }}">Call Hospital</a>{% endif %}
+        {% if site.call_phone %}<a class="btn btn-primary" href="{{ main_tel }}">Call Hospital</a>{% endif %}
         {% if site.google_maps_url %}<a class="btn btn-secondary" href="{{ site.google_maps_url }}" target="_blank" rel="noopener">Open Google Maps</a>{% endif %}
         <a class="text-link" href="{{ contact_url }}">Full contact details</a>
       </div>

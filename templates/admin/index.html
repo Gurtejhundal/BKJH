@@ -1,0 +1,102 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content_title %}{% endblock %}
+
+{% block content %}
+<div id="content-main" class="cms-dashboard">
+  <header class="cms-dashboard__intro">
+    <span class="cms-dashboard__eyebrow">Content control centre</span>
+    <h1>Manage both hospital websites</h1>
+    <p>Choose a section below. Every published record is connected to the public BKGH, Bibi Kaulan Ji, or Miri Piri website.</p>
+  </header>
+
+  <div class="cms-dashboard__grid">
+    <section class="cms-hub-card">
+      <span class="cms-hub-card__icon" aria-hidden="true">{% include "partials/icon.html" with name="department" %}</span>
+      <div>
+        <h2>Hospital profiles</h2>
+        <p>Names, logos, phone numbers, addresses, maps, hours, and parent website content.</p>
+      </div>
+      <nav aria-label="Hospital profile controls">
+        <a href="{% url 'admin:core_hospitalprofile_changelist' %}">Hospital profiles</a>
+        <a href="{% url 'admin:core_parentsitesetting_changelist' %}">Parent website</a>
+      </nav>
+    </section>
+
+    <section class="cms-hub-card">
+      <span class="cms-hub-card__icon" aria-hidden="true">{% include "partials/icon.html" with name="doctor" %}</span>
+      <div>
+        <h2>Clinical content</h2>
+        <p>Doctors, departments, OPD schedules, services, and facilities for either hospital.</p>
+      </div>
+      <nav aria-label="Clinical content controls">
+        <a href="{% url 'admin:hospital_doctor_changelist' %}">Doctors</a>
+        <a href="{% url 'admin:hospital_department_changelist' %}">Departments</a>
+        <a href="{% url 'admin:hospital_opdtiming_changelist' %}">OPD timings</a>
+        <a href="{% url 'admin:hospital_service_changelist' %}">Services</a>
+        <a href="{% url 'admin:hospital_facility_changelist' %}">Facilities</a>
+      </nav>
+    </section>
+
+    <section class="cms-hub-card">
+      <span class="cms-hub-card__icon" aria-hidden="true">{% include "partials/icon.html" with name="phone" %}</span>
+      <div>
+        <h2>Patient support</h2>
+        <p>Appointment requests, notices, emergency information, and ambulance assistance.</p>
+      </div>
+      <nav aria-label="Patient support controls">
+        <a href="{% url 'admin:appointments_appointmentrequest_changelist' %}">Appointments</a>
+        <a href="{% url 'admin:core_notice_changelist' %}">Notices</a>
+        <a href="{% url 'admin:hospital_emergencyinfo_changelist' %}">Emergency info</a>
+        <a href="{% url 'admin:hospital_ambulanceinfo_changelist' %}">Ambulance info</a>
+      </nav>
+    </section>
+
+    <section class="cms-hub-card">
+      <span class="cms-hub-card__icon" aria-hidden="true">{% include "partials/icon.html" with name="gallery" %}</span>
+      <div>
+        <h2>Media and updates</h2>
+        <p>Approved hospital photos, gallery categories, patient reviews, and hospital updates.</p>
+      </div>
+      <nav aria-label="Media controls">
+        <a href="{% url 'admin:gallery_galleryimage_changelist' %}">Gallery photos</a>
+        <a href="{% url 'admin:gallery_gallerycategory_changelist' %}">Gallery categories</a>
+        <a href="{% url 'admin:core_patientreview_changelist' %}">Patient reviews</a>
+        <a href="{% url 'admin:hospital_healthcampupdate_changelist' %}">Hospital updates</a>
+      </nav>
+    </section>
+  </div>
+
+  <section class="cms-all-models">
+    <header>
+      <h2>All administration tools</h2>
+      <p>User accounts and advanced Django controls remain available below.</p>
+    </header>
+    {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+  </section>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<aside id="content-related" class="cms-dashboard__side">
+  <div class="module" id="recent-actions-module">
+    <h2>{% translate 'Recent actions' %}</h2>
+    <h3>{% translate 'My actions' %}</h3>
+    {% load log %}
+    {% get_admin_log 10 as admin_log for_user user %}
+    {% if not admin_log %}
+      <p>{% translate 'None available' %}</p>
+    {% else %}
+      <ul class="actionlist">
+        {% for entry in admin_log %}
+          <li class="{% if entry.is_addition %}addlink{% elif entry.is_change %}changelink{% else %}deletelink{% endif %}">
+            {% if entry.is_deletion or not entry.get_admin_url %}{{ entry.object_repr }}{% else %}<a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>{% endif %}
+            <br><span class="mini quiet">{{ entry.content_type.name|capfirst }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</aside>
+{% endblock %}

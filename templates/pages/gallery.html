@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
 {% include "partials/page_header.html" with title="Gallery" support_text="ਹਸਪਤਾਲ ਗੈਲਰੀ" intro="Approved hospital photos organized by category." eyebrow="Hospital photos" %}
 
@@ -17,13 +18,17 @@
       <div class="gallery-grid">
         {% for image in images %}
           <figure>
-            <img src="{{ image.image.url }}" alt="{{ image.alt_text }}" loading="lazy">
+            {% if image.static_image_path %}
+              <img src="{% static image.static_image_path %}" alt="{{ image.alt_text }}" loading="lazy" width="1024" height="768">
+            {% elif image.image %}
+              <img src="{{ image.image.url }}" alt="{{ image.alt_text }}" loading="lazy">
+            {% endif %}
             <figcaption><strong>{{ image.title }}</strong>{% if image.caption %}<span>{{ image.caption }}</span>{% endif %}</figcaption>
           </figure>
         {% endfor %}
       </div>
     {% else %}
-      {% include "partials/empty_state.html" with title="No gallery images published" message="Upload approved real hospital photos in admin. No fake stock imagery is shown." %}
+      {% include "partials/empty_state.html" with title="Gallery being prepared" message="Approved hospital photos will appear here." %}
     {% endif %}
   </div>
 </section>

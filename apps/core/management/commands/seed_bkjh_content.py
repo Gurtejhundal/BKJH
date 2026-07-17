@@ -5,7 +5,7 @@ from pathlib import Path
 from django.core.files import File
 from django.core.management.base import BaseCommand
 
-from apps.core.models import SiteSetting
+from apps.core.models import HospitalProfile, ParentSiteSetting, SiteSetting
 from apps.gallery.models import GalleryCategory, GalleryImage
 from apps.gallery.hospital.models import (
     AmbulanceInfo,
@@ -63,6 +63,73 @@ class Command(BaseCommand):
             "dialysis, OPD consultation, specialist procedures, doctors, and appointment requests."
         )
         site.save()
+
+        upsert(
+            ParentSiteSetting,
+            {"pk": 1},
+            {
+                "brand_name": "BKGH Hospitals",
+                "punjabi_name": "ਬੀਕੇਜੀਐਚ ਹਸਪਤਾਲ",
+                "service_area_text": "Serving families across Fatehgarh Churian, Amritsar, and nearby areas",
+                "motto_punjabi": "ਸੇਵਾ ਹੀ ਸਾਡਾ ਧਰਮ",
+                "motto_english": "Service is Our Duty",
+                "hero_title": "Two Hospitals. One Trusted Healthcare Network.",
+                "hero_punjabi": "ਦੋ ਹਸਪਤਾਲ, ਇੱਕ ਭਰੋਸੇਯੋਗ ਸਿਹਤ ਸੇਵਾ ਨੈੱਟਵਰਕ",
+                "hero_description": "Choose the hospital you want to visit for doctors, OPD timings, services, emergency support, and location details.",
+                "shared_care_title": "A clearer way for patients to find the right hospital.",
+                "shared_care_description": "BKGH Hospitals helps patients choose between Bibi Kaulan Ji Hospital and Miri Piri Mission Hospital before checking doctors, OPD timings, services, contact numbers, and directions.",
+                "helpdesk_phone": "+91 97805 15050",
+                "meta_title": "BKGH Hospitals | Bibi Kaulan Ji Hospital & Miri Piri Mission Hospital",
+                "meta_description": "BKGH Hospitals connects patients with Bibi Kaulan Ji Hospital and Miri Piri Mission Hospital for OPD timings, doctors, emergency support, services, and location details.",
+            },
+        )
+        upsert(
+            HospitalProfile,
+            {"code": "bkjh"},
+            {
+                "hospital_name": site.hospital_name,
+                "punjabi_name": "ਬੀਬੀ ਕੌਲਾਂ ਜੀ ਹਸਪਤਾਲ",
+                "short_tagline": site.short_tagline,
+                "about_short": site.about_short,
+                "address": site.address,
+                "google_maps_url": site.google_maps_url,
+                "google_maps_embed_url": site.google_maps_embed_url,
+                "main_phone": site.main_phone,
+                "call_phone": "+91 97805 15050",
+                "emergency_phone": site.emergency_phone,
+                "ambulance_phone": site.ambulance_phone,
+                "whatsapp_number": site.whatsapp_number,
+                "email": site.email,
+                "opd_hours": "Call the hospital to confirm current OPD timings.",
+                "emergency_hours": "24x7 emergency assistance",
+                "static_logo_path": "images/bkjh-logo.png",
+                "meta_title": site.meta_title,
+                "meta_description": site.meta_description,
+                "is_active": True,
+            },
+        )
+        upsert(
+            HospitalProfile,
+            {"code": "miri"},
+            {
+                "hospital_name": "Miri Piri Mission Hospital",
+                "punjabi_name": "ਮੀਰੀ ਪੀਰੀ ਮਿਸ਼ਨ ਹਸਪਤਾਲ",
+                "short_tagline": "OPD and critical care support in Amritsar.",
+                "about_short": "Miri Piri Mission Hospital serves patients on Amritsar-Tarn Taran Road with OPD, emergency, critical care, and speciality consultation support.",
+                "address": "Opposite Namdhari Kanda, Amritsar-Tarn Taran Road, Antaryami Colony, Amritsar-143001, Punjab",
+                "google_maps_url": "https://maps.app.goo.gl/h1oCCZ2XJcF7rKy36",
+                "google_maps_embed_url": "https://www.google.com/maps?q=Opposite%20Namdhari%20Kanda%2C%20Tarn%20Taran%20Road%2C%20Amritsar%2C%20Punjab&output=embed",
+                "main_phone": "+91 98558 21107",
+                "call_phone": "+91 98558 21107",
+                "opd_hours": "OPD 9:00 AM - 5:00 PM",
+                "emergency_hours": "Emergency support listed as available 24x7",
+                "instagram_url": "https://www.instagram.com/miripirihospital/",
+                "static_logo_path": "images/miri-piri-logo.jpg",
+                "meta_title": "Miri Piri Mission Hospital | Tarn Taran Road",
+                "meta_description": "Miri Piri Mission Hospital provides OPD, emergency, critical care, specialty consultation and hospital support on Amritsar-Tarn Taran Road.",
+                "is_active": True,
+            },
+        )
 
         Department.objects.filter(name__in=["Emergency Support", "OPD Consultation"]).update(is_active=False)
         Service.objects.filter(title="Free Dialysis Centre").update(title="Dialysis", slug="dialysis")
@@ -205,6 +272,15 @@ class Command(BaseCommand):
                 "featured": False,
             },
             {
+                "name": "Ophthalmology",
+                "short": "Eye OPD, vision assessment, and ophthalmology consultation support.",
+                "details": "Ophthalmology supports eye examination, vision concerns, and specialist OPD consultation.",
+                "services": lines("Eye check-up", "Ophthalmology OPD", "Vision assessment", "Follow-up eye care"),
+                "icon": "eye",
+                "scope": "both",
+                "featured": False,
+            },
+            {
                 "name": "Gynecology",
                 "short": "Women care and gynecology consultation support at Miri Piri Mission Hospital.",
                 "details": "Gynecology supports women's health consultation and related OPD care at Miri Piri Mission Hospital.",
@@ -286,16 +362,20 @@ class Command(BaseCommand):
                 },
             )
 
-        Doctor.objects.filter(full_name__in=["Dr. Manbir Verka", "Dr. Mandir Singh"]).update(is_active=False, is_featured=False)
+        Doctor.objects.filter(full_name__in=["Dr. Kashish Gupta", "Dr. Manbir Verka", "Dr. Mandir Singh"]).update(is_active=False, is_featured=False)
+        if not Doctor.objects.filter(full_name="Dr. Amrita Srivastava").exists():
+            Doctor.objects.filter(full_name="Dr. Amit Srivastava").update(
+                full_name="Dr. Amrita Srivastava",
+                slug="dr-amrita-srivastava",
+            )
         doctor_rows = [
-            ("Dr. Kashish Gupta", "Facility Director", "", None, "", "", "bkjh", True, 1, "dr-kashish-gupta.jpg"),
             ("Dr. Gagandeep Kaur", "MBBS, MD, DNB (Pulmonary Medicine)", "Chest & TB", "Pulmonary Medicine", "Mon, Wed, Fri", "10:00 AM - 2:00 PM", "both", True, 2, "dr-gagandeep-kaur.jpg"),
             ("Dr. Mandeep", "", "Orthopedic", "Orthopedics", "Mon, Thu", "11:00 AM - 3:00 PM", "both", False, 3, ""),
             ("Dr. SS Kaler", "", "Dermatology", "Dermatology", "Thu", "3:00 PM - 5:00 PM", "bkjh", False, 4, ""),
             ("Dr. Shahzad", "", "General Medicine", "General Medicine", "Mon to Sat", "9:00 AM - 3:00 PM", "both", False, 5, ""),
             ("Dr. Manpreet", "", "General Medicine", "General Medicine", "Mon to Sat", "3:00 PM - 8:00 PM", "both", True, 6, ""),
             ("Dr. Navneet Kaur", "", "Dental", "Dental & Implants", "Mon to Sat", "10:00 AM - 4:00 PM", "bkjh", False, 7, ""),
-            ("Dr. Amit Srivastava", "", "ENT / Eye", "ENT", "Mon to Sat", "10:00 AM - 4:00 PM", "both", False, 8, ""),
+            ("Dr. Amrita Srivastava", "", "Ophthalmology", "Ophthalmology", "Mon to Sat", "10:00 AM - 4:00 PM", "both", False, 8, ""),
             ("Dr. Parneet", "", "Physiotherapy", "Physiotherapy & Rehabilitation Services", "Mon to Sat", "9:00 AM - 5:00 PM", "bkjh", False, 9, ""),
             ("Dr. Manbir Singh", "MBBS, MD (Paediatrics)", "Pediatrics", "Pediatrics", "Wed, Fri", "12:00 PM - 3:00 PM", "both", True, 10, "dr-manbir-singh.jpg"),
             ("Dr. Himanchu Lata", "", "Gynecology", "Gynecology", "Call to confirm", "Contact hospital", "miri", True, 11, ""),
@@ -316,6 +396,7 @@ class Command(BaseCommand):
                     "is_featured": featured,
                     "is_active": True,
                     "display_order": order,
+                    "static_photo_path": f"images/doctors/{photo_name}" if photo_name else "",
                 },
             )
             if photo_name and not doctor.photo and not IS_VERCEL:
@@ -331,7 +412,7 @@ class Command(BaseCommand):
             ("Dr. Shahzad", "General Medicine", "Mon to Sat", time(9, 0), time(15, 0), "both", 4),
             ("Dr. Manpreet", "General Medicine", "Mon to Sat", time(15, 0), time(20, 0), "both", 5),
             ("Dr. Navneet Kaur", "Dental & Implants", "Mon to Sat", time(10, 0), time(16, 0), "bkjh", 6),
-            ("Dr. Amit Srivastava", "ENT", "Mon to Sat", time(10, 0), time(16, 0), "both", 7),
+            ("Dr. Amrita Srivastava", "Ophthalmology", "Mon to Sat", time(10, 0), time(16, 0), "both", 7),
             ("Dr. Parneet", "Physiotherapy & Rehabilitation Services", "Mon to Sat", time(9, 0), time(17, 0), "bkjh", 8),
             ("Dr. Manbir Singh", "Pediatrics", "Wed, Fri", time(12, 0), time(15, 0), "both", 9),
         ]
@@ -360,6 +441,7 @@ class Command(BaseCommand):
                 "availability_text": "24x7 emergency assistance",
                 "description": "Emergency contacts: +91 78886 96623 and +91 97805 15050. Main hospital number: +91 79738 14987.",
                 "instructions": "For urgent symptoms, call emergency support immediately. 24x7 assistance: +91 98782 11131.",
+                "hospital_scope": "bkjh",
                 "is_active": True,
             },
         )
@@ -371,19 +453,19 @@ class Command(BaseCommand):
                 "availability_text": "24x7 assistance",
                 "service_area": "Fatehgarh Churian and nearby areas",
                 "description": "24x7 assistance contact support for patients and attendants.",
+                "hospital_scope": "bkjh",
                 "is_active": True,
             },
         )
 
-        if not IS_VERCEL:
-            self.seed_gallery()
+        self.seed_gallery()
         self.stdout.write(self.style.SUCCESS("Hospital website content seeded."))
 
     def seed_gallery(self):
         category = upsert(
             GalleryCategory,
             {"name": "Hospital Photos"},
-            {"description": "Approved real hospital interior and facility photos.", "is_active": True, "display_order": 1},
+            {"description": "Approved real hospital interior and facility photos.", "hospital_scope": "bkjh", "is_active": True, "display_order": 1},
         )
         photos = [
             ("Reception", "bkjh-gallery-reception.jpg", "Reception and patient support desk", 1),
@@ -397,6 +479,8 @@ class Command(BaseCommand):
                 {"title": title},
                 {
                     "category": category,
+                    "hospital_scope": "bkjh",
+                    "static_image_path": f"images/hospital/{filename}",
                     "alt_text": alt,
                     "caption": alt,
                     "is_featured": True,

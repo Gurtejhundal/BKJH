@@ -46,7 +46,7 @@
       </dl>
       <div class="opd-card__actions">
         <a class="text-link" href="{% url 'appointments:appointment' %}">Request Appointment</a>
-        {% if site.main_phone %}<a class="text-link" href="tel:{{ site.main_phone|tel }}">Call Hospital</a>{% endif %}
+        {% if site.call_phone %}<a class="text-link" href="tel:{{ site.call_phone|tel }}">Call Hospital</a>{% endif %}
       </div>
     </article>
   {% endfor %}

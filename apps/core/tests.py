@@ -1,9 +1,11 @@
+from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
 
-from apps.gallery.hospital.models import Department, Facility
+from apps.gallery.models import GalleryCategory, GalleryImage
+from apps.gallery.hospital.models import Department, Doctor, Facility
 
-from .models import PatientReview
+from .models import HospitalProfile, ParentSiteSetting, PatientReview
 
 
 class PublicRouteTests(TestCase):
@@ -79,3 +81,44 @@ class PublicRouteTests(TestCase):
         self.assertIn(miri_department, miri_response.context["departments"])
         self.assertIn(shared_facility, bkjh_response.context["facilities"])
         self.assertIn(shared_facility, miri_response.context["facilities"])
+
+    def test_bkjh_call_buttons_use_the_editable_call_phone(self):
+        HospitalProfile.objects.create(
+            code="bkjh",
+            hospital_name="Bibi Kaulan Ji Hospital",
+            call_phone="+91 97805 15050",
+            static_logo_path="images/bkjh-logo.png",
+        )
+        ParentSiteSetting.objects.create(helpdesk_phone="+91 97805 15050")
+
+        response = self.client.get(reverse("core:bibi_kaulan_hospital"))
+
+        self.assertContains(response, 'href="tel:+919780515050"')
+
+    def test_seed_applies_requested_doctor_corrections(self):
+        call_command("seed_bkjh_content", verbosity=0)
+
+        self.assertFalse(Doctor.objects.filter(full_name="Dr. Kashish Gupta", is_active=True).exists())
+        doctor = Doctor.objects.select_related("department").get(full_name="Dr. Amrita Srivastava")
+        self.assertEqual(doctor.department.name, "Ophthalmology")
+        self.assertEqual(doctor.specialization, "Ophthalmology")
+
+    def test_static_gallery_photo_renders_without_media_storage(self):
+        category = GalleryCategory.objects.create(
+            name="Hospital Photos",
+            hospital_scope="bkjh",
+            is_active=True,
+        )
+        GalleryImage.objects.create(
+            category=category,
+            title="Reception",
+            static_image_path="images/hospital/bkjh-gallery-reception.jpg",
+            alt_text="Hospital reception",
+            hospital_scope="bkjh",
+            is_active=True,
+            is_featured=True,
+        )
+
+        response = self.client.get(reverse("core:bibi_kaulan_hospital"))
+
+        self.assertContains(response, "/static/images/hospital/bkjh-gallery-reception.jpg")

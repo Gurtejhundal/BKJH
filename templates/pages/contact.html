@@ -9,7 +9,7 @@
       <h2>{{ site.hospital_name }}</h2>
       {% if site.address %}<p>{{ site.address }}</p>{% else %}<p>Address pending admin entry.</p>{% endif %}
       <div class="card-grid">
-        {% include "partials/contact_card.html" with title="Main phone" support_text="ਮੁੱਖ ਫੋਨ" value=site.main_phone phone=site.main_phone fallback="Main number pending" action_label="Call hospital" %}
+        {% include "partials/contact_card.html" with title="Call hospital" support_text="ਹਸਪਤਾਲ ਨੂੰ ਕਾਲ ਕਰੋ" value=site.call_phone phone=site.call_phone fallback="Hospital call number pending" action_label="Call hospital" %}
         {% include "partials/contact_card.html" with title="Emergency" support_text="ਐਮਰਜੈਂਸੀ" value=site.emergency_phone phone=site.emergency_phone fallback="Emergency number pending" action_label="Call emergency" %}
         {% include "partials/contact_card.html" with title="Ambulance" support_text="ਐਂਬੂਲੈਂਸ" value=site.ambulance_phone phone=site.ambulance_phone fallback="Ambulance number pending" action_label="Call ambulance" %}
         {% if site.whatsapp_number %}

@@ -2,7 +2,7 @@
 <nav class="mobile-action-bar" aria-label="Quick patient actions">
   {% if parent_landing %}
     <a href="#hospitals">Hospitals</a>
-    {% if site.main_phone %}<a href="tel:{{ site.main_phone|tel }}">Helpdesk</a>{% endif %}
+    {% if parent_settings.helpdesk_phone %}<a href="tel:{{ parent_settings.helpdesk_phone|tel }}">Helpdesk</a>{% elif site.call_phone %}<a href="tel:{{ site.call_phone|tel }}">Helpdesk</a>{% endif %}
     <a href="{% url 'core:bibi_kaulan_hospital' %}">BKJH</a>
     <a class="danger" href="{% url 'core:miri_piri_hospital' %}">Miri Piri</a>
   {% elif page_hospital %}
@@ -11,7 +11,7 @@
     <a href="{{ page_hospital.instagram_url }}" target="_blank" rel="noopener">Instagram</a>
     <a class="danger" href="{% url 'core:bibi_kaulan_hospital' %}">BKJH</a>
   {% else %}
-    {% if site.main_phone %}<a href="tel:{{ site.main_phone|tel }}">Call</a>{% else %}<a href="{% url 'hospital:contact' %}">Call</a>{% endif %}
+    {% if site.call_phone %}<a href="tel:{{ site.call_phone|tel }}">Call</a>{% else %}<a href="{% url 'hospital:contact' %}">Call</a>{% endif %}
     <a href="{% url 'appointments:appointment' %}">Appointment</a>
     {% if site.google_maps_url %}<a href="{{ site.google_maps_url }}" target="_blank" rel="noopener">Location</a>{% else %}<a href="{% url 'hospital:contact' %}">Location</a>{% endif %}
     {% if site.emergency_phone %}<a class="danger" href="tel:{{ site.emergency_phone|tel }}">Emergency</a>{% else %}<a class="danger" href="{% url 'hospital:emergency' %}">Emergency</a>{% endif %}

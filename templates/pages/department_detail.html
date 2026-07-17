@@ -33,7 +33,7 @@
       <h3>Need this department?</h3>
       <p>Submit an appointment request. Staff will contact you for confirmation.</p>
       <a class="btn btn-primary" href="{% url 'appointments:appointment' %}">Request Appointment</a>
-      {% if site.main_phone %}<a class="text-link" href="tel:{{ site.main_phone|tel }}">Call hospital</a>{% endif %}
+      {% if site.call_phone %}<a class="text-link" href="tel:{{ site.call_phone|tel }}">Call hospital</a>{% endif %}
     </aside>
   </div>
 </section>
